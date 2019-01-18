@@ -14,7 +14,7 @@ function fetchRooms(userId, rooms) {
 }
 
 Meteor.methods({
-	spotlight(text, usernames, type = { users: true, rooms: true }, rid) {
+	spotlight(text, usernames, type = { users: true, rooms: true }, rid, onlyPublicUsernames = false) {
 		const searchForChannels = text[0] === '#';
 		const searchForDMs = text[0] === '@';
 		if (searchForChannels) {
@@ -66,7 +66,7 @@ Meteor.methods({
 
 		if (RocketChat.authz.hasPermission(userId, 'view-outside-room')) {
 			if (type.users === true && RocketChat.authz.hasPermission(userId, 'view-d-room')) {
-				result.users = RocketChat.models.Users.findByActiveUsersExcept(text, usernames, userOptions).fetch();
+				result.users = RocketChat.models.Users.findByActiveUsersExcept(text, usernames, userOptions, onlyPublicUsernames).fetch();
 			}
 
 			if (type.rooms === true && RocketChat.authz.hasPermission(userId, 'view-c-room')) {

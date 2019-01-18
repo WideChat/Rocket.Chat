@@ -14,6 +14,7 @@ class ModelUsers extends RocketChat.models._Base {
 		this.tryEnsureIndex({ active: 1 }, { sparse: 1 });
 		this.tryEnsureIndex({ statusConnection: 1 }, { sparse: 1 });
 		this.tryEnsureIndex({ type: 1 });
+		this.tryEnsureIndex({ publicUsername: 1 });
 	}
 
 	findOneByImportId(_id, options) {
@@ -131,7 +132,7 @@ class ModelUsers extends RocketChat.models._Base {
 		return this.find(query, options);
 	}
 
-	findByActiveUsersExcept(searchTerm, exceptions, options) {
+	findByActiveUsersExcept(searchTerm, exceptions, options, onlyPublicUsernames = false) {
 		if (exceptions == null) { exceptions = []; }
 		if (options == null) { options = {}; }
 		if (!_.isArray(exceptions)) {
@@ -155,6 +156,10 @@ class ModelUsers extends RocketChat.models._Base {
 				},
 			],
 		};
+
+		if (onlyPublicUsernames) {
+			query.$and.push({ publicUsername: true });
+		}
 
 		// do not use cache
 		return this._db.find(query, options);

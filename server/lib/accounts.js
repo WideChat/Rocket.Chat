@@ -96,6 +96,7 @@ Accounts.onCreateUser(function(options, user = {}) {
 
 	user.status = 'offline';
 	user.active = !RocketChat.settings.get('Accounts_ManuallyApproveNewUsers');
+	user.publicUsername = true;
 
 	if (!user.name) {
 		if (options.profile) {

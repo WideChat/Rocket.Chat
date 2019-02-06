@@ -200,6 +200,7 @@ Package.onUse(function(api) {
 	api.addFiles('server/methods/setAdminStatus.js', 'server');
 	api.addFiles('server/methods/setRealName.js', 'server');
 	api.addFiles('server/methods/setUsername.js', 'server');
+	api.addFiles('server/methods/setPublicUsername.js', 'server');
 	api.addFiles('server/methods/setEmail.js', 'server');
 	api.addFiles('server/methods/unarchiveRoom.js', 'server');
 	api.addFiles('server/methods/unblockUser.js', 'server');

@@ -55,6 +55,10 @@ Meteor.methods({
 			Meteor.call('setEmail', settings.email);
 		}
 
+		if ('publicUsername' in settings) {
+			Meteor.call('setPublicUsername', settings.publicUsername);
+		}
+
 		// Should be the last check to prevent error when trying to check password for users without password
 		if ((settings.newPassword) && RocketChat.settings.get('Accounts_AllowPasswordChange') === true) {
 			if (!checkPassword(user, settings.typedPassword)) {

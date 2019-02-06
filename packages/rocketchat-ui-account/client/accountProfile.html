@@ -162,6 +162,17 @@
 					</div>
 				</fieldset>
 				<fieldset>
+					<label class="rc-input__label">
+						<div class="rc-input__title">{{_ "Public Username"}}</div>
+						<div class="rc-input__wrapper">
+							<div class="setting-field">
+								<label><input type="radio" name="publicUsername" value=true checked="{{checkPublicUsername true}}"/> {{_ "True"}}</label>
+								<label><input type="radio" name="publicUsername" value=false checked="{{checkPublicUsername false}}"/> {{_ "False"}}</label>
+							</div>
+						</div>
+					</label>
+				</fieldset>
+				<fieldset>
 					<!-- <legend style="margin-bottom: 2.5rem;">Custom Fields</legend> -->
 					{{> customFieldsForm hideFromForm=false formData=customFields new=true}}
 				</fieldset>

@@ -17,7 +17,7 @@ const getFromServer = (cb, type) => {
 	isLoading.set(true);
 	const currentFilter = filterText;
 
-	Meteor.call('spotlight', currentFilter, usernamesFromClient, type, (err, results) => {
+	Meteor.call('spotlight', currentFilter, usernamesFromClient, type, undefined, true, (err, results) => {
 		if (currentFilter !== filterText) {
 			return;
 		}

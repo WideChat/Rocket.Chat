@@ -32,6 +32,7 @@ Meteor.publish('userData', function() {
 			'services.totp.enabled': 1,
 			statusLivechat: 1,
 			banners: 1,
+			publicUsername: 1,
 		},
 	});
 });

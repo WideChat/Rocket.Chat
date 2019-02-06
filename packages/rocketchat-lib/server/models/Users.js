@@ -329,6 +329,13 @@ class ModelUsers extends RocketChat.models._Base {
 		return this.update(_id, update);
 	}
 
+	setPublicUsername(_id, publicUsername) {
+		const update =
+		{ $set: { publicUsername } };
+
+		return this.update(_id, update);
+	}
+
 	setEmail(_id, email) {
 		const update = {
 			$set: {
@@ -624,6 +631,7 @@ class ModelUsers extends RocketChat.models._Base {
 		const user = {
 			createdAt: new Date,
 			avatarOrigin: 'none',
+			publicUsername: true,
 		};
 
 		_.extend(user, data);

@@ -171,6 +171,9 @@ Template.accountProfile.helpers({
 	customFields() {
 		return Meteor.user().customFields;
 	},
+	checkPublicUsername(tf) {
+		return Meteor.user().publicUsername === tf;
+	},
 });
 
 Template.accountProfile.onCreated(function() {
@@ -186,6 +189,7 @@ Template.accountProfile.onCreated(function() {
 	self.avatar = new ReactiveVar;
 	self.url = new ReactiveVar('');
 	self.usernameAvaliable = new ReactiveVar(true);
+	self.publicUsername = new ReactiveVar(user.publicUsername);
 
 	RocketChat.Notifications.onLogged('updateAvatar', () => self.avatar.set());
 	self.getSuggestions = function() {
@@ -272,6 +276,11 @@ Template.accountProfile.onCreated(function() {
 				data.email = s.trim(self.email.get());
 			}
 		}
+
+		if (self.publicUsername.get() !== user.publicUsername) {
+			data.publicUsername = self.publicUsername.get();
+		}
+
 		const customFields = {};
 		$('[data-customfield=true]').each(function() {
 			customFields[this.name] = $(this).val() || '';
@@ -382,6 +391,13 @@ Template.accountProfile.events({
 	},
 	'input [name=confirmation-password]'(e, instance) {
 		instance.confirmationPassword.set(e.target.value);
+	},
+	'change input[name=publicUsername]'(e, instance) {
+		if (e.target.value === 'true') {
+			instance.publicUsername.set(true);
+		} else {
+			instance.publicUsername.set(false);
+		}
 	},
 	'submit form'(e, instance) {
 		e.preventDefault();

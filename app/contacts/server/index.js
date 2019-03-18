@@ -4,22 +4,24 @@ import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
 import _ from 'underscore';
 import { getAvatarUrlFromUsername } from 'meteor/app:ui';
+import { getUserPreference } from '../../utils';
 const service = require('./service.js');
 const provider = new service.Provider();
+const settings = require('../../settings');
 
 function refreshContactsHashMap() {
 	let phoneFieldName = '';
-	RocketChat.settings.get('Contacts_Phone_Custom_Field_Name', function(name, fieldName) {
+	settings.get('Contacts_Phone_Custom_Field_Name', function(name, fieldName) {
 		phoneFieldName = fieldName;
 	});
 
 	let emailFieldName = '';
-	RocketChat.settings.get('Contacts_Email_Custom_Field_Name', function(name, fieldName) {
+	settings.get('Contacts_Email_Custom_Field_Name', function(name, fieldName) {
 		emailFieldName = fieldName;
 	});
 
 	let useDefaultEmails = false;
-	RocketChat.settings.get('Contacts_Use_Default_Emails', function(name, fieldName) {
+	settings.get('Contacts_Use_Default_Emails', function(name, fieldName) {
 		useDefaultEmails = fieldName;
 	});
 
@@ -41,7 +43,7 @@ function refreshContactsHashMap() {
 	const phonePattern = /^\+?[1-9]\d{1,14}$/;
 	const rfcMailPattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 	cursor.forEach((user) => {
-		const discoverable = RocketChat.getUserPreference(user, 'isPublicAccount');
+		const discoverable = getUserPreference(user, 'isPublicAccount');
 		if (discoverable !== false) {
 			if (phoneFieldArray.length > 0) {
 				dict = user;
@@ -106,35 +108,35 @@ Meteor.methods({
 
 		let link = '';
 		try {
-			if (!RocketChat.settings.get('Contacts_Dynamic_Link_APIKey')) {
+			if (!settings.get('Contacts_Dynamic_Link_APIKey')) {
 				throw new Meteor.Error('error-invalid-config', 'Contacts_Dynamic_Link_APIKey not configured', {
 					method: 'getInviteLink',
 				});
 			}
 
-			if (!RocketChat.settings.get('Contacts_Dynamic_Link_DomainURIPrefix')) {
+			if (!settings.get('Contacts_Dynamic_Link_DomainURIPrefix')) {
 				throw new Meteor.Error('error-invalid-config', 'Contacts_Dynamic_Link_DomainURIPrefix not configured', {
 					method: 'getInviteLink',
 				});
 			}
 
-			if (!RocketChat.settings.get('Contacts_Dynamic_Link_AndroidPackageName')) {
+			if (!settings.get('Contacts_Dynamic_Link_AndroidPackageName')) {
 				throw new Meteor.Error('error-invalid-config', 'Contacts_Dynamic_Link_AndroidPackageName not configured', {
 					method: 'getInviteLink',
 				});
 			}
 
-			const server = RocketChat.settings.get('Site_Url');
+			const server = settings.get('Site_Url');
 
 			this.unblock();
 			try {
-				const result = HTTP.call('POST', `https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=${ RocketChat.settings.get('Contacts_Dynamic_Link_APIKey') }`, {
+				const result = HTTP.call('POST', `https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=${ settings.get('Contacts_Dynamic_Link_APIKey') }`, {
 					data: {
 						dynamicLinkInfo:{
-							domainUriPrefix: RocketChat.settings.get('Contacts_Dynamic_Link_DomainURIPrefix'),
+							domainUriPrefix: settings.get('Contacts_Dynamic_Link_DomainURIPrefix'),
 							link: `${ server }direct/${ user.username }`,
 							androidInfo:{
-								androidPackageName:RocketChat.settings.get('Contacts_Dynamic_Link_AndroidPackageName'),
+								androidPackageName:settings.get('Contacts_Dynamic_Link_AndroidPackageName'),
 							},
 							socialMetaTagInfo: {
 								socialTitle: user.username,
@@ -151,7 +153,7 @@ Meteor.methods({
 				});
 			}
 		} catch (e) {
-			link = RocketChat.settings.get('Site_Url');
+			link = settings.get('Site_Url');
 		} finally {
 			return link;
 		}
@@ -164,7 +166,7 @@ Meteor.startup(() => {
 	Meteor.defer(() => {
 		refreshContactsHashMap();
 
-		RocketChat.settings.get('Contacts_Background_Sync_Interval', function(name, processingFrequency) {
+		settings.get('Contacts_Background_Sync_Interval', function(name, processingFrequency) {
 			SyncedCron.remove(jobName);
 			SyncedCron.add({
 				name: jobName,

@@ -1,20 +1,24 @@
 import { Meteor } from 'meteor/meteor';
 import { TAPi18n } from 'meteor/tap:i18n';
 import { check } from 'meteor/check';
+import { hasPermission } from '../../authorization';
+import { placeholders } from '../../utils';
 import _ from 'underscore';
+const settings = require('../../settings');
+const SMS = require('../../sms');
 
 const supportedLanguages = ['en', 'es'];
 
 Meteor.methods({
 	sendInvitationSMS(phones, language) {
-		const twilioService = RocketChat.SMS.getService('twilio');
-		if (!RocketChat.SMS.enabled || !twilioService) {
+		const twilioService = SMS.getService('twilio');
+		if (!SMS.enabled || !twilioService) {
 			throw new Meteor.Error('error-twilio-not-active', 'Twilio service not active', {
 				method: 'sendInvitationSMS',
 			});
 		}
 
-		const messageFrom = RocketChat.settings.get('Invitation_SMS_Twilio_From');
+		const messageFrom = settings.get('Invitation_SMS_Twilio_From');
 		if (!twilioService.accountSid || ! twilioService.authToken || !messageFrom) {
 			throw new Meteor.Error('error-twilio-not-configured', 'Twilio service not configured', {
 				method: 'sendInvitationSMS',
@@ -29,7 +33,7 @@ Meteor.methods({
 		}
 
 		// to be replaced by a seperate permission specific to SMS later
-		if (!RocketChat.authz.hasPermission(Meteor.userId(), 'bulk-register-user')) {
+		if (!hasPermission(Meteor.userId(), 'bulk-register-user')) {
 			throw new Meteor.Error('error-not-allowed', 'Not allowed', {
 				method: 'sendInvitationSMS',
 			});
@@ -42,10 +46,10 @@ Meteor.methods({
 		}));
 		const user = Meteor.user();
 		let body;
-		if (RocketChat.settings.get('Invitation_SMS_Customized')) {
-			body = RocketChat.settings.get('Invitation_SMS_Customized_Body');
+		if (settings.get('Invitation_SMS_Customized')) {
+			body = settings.get('Invitation_SMS_Customized_Body');
 		} else {
-			let lng = user.language || RocketChat.settings.get('language') || 'en';
+			let lng = user.language || settings.get('language') || 'en';
 			if (supportedLanguages.indexOf(language) > -1) {
 				lng = language;
 			}
@@ -53,7 +57,7 @@ Meteor.methods({
 				lng,
 			});
 		}
-		body = RocketChat.placeholders.replace(body);
+		body = placeholders.replace(body);
 		validPhones.forEach((phone) => {
 			try {
 				twilioService.send(messageFrom, phone, body);

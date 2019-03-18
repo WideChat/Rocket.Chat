@@ -3,7 +3,7 @@
 import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
 import _ from 'underscore';
-import { getAvatarUrlFromUsername } from 'meteor/rocketchat:ui';
+import { getAvatarUrlFromUsername } from 'meteor/app:ui';
 const service = require('./service.js');
 const provider = new service.Provider();
 

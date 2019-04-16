@@ -255,7 +255,7 @@ export class CustomOAuth {
 				serviceData,
 				options: {
 					profile: {
-						name: identity.name || identity.username || identity.nickname || identity.CharacterName || identity.userName || identity.preferred_username || (identity.user && identity.user.name),
+						name: identity.name || identity.username || identity.nickname || identity.CharacterName || identity.userName || identity.preferred_username || (identity.user && identity.user.name) || identity.userid,
 					},
 				},
 			};

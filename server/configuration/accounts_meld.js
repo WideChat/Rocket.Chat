@@ -46,7 +46,7 @@ Accounts.updateOrCreateUserFromExternalService = function(serviceName, serviceDa
 			RocketChat.models.Users.setEmailVerified(user._id, serviceData.email);
 		} else {
 			// WIDECHAT
-			let user = RocketChat.models.Users.findOneByUsername(serviceData.userid);
+			user = RocketChat.models.Users.findOneByUsername(serviceData.userid);
 			if (user != null) {
 				RocketChat.models.Users.setServiceId(user._id, serviceName, serviceData.id);
 				RocketChat.models.Users.setEmail(user._id, serviceData.email);

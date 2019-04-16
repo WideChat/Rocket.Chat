@@ -48,6 +48,9 @@ Accounts.updateOrCreateUserFromExternalService = function(serviceName, serviceDa
 			}
 
 			RocketChat.models.Users.setServiceId(user._id, serviceName, serviceData.id);
+			// WIDECHAT
+			RocketChat.models.Users.setEmail(user._id, serviceData.email);
+			
 			RocketChat.models.Users.setEmailVerified(user._id, serviceData.email);
 		}
 	}

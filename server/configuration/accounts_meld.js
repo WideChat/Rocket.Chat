@@ -31,8 +31,7 @@ Accounts.updateOrCreateUserFromExternalService = function(serviceName, serviceDa
 	}
 
 	if (serviceData.email) {
-		let user;
-		user = RocketChat.models.Users.findOneByEmailAddress(serviceData.email);
+		var user = RocketChat.models.Users.findOneByEmailAddress(serviceData.email);
 		if (user != null) {
 			const findQuery = {
 				address: serviceData.email,

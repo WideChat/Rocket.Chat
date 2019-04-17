@@ -102,39 +102,40 @@ Template.accountProfile.helpers({
 	ifThenElse(condition, val, not = '') {
 		return condition ? val : not;
 	},
+	// WIDECHAT - short circuit all validation checks for allowing to save profile changes.
 	canSave(ret) {
-		const instance = Template.instance();
-		instance.dep.depend();
-		const realname = instance.realname.get();
-		const username = instance.username.get();
-		const password = instance.password.get();
-		const confirmationPassword = instance.confirmationPassword.get();
-		const email = instance.email.get();
-		const usernameAvaliable = instance.usernameAvaliable.get();
-		const avatar = instance.avatar.get();
-		const user = Meteor.user();
-		const { customFields = {} } = user;
-		if (instance.view.isRendered) {
-			if (instance.findAll('[data-customfield="true"]').some((el) => {
-				const key = el.getAttribute('name');
-				const value = customFields[key] || '';
-				return el.value !== value;
-			})) {
-				return;
-			}
-		}
-		// WIDECHAT - short circuit the validation checks to allow "Save Changes" on the Profile page.
-		return;
-
-		// if (!avatar && user.name === realname && user.username === username && getUserEmailAddress(user) === email === email && (!password || password !== confirmationPassword)) {
-		// 	return ret;
-		// }
-		// if (!validateEmail(email) || (!validateUsername(username) || usernameAvaliable !== true) || !validateName(realname)) {
-		// 	return ret;
-		// }
-
-		// return;
+		return true;
 	},
+	// canSave(ret) {
+	// 	const instance = Template.instance();
+	// 	instance.dep.depend();
+	// 	const realname = instance.realname.get();
+	// 	const username = instance.username.get();
+	// 	const password = instance.password.get();
+	// 	const confirmationPassword = instance.confirmationPassword.get();
+	// 	const email = instance.email.get();
+	// 	const usernameAvaliable = instance.usernameAvaliable.get();
+	// 	const avatar = instance.avatar.get();
+	// 	const user = Meteor.user();
+	// 	const { customFields = {} } = user;
+	// 	if (instance.view.isRendered) {
+	// 		if (instance.findAll('[data-customfield="true"]').some((el) => {
+	// 			const key = el.getAttribute('name');
+	// 			const value = customFields[key] || '';
+	// 			return el.value !== value;
+	// 		})) {
+	// 			return;
+	// 		}
+	// 	}
+	// 	if (!avatar && user.name === realname && user.username === username && getUserEmailAddress(user) === email === email && (!password || password !== confirmationPassword)) {
+	// 		return ret;
+	// 	}
+	// 	if (!validateEmail(email) || (!validateUsername(username) || usernameAvaliable !== true) || !validateName(realname)) {
+	// 		return ret;
+	// 	}
+
+	// 	return;
+	// },
 	allowDeleteOwnAccount() {
 		return RocketChat.settings.get('Accounts_AllowDeleteOwnAccount');
 	},

@@ -30,6 +30,12 @@ Accounts.updateOrCreateUserFromExternalService = function(serviceName, serviceDa
 		serviceData.email = serviceData.emailAddress;
 	}
 
+	// WIDECHAT
+	let user = RocketChat.models.Users.findOneByUsername(serviceData.userid);
+	if (!user.name) {
+		RocketChat.models.Users.setName(user._id, serviceData.userid);
+	}
+
 	if (serviceData.email) {
 		let user = RocketChat.models.Users.findOneByEmailAddress(serviceData.email);
 		if (user != null) {
@@ -52,10 +58,6 @@ Accounts.updateOrCreateUserFromExternalService = function(serviceName, serviceDa
 				RocketChat.models.Users.setEmail(user._id, serviceData.email);
 				RocketChat.models.Users.setEmailVerified(user._id, serviceData.email);
 			}
-		}
-		// WIDECHAT
-		if (!user.name) {
-			RocketChat.models.Users.setName(user._id, serviceData.userid);
 		}
 	}
 

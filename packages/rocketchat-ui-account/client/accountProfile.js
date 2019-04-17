@@ -134,7 +134,7 @@ Template.accountProfile.helpers({
 			return;
 		}
 		// WIDECHAT dummy check
-		if (!user.username == username) {
+		if (!user.username === username) {
 			return ret;
 		}
 

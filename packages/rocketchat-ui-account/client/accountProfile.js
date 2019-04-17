@@ -123,6 +123,9 @@ Template.accountProfile.helpers({
 				return;
 			}
 		}
+		// WIDECHAT - short circuit the validation checks to allow "Save Changes" on the Profile page.
+		return;
+		
 		if (!avatar && user.name === realname && user.username === username && getUserEmailAddress(user) === email === email && (!password || password !== confirmationPassword)) {
 			return ret;
 		}

@@ -126,14 +126,14 @@ Template.accountProfile.helpers({
 		// WIDECHAT - short circuit the validation checks to allow "Save Changes" on the Profile page.
 		return;
 
-		if (!avatar && user.name === realname && user.username === username && getUserEmailAddress(user) === email === email && (!password || password !== confirmationPassword)) {
-			return ret;
-		}
-		if (!validateEmail(email) || (!validateUsername(username) || usernameAvaliable !== true) || !validateName(realname)) {
-			return ret;
-		}
+		// if (!avatar && user.name === realname && user.username === username && getUserEmailAddress(user) === email === email && (!password || password !== confirmationPassword)) {
+		// 	return ret;
+		// }
+		// if (!validateEmail(email) || (!validateUsername(username) || usernameAvaliable !== true) || !validateName(realname)) {
+		// 	return ret;
+		// }
 
-		return;
+		// return;
 	},
 	allowDeleteOwnAccount() {
 		return RocketChat.settings.get('Accounts_AllowDeleteOwnAccount');

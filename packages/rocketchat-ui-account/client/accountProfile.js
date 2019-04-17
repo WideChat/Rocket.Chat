@@ -124,17 +124,9 @@ Template.accountProfile.helpers({
 			}
 		}
 		if (!avatar && user.name === realname && user.username === username && getUserEmailAddress(user) === email === email && (!password || password !== confirmationPassword)) {
-			// return ret;
-			// WIDECHAT short circuit
-			return;
+			return ret;
 		}
 		if (!validateEmail(email) || (!validateUsername(username) || usernameAvaliable !== true) || !validateName(realname)) {
-			// return ret;
-			// WIDECHAT short circuit
-			return;
-		}
-		// WIDECHAT dummy check
-		if (!user.username === username) {
 			return ret;
 		}
 

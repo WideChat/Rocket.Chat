@@ -133,6 +133,10 @@ Template.accountProfile.helpers({
 			// WIDECHAT short circuit
 			return;
 		}
+		// WIDECHAT dummy check
+		if (!user.username == username) {
+			return ret;
+		}
 
 		return;
 	},

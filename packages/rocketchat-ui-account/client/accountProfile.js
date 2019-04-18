@@ -262,16 +262,17 @@ Template.accountProfile.onCreated(function() {
 				data.username = s.trim(self.username.get());
 			}
 		}
-		if (s.trim(self.email.get()) !== getUserEmailAddress(user)) {
-			if (!RocketChat.settings.get('Accounts_AllowEmailChange')) {
-				toastr.remove();
-				toastr.error(t('Email_Change_Disabled'));
-				instance.clearForm();
-				return cb && cb();
-			} else {
-				data.email = s.trim(self.email.get());
-			}
-		}
+		// WIDECHAT
+		// if (s.trim(self.email.get()) !== getUserEmailAddress(user)) {
+		// 	if (!RocketChat.settings.get('Accounts_AllowEmailChange')) {
+		// 		toastr.remove();
+		// 		toastr.error(t('Email_Change_Disabled'));
+		// 		instance.clearForm();
+		// 		return cb && cb();
+		// 	} else {
+		// 		data.email = s.trim(self.email.get());
+		// 	}
+		// }
 		const customFields = {};
 		$('[data-customfield=true]').each(function() {
 			customFields[this.name] = $(this).val() || '';

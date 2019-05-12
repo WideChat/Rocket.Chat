@@ -72,15 +72,15 @@ function refreshContactsHashMap() {
 				const email = dict[emailFieldArray[emailFieldArray.length - 1]];
 				if (email && _.isString(email)) {
 					if (rfcMailPattern.test(email)) {
-						contacts.push({ d:email, u:user.username, _id:user._id });
+						contacts.push({ d:email.toLowerCase(), u:user.username, _id:user._id });
 					}
 				}
 			}
 
 			if (useDefaultEmails && 'emails' in user) {
 				user.emails.forEach((email) => {
-					if (email.verified) {
-						contacts.push({ d:email.address, u:user.username, _id:user._id });
+					if (email.verified && _.isString(email.address)) {
+						contacts.push({ d:email.address.toLowerCase(), u:user.username, _id:user._id });
 					}
 				});
 			}

@@ -260,7 +260,7 @@ export class RoomTypeConfig {
 
 		const title = `#${ this.roomName(room) }`;
 
-		const text = `${ settings.get('UI_Use_Real_Name') ? user.name : user.username }: ${ notificationMessage }`;
+		const text = `${ settings && settings.get('UI_Use_Real_Name') ? user.name : user.username }: ${ notificationMessage }`;
 
 		return { title, text };
 	}

@@ -153,6 +153,14 @@
 													{{/if}}
 												{{/if}}
 
+												{{#if $eq type 'link'}}
+													{{#if hasChanges section}}
+														<span style="line-height: 40px" class="secondary-font-color">{{_ "Save_to_enable_this_action"}}</span>
+													{{else}}
+														<button type="button" class="rc-button rc-button--primary link" data-setting="{{_id}}" data-action="{{value}}" {{isDisabled}} >{{_ linkText}}</button>
+													{{/if}}
+												{{/if}}
+
 												{{#if $eq type 'asset'}}
 													{{#if value.url}}
 														<div class="settings-file-preview">

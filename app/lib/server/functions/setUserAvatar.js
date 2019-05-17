@@ -5,6 +5,7 @@ import { RocketChatFile } from '../../../file';
 import { FileUpload } from '../../../file-upload';
 import { Users } from '../../../models';
 import { Notifications } from '../../../notifications';
+import { callbacks } from '../../../callbacks';
 
 export const setUserAvatar = function(user, dataURI, contentType, service) {
 	let encoding;
@@ -63,4 +64,5 @@ export const setUserAvatar = function(user, dataURI, contentType, service) {
 			Notifications.notifyLogged('updateAvatar', { username: user.username });
 		}, 500);
 	});
+	callbacks.run('afterUserAvatarChange', { _id: user._id, avatar: image });
 };

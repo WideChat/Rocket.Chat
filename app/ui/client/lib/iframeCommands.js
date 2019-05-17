@@ -56,7 +56,7 @@ const commands = {
 		const user = Meteor.user();
 		Meteor.logout(() => {
 			callbacks.run('afterLogoutCleanUp', user);
-			Meteor.call('logoutCleanUp', user);
+			Meteor.call('logoutCleanUp', user, document.cookie);
 			return FlowRouter.go('home');
 		});
 	},

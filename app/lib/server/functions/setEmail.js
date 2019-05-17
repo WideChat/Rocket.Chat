@@ -4,6 +4,7 @@ import s from 'underscore.string';
 import { Users } from '../../../models';
 import { hasPermission } from '../../../authorization';
 import { RateLimiter, validateEmailDomain } from '../lib';
+import { callbacks } from '../../../callbacks';
 
 import { checkEmailAvailability } from '.';
 
@@ -21,7 +22,7 @@ const _setEmail = function(userId, email, shouldSendVerificationEmail = true) {
 
 	const user = Users.findOneById(userId);
 
-	// User already has desired username, return
+	// User already has desired email, return
 	if (user.emails && user.emails[0] && user.emails[0].address === email) {
 		return user;
 	}
@@ -37,6 +38,7 @@ const _setEmail = function(userId, email, shouldSendVerificationEmail = true) {
 	if (shouldSendVerificationEmail === true) {
 		Meteor.call('sendConfirmationEmail', user.email);
 	}
+	callbacks.run('afterUserEmailChange', { _id: user._id, email });
 	return user;
 };
 

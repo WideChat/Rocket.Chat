@@ -20,6 +20,7 @@ export class Users extends Base {
 		this.tryEnsureIndex({ type: 1 });
 		this.tryEnsureIndex({ 'visitorEmails.address': 1 });
 		this.tryEnsureIndex({ federation: 1 }, { sparse: true });
+		this.tryEnsureIndex({ 'u._id': 1 });
 	}
 
 	getLoginTokensByUserId(userId) {
@@ -665,6 +666,12 @@ export class Users extends Base {
 		return this.findOne(query, options);
 	}
 
+	findLinkedServiceAccounts(_id, options) {
+		const query = { 'u._id': _id };
+
+		return this.find(query, options);
+	}
+
 	// UPDATE
 	addImportIds(_id, importIds) {
 		importIds = [].concat(importIds);
@@ -1044,6 +1051,17 @@ export class Users extends Base {
 				statusDefault,
 			},
 		});
+	}
+
+	setOwnerUsernameByUserId(userId, username) {
+		const query = { 'u._id': userId };
+		const update = {
+			$set: {
+				'u.username': username,
+			},
+		};
+
+		return this.update(query, update, { multi: true });
 	}
 
 	// INSERT

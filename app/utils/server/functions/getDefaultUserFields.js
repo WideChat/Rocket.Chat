@@ -27,4 +27,5 @@ export const getDefaultUserFields = () => ({
 	banners: 1,
 	followers: 1,
 	following: 1,
+	u: 1,
 });

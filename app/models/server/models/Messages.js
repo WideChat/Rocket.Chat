@@ -247,22 +247,6 @@ export class Messages extends Base {
 		return this.find(query, options);
 	}
 
-	findVisibleByFollowingNotContainingTypes(following, types, options) {
-		const query = {
-			_hidden: {
-				$ne: true,
-			},
-
-			$or: following,
-		};
-
-		if (Match.test(types, [String]) && (types.length > 0)) {
-			query.t =			{ $nin: types };
-		}
-
-		return this.find(query, options);
-	}
-
 	findInvisibleByRoomId(roomId, options) {
 		const query = {
 			_hidden: true,
@@ -375,49 +359,12 @@ export class Messages extends Base {
 		return this.find(query, options);
 	}
 
-	findVisibleByFollowingBeforeTimestampNotContainingTypes(following, timestamp, types, options) {
-		const query = {
-			_hidden: {
-				$ne: true,
-			},
-			$or: following,
-			ts: {
-				$lt: timestamp,
-			},
-		};
-
-		if (Match.test(types, [String]) && (types.length > 0)) {
-			query.t =			{ $nin: types };
-		}
-
-		return this.find(query, options);
-	}
-
 	findVisibleByRoomIdBetweenTimestampsNotContainingTypes(roomId, afterTimestamp, beforeTimestamp, types, options) {
 		const query = {
 			_hidden: {
 				$ne: true,
 			},
 			rid: roomId,
-			ts: {
-				$gt: afterTimestamp,
-				$lt: beforeTimestamp,
-			},
-		};
-
-		if (Match.test(types, [String]) && (types.length > 0)) {
-			query.t =			{ $nin: types };
-		}
-
-		return this.find(query, options);
-	}
-
-	findVisibleByFollowingBetweenTimestampsNotContainingTypes(following, afterTimestamp, beforeTimestamp, types, options) {
-		const query = {
-			_hidden: {
-				$ne: true,
-			},
-			$or: following,
 			ts: {
 				$gt: afterTimestamp,
 				$lt: beforeTimestamp,

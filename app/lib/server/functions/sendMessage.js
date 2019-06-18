@@ -199,13 +199,6 @@ export const sendMessage = function(user, message, room, upsert = false) {
 			message._id = _id;
 		} else {
 			message._id = Messages.insert(message);
-
-			// if(settings.get('Newsfeed_enabled')){
-			// 	const messageToNewsfeed = message;
-			// 	messageToNewsfeed._id = 'fliptrail';
-			// 	messageToNewsfeed.rid = 'aa2A9AzsziWXm4czL';
-			// 	messageToNewsfeed._id = Messages.insert(messageToNewsfeed);
-			// }
 		}
 
 		if (Apps && Apps.isLoaded()) {
@@ -219,7 +212,6 @@ export const sendMessage = function(user, message, room, upsert = false) {
 		*/
 		// Execute all callbacks
 		Meteor.defer(() => callbacks.run('afterSaveMessage', message, room, user._id));
-
 		return message;
 	}
 };

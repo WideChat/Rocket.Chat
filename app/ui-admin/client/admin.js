@@ -571,6 +571,27 @@ Template.admin.events({
 			toastr.success(TAPi18n.__.apply(TAPi18n, args), TAPi18n.__('Success'));
 		});
 	},
+	'click button.link'() {
+		if (this.type !== 'link') {
+			return;
+		}
+		const loginToken = localStorage.getItem('Meteor.loginToken');
+		Meteor.call(this.value, loginToken, function(err, data) {
+			if (err != null) {
+				err.details = _.extend(err.details || {}, {
+					errorTitle: 'Error',
+				});
+				handleError(err);
+				return;
+			}
+			if (data.link) {
+				const redirectWindow = window.open(data.link, '_blank');
+				redirectWindow.location;
+			}
+			const args = [data.message].concat(data.params);
+			toastr.success(TAPi18n.__.apply(TAPi18n, args), TAPi18n.__('Success'));
+		});
+	},
 	'click .button-fullscreen'() {
 		const codeMirrorBox = $(`.code-mirror-box[data-editor-id="${ this._id }"]`);
 		codeMirrorBox.addClass('code-mirror-box-fullscreen content-background-color');

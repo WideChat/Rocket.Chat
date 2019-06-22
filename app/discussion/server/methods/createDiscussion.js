@@ -33,7 +33,7 @@ const mentionMessage = (rid, { _id, username, name }, message_embedded) => {
 	return Messages.insert(welcomeMessage);
 };
 
-const create = ({ prid, pmid, t_name, reply, users }) => {
+const create = ({ prid, pmid, t_name, reply, t, users }) => {
 	// if you set both, prid and pmid, and the rooms doesnt match... should throw an error)
 	let message = false;
 	if (pmid) {
@@ -86,8 +86,10 @@ const create = ({ prid, pmid, t_name, reply, users }) => {
 	// auto invite the replied message owner
 	const invitedUsers = message ? [message.u.username, ...users] : users;
 
-	// discussions are always created as private groups
-	const discussion = createRoom('p', name, user.username, [...new Set(invitedUsers)], false, {
+	// discussions are created as private groups, if t is not given as 'c'
+	const type = t === 'c' ? 'c' : 'p';
+
+	const discussion = createRoom(type, name, user.username, [...new Set(invitedUsers)], false, {
 		fname: t_name,
 		description: message.msg, // TODO discussions remove
 		topic: p_room.name, // TODO discussions remove
@@ -121,7 +123,7 @@ Meteor.methods({
 	* @param {string} t_name - discussion name
 	* @param {string[]} users - users to be added
 	*/
-	createDiscussion({ prid, pmid, t_name, reply, users }) {
+	createDiscussion({ prid, pmid, t_name, reply, t, users }) {
 		if (!settings.get('Discussion_enabled')) {
 			throw new Meteor.Error('error-action-not-allowed', 'You are not allowed to create a discussion', { method: 'createDiscussion' });
 		}
@@ -135,6 +137,6 @@ Meteor.methods({
 			throw new Meteor.Error('error-action-not-allowed', 'You are not allowed to create a discussion', { method: 'createDiscussion' });
 		}
 
-		return create({ uid, prid, pmid, t_name, reply, users });
+		return create({ uid, prid, pmid, t_name, reply, t, users });
 	},
 });

@@ -2658,10 +2658,7 @@
   "Service_account_description": "Service Accounts are an upgrade to existing user accounts. You can connect to a large number of users using service account with exclusive features such as broadcast message to all your subscribers at once",
   "Service_account_limit": "Service Accounts per user",
   "Service_account_login": "Service Account login",
-<<<<<<< HEAD
-=======
   "Service_Accounts_SearchFields": "Fields to consider for service account search",
->>>>>>> 117d725d6cc18dfcfdd2d314fdfe68dfa1e3cd6f
   "Service_account_name_placeholder": "Service Account name",
   "Service_account_username_placeholder": "Service Account username",
   "Service_account_title": "Create a new Service Account",

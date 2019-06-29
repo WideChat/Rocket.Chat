@@ -169,6 +169,7 @@ Template.accountPreferences.onCreated(function() {
 		data.mobileNotifications = $('#mobileNotifications').find('select').val();
 		data.unreadAlert = JSON.parse($('#unreadAlert').find('input:checked').val());
 		data.sidebarShowDiscussion = JSON.parse($('#sidebarShowDiscussion').find('input:checked').val());
+		data.sidebarShowServiceAccounts = JSON.parse($('#sidebarShowServiceAccounts').find('input:checked').val());
 		data.notificationsSoundVolume = parseInt($('#notificationsSoundVolume').val());
 		data.roomCounterSidebar = JSON.parse($('#roomCounterSidebar').find('input:checked').val());
 		data.highlights = _.compact(_.map($('[name=highlights]').val().split(/,|\n/), function(e) {
@@ -244,10 +245,15 @@ Template.accountPreferences.onCreated(function() {
 
 				if (results.exportOperation) {
 					if (results.exportOperation.status === 'completed') {
+						const text = results.url
+							? TAPi18n.__('UserDataDownload_CompletedRequestExistedWithLink_Text', { download_link: results.url })
+							: t('UserDataDownload_CompletedRequestExisted_Text');
+
 						modal.open({
 							title: t('UserDataDownload_Requested'),
-							text: t('UserDataDownload_CompletedRequestExisted_Text'),
+							text,
 							type: 'success',
+							html: true,
 						});
 
 						return true;

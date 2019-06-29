@@ -25,6 +25,7 @@ Template.roomList.helpers({
 				'settings.preferences.sidebarShowFavorites': 1,
 				'settings.preferences.sidebarShowUnread': 1,
 				'settings.preferences.sidebarShowDiscussion': 1,
+				'settings.preferences.sidebarShowServiceAccounts': 1,
 				'services.tokenpass': 1,
 				messageViewMode: 1,
 			},
@@ -84,6 +85,10 @@ Template.roomList.helpers({
 				query.prid = { $exists: false };
 			}
 
+			if (getUserPreference(user, 'sidebarShowServiceAccounts')) {
+				query.sa = { $exists: false };
+			}
+
 			if (getUserPreference(user, 'sidebarShowUnread')) {
 				query.$or = [
 					{ alert: { $ne: true } },
@@ -125,6 +130,9 @@ Template.roomList.helpers({
 
 	noSubscriptionText() {
 		const instance = Template.instance();
+		if (instance.data.anonymous) {
+			return 'No_channels_yet';
+		}
 		return roomTypes.roomTypes[instance.data.identifier].getUiText(UiTextContext.NO_ROOMS_SUBSCRIBED) || 'No_channels_yet';
 	},
 

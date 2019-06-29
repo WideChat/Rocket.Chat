@@ -14,5 +14,16 @@ Meteor.startup(() => {
 			type: 'int',
 			public: true,
 		});
+		this.add('Service_Accounts_SearchFields', 'username, name, description', {
+			type: 'string',
+			public: true,
+		});
+	});
+	settings.add('Accounts_Default_User_Preferences_sidebarShowServiceAccounts', true, {
+		group: 'Accounts',
+		section: 'Accounts_Default_User_Preferences',
+		type: 'boolean',
+		public: true,
+		i18nLabel: 'Group_subscriptions',
 	});
 });

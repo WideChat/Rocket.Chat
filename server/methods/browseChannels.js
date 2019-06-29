@@ -5,6 +5,7 @@ import s from 'underscore.string';
 import { hasPermission } from '../../app/authorization';
 import { Rooms, Users } from '../../app/models';
 import { Federation } from '../../app/federation/server';
+import { settings } from '../../app/settings/server';
 
 const sortChannels = function(field, direction) {
 	switch (field) {
@@ -28,11 +29,20 @@ const sortUsers = function(field, direction) {
 	}
 };
 
+const sortServiceAccounts = function(field, direction) {
+	switch (field) {
+		default:
+			return {
+				[field]: direction === 'asc' ? 1 : -1,
+			};
+	}
+};
+
 Meteor.methods({
 	browseChannels({ text = '', workspace = '', type = 'channels', sortBy = 'name', sortDirection = 'asc', page, offset, limit = 10 }) {
 		const regex = new RegExp(s.trim(s.escapeRegExp(text)), 'i');
 
-		if (!['channels', 'users'].includes(type)) {
+		if (!['channels', 'users', 'serviceAccounts'].includes(type)) {
 			return;
 		}
 
@@ -57,11 +67,13 @@ Meteor.methods({
 			limit,
 		};
 
+		const canViewAnonymous = settings.get('Accounts_AllowAnonymousRead') === true;
+
 		const user = Meteor.user();
 
 		if (type === 'channels') {
 			const sort = sortChannels(sortBy, sortDirection);
-			if (!hasPermission(user._id, 'view-c-room')) {
+			if ((!user && !canViewAnonymous) || (user && !hasPermission(user._id, 'view-c-room'))) {
 				return;
 			}
 
@@ -83,6 +95,45 @@ Meteor.methods({
 				total: result.count(), // count ignores the `skip` and `limit` options
 				results: result.fetch(),
 			};
+		}
+
+		if (type === 'serviceAccounts') {
+			const options = {
+				...pagination,
+				sort: sortServiceAccounts(sortBy, sortDirection),
+				fields: {
+					username: 1,
+					name: 1,
+					createdAt: 1,
+					description: 1,
+					federation: 1,
+				},
+			};
+
+			const exceptions = [user.username];
+			const forcedSearchFields = workspace === 'all' && ['username', 'name', 'description'];
+
+			let result;
+			if (workspace === 'all') {
+				result = Users.findByActiveServiceAccountsExcept(text, exceptions, forcedSearchFields, options);
+			} else if (workspace === 'external') {
+				result = Users.findByActiveExternalServiceAccountsExcept(text, exceptions, options, forcedSearchFields, Federation.localIdentifier);
+			} else {
+				result = Users.findByActiveLocalServiceAccountsExcept(text, exceptions, options, forcedSearchFields, Federation.localIdentifier);
+			}
+			const total = result.count();
+			const results = result.fetch();
+			results.forEach((account) => {
+				account.subscribers = Rooms.findDirectRoomContainingUsername(account.username).count();
+			});
+			return {
+				total,
+				results,
+			};
+		}
+		// non-logged id user
+		if (!user) {
+			return;
 		}
 
 		// type === users

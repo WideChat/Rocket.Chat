@@ -33,7 +33,10 @@ Template.serviceAccountSidebarLogin.events({
 		if (Meteor.user().u) {
 			username = Meteor.user().u.username;
 		}
+<<<<<<< HEAD
 		console.log(username);
+=======
+>>>>>>> 117d725d6cc18dfcfdd2d314fdfe68dfa1e3cd6f
 		Meteor.call('getLoginToken', username, function(error, token) {
 			if (error) {
 				return handleError(error);
@@ -41,7 +44,11 @@ Template.serviceAccountSidebarLogin.events({
 			FlowRouter.go('/home');
 			Meteor.loginWithToken(token.token, (err) => {
 				if (err) {
+<<<<<<< HEAD
 					console.log(err);
+=======
+					return handleError(err);
+>>>>>>> 117d725d6cc18dfcfdd2d314fdfe68dfa1e3cd6f
 				}
 				document.location.reload(true);
 				if (Meteor.user().u) {

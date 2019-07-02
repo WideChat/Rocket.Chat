@@ -4,19 +4,17 @@ import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import { handleError } from '../../../utils';
-import FullUser from '../../../models/client/models/FullUser';
 import './serviceAccountSidebarLogin.html';
 
 Template.serviceAccountSidebarLogin.helpers({
-	isReady() {
-		const instance = Template.instance();
-		return instance.ready && instance.ready.get();
+	loading() {
+		return Template.instance().loading.get();
 	},
 	users() {
-		return Template.instance().users();
+		return Template.instance().users.get();
 	},
 	hasServiceAccounts() {
-		return Template.instance().users() && Template.instance().users().length > 0;
+		return Template.instance().users.get() && Template.instance().users.get().length > 0;
 	},
 	owner() {
 		return Meteor.user().u;
@@ -56,16 +54,17 @@ Template.serviceAccountSidebarLogin.events({
 Template.serviceAccountSidebarLogin.onCreated(function() {
 	const instance = this;
 	this.ready = new ReactiveVar(true);
+	this.users = new ReactiveVar([]);
+	this.loading = new ReactiveVar(true);
 	this.autorun(() => {
-		const subscription = instance.subscribe('userServiceAccounts');
-		instance.ready.set(subscription.ready());
+		instance.loading.set(true);
+		Meteor.call('getLinkedServiceAccounts', function(err, serviceAccounts) {
+			if (err) {
+				this.loading.set(false);
+				return handleError(err);
+			}
+			instance.users.set(serviceAccounts);
+			instance.loading.set(false);
+		});
 	});
-	this.users = function() {
-		const query = {
-			'u._id': Meteor.userId(),
-			active: true,
-		};
-		const limit = instance.limit && instance.limit.get();
-		return FullUser.find(query, { limit, sort: { username: 1, name: 1 } }).fetch();
-	};
 });

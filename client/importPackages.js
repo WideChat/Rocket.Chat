@@ -110,6 +110,4 @@ import '../app/ui-cached-collection';
 import '../app/action-links';
 import '../app/reactions/client';
 import '../app/livechat/client';
-import '../app/newsfeed/client';
-import '../app/follow/client';
 import '../app/articles/client';

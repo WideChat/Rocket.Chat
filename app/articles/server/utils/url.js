@@ -16,6 +16,11 @@ export class API {
 		return `${ base }/ghost`;
 	}
 
+	authorUrl(slug) {
+		const base = settings.get('Article_Site_Url').replace(/\/$/, '');
+		return `${ base }/author/${ slug }`;
+	}
+
 	setup() {
 		return this.buildAPIUrl('authentication', 'setup');
 	}

@@ -111,6 +111,24 @@ export const getActions = ({ user, directActions, hideAdminControls }) => {
 			},
 		},
 
+		{
+			icon: 'articles',
+			name: t('Articles'),
+			action: prevent(getUser, ({ _id }) =>
+				Meteor.call('redirectToUsersArticles', _id, (error, result) => {
+					if (error) {
+						return handleError(error);
+					}
+					const redirectWindow = window.open(result.link, '_blank');
+					toastr.success(result.message, 'Success');
+					redirectWindow.location;
+				})
+			),
+			condition() {
+				return settings.get('Articles_enabled');
+			},
+		},
+
 		function() {
 			if (isSelf(this.username) || !directActions) {
 				return;

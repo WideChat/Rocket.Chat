@@ -13,6 +13,11 @@
 						<img class="image-button" src="{{image_url}}" />
 					</button>
 				{{/if}}
+				{{#if open_room_by_id}}
+					<button class="{{jsActionButtonClassname msg_processing_type}}" value="{{rid}}">
+						<img class="image-button" src="{{image_url}}" />
+					</button>
+				{{/if}}
 			{{/if}}
 			{{#if text}}
 				{{#if url}}
@@ -25,6 +30,11 @@
 						<span class="overflow-ellipsis">{{text}}</span>
 					</button>
 				{{/if}}
+				{{#if open_room_by_id}}
+                    <button class="text-button {{jsActionButtonClassname msg_processing_type}}" value="{{rid}}">
+                        <span class="overflow-ellipsis">{{text}}</span>
+                    </button>
+                {{/if}}
 			{{/if}}
 		{{/if}}
 	</div>

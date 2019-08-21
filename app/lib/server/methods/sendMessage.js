@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { Random } from 'meteor/random';
-import { TAPi18n } from 'meteor/tap:i18n';
+import { TAPi18n } from 'meteor/rocketchat:tap-i18n';
 import moment from 'moment';
 
 import { hasPermission } from '../../../authorization';
@@ -87,6 +87,10 @@ Meteor.methods({
 		} catch (error) {
 			if (error === 'error-not-allowed') {
 				throw new Meteor.Error('error-not-allowed');
+			}
+
+			if (error.error === 'error-max-broadcast-limit') {
+				throw new Meteor.Error('error-max-broadcast-limit');
 			}
 
 			SystemLogger.error('Error sending message:', error);

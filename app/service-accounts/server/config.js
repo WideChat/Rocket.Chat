@@ -24,6 +24,14 @@ Meteor.startup(() => {
 			type: 'boolean',
 			public: true,
 		});
+		this.add('Service_accounts_broadcast_time_limit', 24, {
+			type: 'int',
+			public: true,
+		});
+		this.add('Service_accounts_broadcast_limit', 1, {
+			type: 'int',
+			public: true,
+		});
 	});
 	settings.add('Accounts_Default_User_Preferences_sidebarShowServiceAccounts', true, {
 		group: 'Accounts',

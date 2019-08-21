@@ -6,6 +6,6 @@ callbacks.add('beforeSaveMessage', (message, room) => {
 	if (!room || !room.sa) {
 		return message;
 	}
-	sendBroadcastMessage(message);
+	sendBroadcastMessage(message, room);
 	return message;
 });

@@ -1719,10 +1719,9 @@ describe('[Users]', function() {
 		});
 	});
 	describe('[Service Accounts]', () => {
+		const username = `serviceAccount_${ apiUsername }`;
+		const description = 'Test Service Account';
 		it('should create a new service account', (done) => {
-			const username = `serviceAccount_${ apiUsername }`;
-			const description = 'Test Service Account';
-
 			request.post(api('serviceAccounts.create'))
 				.set(credentials)
 				.send({
@@ -1745,6 +1744,48 @@ describe('[Users]', function() {
 
 					targetUser._id = res.body.user._id;
 					targetUser.username = res.body.user.username;
+				})
+				.end(done);
+		});
+		it('should return an error when trying register new service account with an existing username', (done) => {
+			request.post(api('serviceAccounts.create'))
+				.set(credentials)
+				.send({
+					name: username,
+					username,
+					description,
+					password,
+				})
+				.expect('Content-Type', 'application/json')
+				.expect(400)
+				.expect((res) => {
+					expect(res.body).to.have.property('success', false);
+					expect(res.body).to.have.property('error').and.to.be.equal('Username is already in use');
+				})
+				.end(done);
+		});
+		it('should retrieve the linked service accounts successfully', (done) => {
+			request.get(api('serviceAccounts.getLinkedAccounts'))
+				.set(credentials)
+				.expect('Content-Type', 'application/json')
+				.expect(200)
+				.expect((res) => {
+					expect(res.body).to.have.property('success', true);
+					expect(res.body).to.have.property('users').and.to.be.an('array');
+				})
+				.end(done);
+		});
+		it('should retrieve the login token for linked service account', (done) => {
+			request.get(api('serviceAccounts.getToken'))
+				.set(credentials)
+				.query({
+					username,
+				})
+				.expect('Content-Type', 'application/json')
+				.expect(200)
+				.expect((res) => {
+					expect(res.body).to.have.property('success', true);
+					expect(res.body).to.not.have.nested.property('token.token');
 				})
 				.end(done);
 		});

@@ -76,7 +76,7 @@ const toolbarButtons = (user) => [{
 	name: t('Service_account_login'),
 	icon: 'reload',
 	active: Session.get('saNotification'),
-	condition: () => (Meteor.user() && !Meteor.user().u) || (Meteor.user() && Meteor.user().u && localStorage.getItem('serviceAccountForceLogin')),
+	condition: () => settings.get('Service_account_enabled') && ((Meteor.user() && !Meteor.user().u) || (Meteor.user() && Meteor.user().u && localStorage.getItem('serviceAccountForceLogin'))),
 	action: (e) => {
 		const options = [];
 		const config = {
@@ -192,7 +192,6 @@ const toolbarButtons = (user) => [{
 		};
 
 		const discussionEnabled = settings.get('Discussion_enabled');
-		const serviceAccountEnabled = settings.get('Service_account_enabled');
 		const items = [{
 			icon: 'hashtag',
 			name: t('Channel'),
@@ -207,29 +206,6 @@ const toolbarButtons = (user) => [{
 					modal.open({
 						title: t('Discussion_title'),
 						content: 'CreateDiscussion',
-						data: {
-							onCreate() {
-								modal.close();
-							},
-						},
-						modifier: 'modal',
-						showConfirmButton: false,
-						showCancelButton: false,
-						confirmOnEnter: false,
-					});
-				},
-			});
-		}
-
-		if (serviceAccountEnabled && hasAtLeastOnePermission(['create-service-account'])) {
-			items.push({
-				icon: 'user',
-				name: t('Service_account'),
-				action: (e) => {
-					e.preventDefault();
-					modal.open({
-						title: t('Service_account_title'),
-						content: 'createServiceAccount',
 						data: {
 							onCreate() {
 								modal.close();

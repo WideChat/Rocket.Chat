@@ -289,7 +289,6 @@ Template.room.helpers({
 			},
 		};
 		if (Template.instance().room.t === 'n') {
-
 			let query = {
 
 				$or: Template.instance().followingUsers.get(),

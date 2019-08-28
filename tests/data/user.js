@@ -24,6 +24,7 @@ export const preferences = {
 		enableAutoAway: true,
 		highlights: [],
 		desktopNotificationDuration: 0,
+		isPublicAccount: true,
 		messageViewMode: 0,
 		hideUsernames: false,
 		hideRoles: false,

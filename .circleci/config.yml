@@ -376,6 +376,8 @@ jobs:
             cp ~/repo/.docker-mongo/Dockerfile .
             cp ~/repo/.docker-mongo/entrypoint.sh .
             docker build -t rocketchat/rocket.chat.preview:pr-$CIRCLE_PR_NUMBER .
+            pwd
+            ls -la
             
       - persist_to_workspace:
           root: /tmp/

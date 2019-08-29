@@ -375,7 +375,7 @@ jobs:
             echo "Build preview Docker image"
             cp ~/repo/.docker-mongo/Dockerfile .
             cp ~/repo/.docker-mongo/entrypoint.sh .
-            docker build -t rocketchat/rocket.chat.preview:pr-$CIRCLE_PR_NUMBER 
+            docker build -t rocketchat/rocket.chat.preview:pr-$CIRCLE_PR_NUMBER .
 
       - store_artifacts:
           path: /tmp/build/rocketchat

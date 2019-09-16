@@ -63,7 +63,21 @@ test-with-oplog: &test-with-oplog
     - save_cache: *test-save-npm-cache
     - store_artifacts: *test-store_artifacts
 
-version: 2
+version: 2.1
+
+orbs:
+    aws-ecr: circleci/aws-ecr@6.3.0
+
+commands:
+  build_and_push_image_to_ecr:
+    description: "Build Docker image and push to ECR"
+    steps:
+     - aws-ecr/build_and_push_image:
+         account-url: ${AWS_ECR_ACCOUNT_URL}
+         create-repo: true
+         repo: ${SERVICE_REPO}
+         tag: $CIRCLE_SHA1
+
 jobs:
   build:
     <<: *defaults
@@ -299,22 +313,24 @@ jobs:
 
             export CIRCLE_TAG=${CIRCLE_TAG:=}
             if [[ $CIRCLE_TAG ]]; then
-              docker login -u $DOCKER_USER -p $DOCKER_PASS
+              # docker login -u $DOCKER_USER -p $DOCKER_PASS
 
               echo "Build official Docker image"
               cp ~/repo/.docker/Dockerfile .
-              docker build -t rocketchat/rocket.chat:$CIRCLE_TAG .
-              docker push rocketchat/rocket.chat:$CIRCLE_TAG
+              # docker build -t rocketchat/rocket.chat:$CIRCLE_TAG .
+              # docker push rocketchat/rocket.chat:$CIRCLE_TAG
+              build_and_push_image_to_ecr
 
               echo "Build preview Docker image"
               cp ~/repo/.docker-mongo/Dockerfile .
               cp ~/repo/.docker-mongo/entrypoint.sh .
-              docker build -t rocketchat/rocket.chat.preview:$CIRCLE_TAG .
-              docker push rocketchat/rocket.chat.preview:$CIRCLE_TAG
+              # docker build -t rocketchat/rocket.chat.preview:$CIRCLE_TAG .
+              # docker push rocketchat/rocket.chat.preview:$CIRCLE_TAG
 
               if echo "$CIRCLE_TAG" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$' ; then
                 docker tag rocketchat/rocket.chat:$CIRCLE_TAG rocketchat/rocket.chat:latest
                 docker push rocketchat/rocket.chat:latest
+                build_and_push_image_to_ecr
 
                 docker tag rocketchat/rocket.chat.preview:$CIRCLE_TAG rocketchat/rocket.chat.preview:latest
                 docker push rocketchat/rocket.chat.preview:latest
@@ -330,18 +346,19 @@ jobs:
             fi;
 
             if [[ $CIRCLE_BRANCH == 'develop' ]]; then
-              docker login -u $DOCKER_USER -p $DOCKER_PASS
+              # docker login -u $DOCKER_USER -p $DOCKER_PASS
 
               echo "Build official Docker image"
               cp ~/repo/.docker/Dockerfile .
-              docker build -t rocketchat/rocket.chat:develop .
-              docker push rocketchat/rocket.chat:develop
+              # docker build -t rocketchat/rocket.chat:develop .
+              # docker push rocketchat/rocket.chat:develop
+              build_and_push_image_to_ecr
 
               echo "Build preview Docker image"
               cp ~/repo/.docker-mongo/Dockerfile .
               cp ~/repo/.docker-mongo/entrypoint.sh .
-              docker build -t rocketchat/rocket.chat.preview:develop .
-              docker push rocketchat/rocket.chat.preview:develop
+              # docker build -t rocketchat/rocket.chat.preview:develop .
+              # docker push rocketchat/rocket.chat.preview:develop
 
               exit 0
             fi;
@@ -386,7 +403,7 @@ jobs:
             docker push rocketchat/rocket.chat.preview:pr-$CIRCLE_PR_NUMBER
 
 workflows:
-  version: 2
+  version: 2.1
   build-and-test:
     jobs:
       - build:
@@ -445,4 +462,12 @@ workflows:
               ignore: develop
             tags:
               only: /^[0-9]+\.[0-9]+\.[0-9]+(?:-(?:rc|beta)\.[0-9]+)?$/
+      - aws-ecr/build_and_push_image:
+          requires:
+            - hold
+          account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+          repo: "${AWS_RESOURCE_NAME_PREFIX}"
+          region: ${AWS_DEFAULT_REGION}
+          tag: "${CIRCLE_SHA1}"
+          path: ~/repo/.docker/Dockerfile
 

@@ -68,15 +68,25 @@ version: 2.1
 orbs:
     aws-ecr: circleci/aws-ecr@6.3.0
 
+
+- aws-ecr/build_and_push_image:
+        
+          account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+          repo: "${AWS_RESOURCE_NAME_PREFIX}"
+          region: ${AWS_DEFAULT_REGION}
+          tag: "${CIRCLE_SHA1}"
+          path: ~/repo/.docker/Dockerfile
+
 commands:
   build_and_push_image_to_ecr:
     description: "Build Docker image and push to ECR"
     steps:
      - aws-ecr/build_and_push_image:
-         account-url: ${AWS_ECR_ACCOUNT_URL}
-         create-repo: true
-         repo: ${SERVICE_REPO}
-         tag: $CIRCLE_SHA1
+         account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+         repo: "${AWS_RESOURCE_NAME_PREFIX}"
+         region: ${AWS_DEFAULT_REGION}
+         tag: "${CIRCLE_SHA1}"
+         # path: ~/repo/.docker/Dockerfile
 
 jobs:
   build:
@@ -462,12 +472,3 @@ workflows:
               ignore: develop
             tags:
               only: /^[0-9]+\.[0-9]+\.[0-9]+(?:-(?:rc|beta)\.[0-9]+)?$/
-      - aws-ecr/build_and_push_image:
-          requires:
-            - hold
-          account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-          repo: "${AWS_RESOURCE_NAME_PREFIX}"
-          region: ${AWS_DEFAULT_REGION}
-          tag: "${CIRCLE_SHA1}"
-          path: ~/repo/.docker/Dockerfile
-

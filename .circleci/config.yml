@@ -376,7 +376,7 @@ jobs:
 
       - checkout
 
-      - setup_remote_docker
+      # - setup_remote_docker
 
       - run:
           name: Build Docker image for PRs
@@ -396,14 +396,21 @@ jobs:
             cp ~/repo/.docker/Dockerfile .
             # docker build -t rocketchat/rocket.chat:pr-$CIRCLE_PR_NUMBER .
             # docker push rocketchat/rocket.chat:pr-$CIRCLE_PR_NUMBER
-            build_and_push_image_to_ecr
-
+            aws-ecr/build_and_push_image:
+               account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+               repo: "${AWS_RESOURCE_NAME_PREFIX}"
+               region: ${AWS_DEFAULT_REGION}
+               tag: "${CIRCLE_SHA1}"
             echo "Build preview Docker image"
             cp ~/repo/.docker-mongo/Dockerfile .
             cp ~/repo/.docker-mongo/entrypoint.sh .
             # docker build -t rocketchat/rocket.chat.preview:pr-$CIRCLE_PR_NUMBER .
             # docker push rocketchat/rocket.chat.preview:pr-$CIRCLE_PR_NUMBER
-            build_and_push_image_to_ecr
+            aws-ecr/build_and_push_image:
+               account-url: "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+               repo: "${AWS_RESOURCE_NAME_PREFIX}"
+               region: ${AWS_DEFAULT_REGION}
+               tag: "${CIRCLE_SHA1}"
 
 workflows:
   version: 2.1

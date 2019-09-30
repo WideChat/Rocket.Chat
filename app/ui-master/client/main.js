@@ -173,16 +173,15 @@ Template.main.helpers({
 		return iframeEnabled && iframeLogin.reactiveIframeUrl.get();
 	},
 	subsReady() {
-		const status = Meteor.status();
-		if (Meteor.user() && status && (status.status !== 'connected' || status.status !== 'connecting')) {
-			return true;
-		}
 		const subscriptions = ['userData'];
 		if (!skipActiveUsersToBeReady) {
 			subscriptions.push('activeUsers');
 		}
-		const routerReady = FlowRouter.subsReady.apply(FlowRouter, subscriptions);
-
+		let routerReady = FlowRouter.subsReady.apply(FlowRouter, subscriptions);
+		const status = Meteor.status();
+		if (Meteor.user() && status && (status.status !== 'connected' || status.status !== 'connecting')) {
+			routerReady = true;
+		}
 		const subscriptionsReady = CachedChatSubscription.ready.get();
 		const settingsReady = settings.cachedCollection.ready.get();
 

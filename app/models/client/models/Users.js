@@ -21,4 +21,6 @@ Object.assign(Users, {
 	},
 });
 
+new PersistentMinimongo2(Meteor.users, 'Users');
+
 export { Users };

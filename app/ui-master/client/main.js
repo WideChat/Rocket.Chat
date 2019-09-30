@@ -173,6 +173,10 @@ Template.main.helpers({
 		return iframeEnabled && iframeLogin.reactiveIframeUrl.get();
 	},
 	subsReady() {
+		const status = Meteor.status();
+		if (status && (status.status !== 'connected' || status.status !== 'connecting')) {
+			return true;
+		}
 		const subscriptions = ['userData'];
 		if (!skipActiveUsersToBeReady) {
 			subscriptions.push('activeUsers');

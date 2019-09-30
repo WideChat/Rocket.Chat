@@ -174,7 +174,7 @@ Template.main.helpers({
 	},
 	subsReady() {
 		const status = Meteor.status();
-		if (status && (status.status !== 'connected' || status.status !== 'connecting')) {
+		if (Meteor.user() && status && (status.status !== 'connected' || status.status !== 'connecting')) {
 			return true;
 		}
 		const subscriptions = ['userData'];

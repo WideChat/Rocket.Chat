@@ -1,12 +1,59 @@
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js');
+// This is the "Offline copy of pages" service worker
 
-if (workbox) {
-  console.log(`Yay! Workbox is loaded 🎉`);
-} else {
-  console.log(`Boo! Workbox didn't load 😬`);
+const CACHE = 'viasat-offline';
+
+function fromCache(request) {
+	// Check to see if you have it in the cache
+	// Return response
+	// If not in the cache, then return error page
+	return caches.open(CACHE).then(function (cache) {
+		return cache.match(request).then(function (matching) {
+			if (!matching || matching.status === 404) {
+				return Promise.reject('no-match');
+			}
+
+			return matching;
+		});
+	});
+}
+function updateCache(request, response) {
+	return caches.open(CACHE).then(function(cache) {
+		return cache.put(request, response);
+	});
 }
 
-workbox.routing.registerRoute(
-  /\.*$/,
-  new workbox.strategies.NetworkFirst()
-);
+// TODO: replace the following with the correct offline fallback page i.e.: const offlineFallbackPage = "index.html";
+const offlineFallbackPage = 'index.html';
+
+// Install stage sets up the index page (home page) in the cache and opens a new cache
+self.addEventListener('install', function(event) {
+	console.log('Install Event processing');
+
+	event.waitUntil(
+		caches.open(CACHE).then(function(cache) {
+			console.log('Cached offline page during install');
+			return cache.add(offlineFallbackPage);
+		})
+	);
+});
+
+// If any fetch fails, it will look for the request in the cache and serve it from there first
+self.addEventListener('fetch', function(event) {
+	if (event.request.method !== 'GET') { return; }
+
+	event.respondWith(
+		fetch(event.request)
+			.then(function(response) {
+				console.log(`add page to offline cache: ${ response.url }`);
+
+				// If request was success, add or update it in the cache
+				event.waitUntil(updateCache(event.request, response.clone()));
+
+				return response;
+			})
+			.catch(function(error) {
+				console.log(`Network request Failed. Serving content from cache: ${ error }`);
+				return fromCache(event.request);
+			})
+	);
+});

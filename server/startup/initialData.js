@@ -17,11 +17,11 @@ Meteor.startup(function() {
 			});
 		}
 
-		if (!Users.findOneById('rocket.cat')) {
+		if (!Users.findOneById('viasat')) {
 			Users.create({
-				_id: 'rocket.cat',
-				name: 'Rocket.Cat',
-				username: 'rocket.cat',
+				_id: 'viasat',
+				name: 'viasat',
+				username: 'viasat',
 				status: 'online',
 				statusDefault: 'online',
 				utcOffset: 0,
@@ -29,19 +29,19 @@ Meteor.startup(function() {
 				type: 'bot',
 			});
 
-			addUserRoles('rocket.cat', 'bot');
+			addUserRoles('viasat', 'bot');
 
-			const rs = RocketChatFile.bufferToStream(new Buffer(Assets.getBinary('avatars/rocketcat.png'), 'utf8'));
+			const rs = RocketChatFile.bufferToStream(new Buffer(Assets.getBinary('avatars/viasat.png'), 'utf8'));
 			const fileStore = FileUpload.getStore('Avatars');
-			fileStore.deleteByName('rocket.cat');
+			fileStore.deleteByName('viasat');
 
 			const file = {
-				userId: 'rocket.cat',
+				userId: 'viasat',
 				type: 'image/png',
 			};
 
-			Meteor.runAsUser('rocket.cat', () => {
-				fileStore.insert(file, rs, () => Users.setAvatarOrigin('rocket.cat', 'local'));
+			Meteor.runAsUser('viasat', () => {
+				fileStore.insert(file, rs, () => Users.setAvatarOrigin('viasat', 'local'));
 			});
 		}
 

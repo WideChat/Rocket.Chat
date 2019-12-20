@@ -11,7 +11,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
 
-import { t, roomTypes, getUserPreference, handleError, isMobile } from '../../../../utils';
+import { t, roomTypes, getUserPreference, handleError } from '../../../../utils';
 import { WebRTC } from '../../../../webrtc/client';
 import { ChatMessage, RoomRoles, Users, Subscriptions, Rooms } from '../../../../models';
 import {
@@ -665,10 +665,6 @@ Template.room.events({
 			}
 
 			window.open(e.target.href);
-		}
-
-		if (isMobile()) {
-			mountPopover(e, t, this);
 		}
 	},
 

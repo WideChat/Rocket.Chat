@@ -1,1 +1,1 @@
-export { Markdown } from '../lib/markdown';
+export { Markdown, MarkdownMessage } from '../lib/markdown';

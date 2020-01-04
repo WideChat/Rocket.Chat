@@ -25,11 +25,15 @@ const mem = (fn, tm = 500, generateKey = generateKeyDefault) => {
 	};
 };
 
-export const renderMessageBody = mem((message) => {
+export const renderMessageBody = mem((message, runMarkdown = true, markdownFn = null) => {
 	message.html = s.trim(message.msg) ? s.escapeHTML(message.msg) : '';
-
-	const { tokens, html } = callbacks.run('renderMessage', message);
-
+	let tokens;
+	let html;
+	if (runMarkdown && markdownFn) {
+		({ tokens, html } = callbacks.run('renderMessage', markdownFn(message)));
+	} else {
+		({ tokens, html } = callbacks.run('renderMessage', message));
+	}
 	return (Array.isArray(tokens) ? tokens.reverse() : [])
 		.reduce((html, { token, text }) => html.replace(token, () => text), html);
 }, 500, ({ _id, _updatedAt }) => _id && _updatedAt && _id + _updatedAt);

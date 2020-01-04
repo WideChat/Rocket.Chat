@@ -81,7 +81,8 @@ class MarkdownClass {
 export const Markdown = new MarkdownClass();
 
 // renderMessage already did html escape
-const MarkdownMessage = (message) => {
+export const MarkdownMessage = (message) => {
+	console.log('in the markdownmessage fn');
 	if (s.trim(message != null ? message.html : undefined)) {
 		message = Markdown.parseMessageNotEscaped(message);
 	}
@@ -89,7 +90,7 @@ const MarkdownMessage = (message) => {
 	return message;
 };
 
-callbacks.add('renderMessage', MarkdownMessage, callbacks.priority.HIGH, 'markdown');
+// callbacks.add('renderMessage', MarkdownMessage, callbacks.priority.HIGH, 'markdown');
 
 if (Meteor.isClient) {
 	Blaze.registerHelper('RocketChatMarkdown', (text) => Markdown.parse(text));

@@ -1,4 +1,4 @@
-const Page = require('./Page');
+import Page from "./Page"
 
 class LoginPage extends Page {
 	get registerButton() { return $('button.register'); }
@@ -35,6 +35,8 @@ class LoginPage extends Page {
 
 	get registrationSucceededCard() { return $('#login-card h2'); }
 
+	get warningAlert() { return $('.short-alert'); }
+
 	open() {
 		super.open('', false);
 	}
@@ -42,9 +44,9 @@ class LoginPage extends Page {
 	openInOffline() {
 		super.open('', true);
 	}
-	
+
 	setOfflineMode() {
-		super.offlineMode(true);
+		super.offlineMode(true)
 	}
 
 	setOnlineMode() {
@@ -65,6 +67,12 @@ class LoginPage extends Page {
 		this.forgotPasswordButton.waitForDisplayed(5000);
 		this.forgotPasswordButton.click();
 		this.emailField.waitForDisplayed(15000);
+	}
+
+	gotBackToLogin() {
+		this.backToLoginButton.isDisplayed();
+		this.backToLoginButton.click();
+		this.emailOrUsernameField.waitForDisplayed(15000);
 	}
 
 	registerNewUser({ username, email, password }) {

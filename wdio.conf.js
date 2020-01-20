@@ -176,7 +176,7 @@ exports.config = {
 		global.expect = chai.expect
 		chai.Should()
 
-		var proxy = httpProxy.createProxyServer({target:'http://localhost:3500'});
+		var proxy = httpProxy.createProxyServer({target:'http://localhost:3000'});
 		proxy.on('error', function (err, req, res) {
 			res.writeHead(500, {
 			  'Content-Type': 'text/plain'

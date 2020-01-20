@@ -13,7 +13,7 @@ class MainContent extends Page {
 	// Main Content Footer (Message Input Area)
 	get messageInput() { return $('.js-input-message'); }
 
-	get sendBtn() { return $('.rc-message-box__icon.js-send'); }
+	get sendBtn() { return $('.rc-message-box__send.js-message-action.js-send'); }
 
 	get messageBoxActions() { return $('.rc-message-box__icon'); }
 
@@ -39,6 +39,8 @@ class MainContent extends Page {
 	get lastMessageUser() { return $('.message:last-child .title .user-card-message'); }
 
 	get lastMessage() { return $('.message:last-child .body'); }
+
+	get lastWholeMessage() { return $('.message:last-child'); }
 
 	get lastMessageDesc() { return $('.message:last-child .body .attachment-description'); }
 
@@ -118,80 +120,42 @@ class MainContent extends Page {
 	// Popover
 	get popoverWrapper() { return $('.rc-popover'); }
 
+	get warningAlert() { return $('.short-alert'); }
+
+	setOfflineMode() {
+		super.offlineMode(true)
+	}
+
+	setOnlineMode() {
+		super.offlineMode(false)
+	}
+
+	refresh() {
+		super.refresh();
+	}
+
 	// Sends a message and wait for the message to equal the text sent
 	sendMessage(text) {
 		this.setTextToInput(text);
 		this.sendBtn.click();
 		browser.waitUntil(function() {
-			browser.waitForDisplayed('.message:last-child .body', 5000);
-			return browser.getText('.message:last-child .body') === text;
+			browser.$('.message:last-child .body').waitForDisplayed(5000);
+			return browser.$('.message:last-child .body').getText() === text;
 		}, 5000);
-	}
-
-	// adds text to the input
-	addTextToInput(text) {
-		this.messageInput.waitForDisplayed(5000);
-		this.messageInput.addValue(text);
 	}
 
 	// Clear and sets the text to the input
 	setTextToInput(text) {
 		this.messageInput.waitForDisplayed(5000);
-		this.messageInput.clearElement();
+		this.messageInput.clearValue();
 		this.messageInput.addValue(text);
 	}
 
-	// uploads a file in the given filepath (url).
-	fileUpload(filePath) {
-		this.sendMessage('Prepare for the file');
-		this.fileAttachment.chooseFile(filePath);
-	}
-
-	waitForLastMessageEqualsText(text) {
-		browser.waitUntil(function() {
-			browser.waitForDisplayed('.message:last-child .body', 5000);
-			return browser.getText('.message:last-child .body') === text;
-		}, 5000);
-	}
-
-	waitForLastMessageEqualsHtml(text) {
-		browser.waitUntil(function() {
-			browser.waitForDisplayed('.message:last-child .body', 5000);
-			return browser.getHTML('.message:last-child .body', false).trim() === text;
-		}, 5000);
-	}
-
-	waitForLastMessageTextAttachmentEqualsText(text) {
-		browser.waitForDisplayed('.message:last-child .attachment-text', 5000);
-		return browser.getText('.message:last-child .attachment-text') === text;
-	}
-
-	// Wait for the last message author username to equal the provided text
-	waitForLastMessageUserEqualsText(text) {
-		browser.waitUntil(function() {
-			browser.waitForDisplayed('.message:last-child .user-card-message:nth-of-type(2)', 5000);
-			return browser.getText('.message:last-child .user-card-message:nth-of-type(2)') === text;
-		}, 5000);
-	}
-
 	openMessageActionMenu() {
-		this.lastMessage.moveToObject();
-		this.messageOptionsBtn.waitForDisplayed(5000);
-		this.messageOptionsBtn.click();
+		this.lastMessage.moveTo();
+		this.lastWholeMessage.click();
 		this.messageActionMenu.waitForDisplayed(5000);
 		browser.pause(100);
-	}
-
-	setLanguageToEnglish() {
-		this.settingLanguageSelect.click();
-		this.settingLanguageEnglish.click();
-		this.settingSaveBtn.click();
-	}
-
-	tryToMentionAll() {
-		this.addTextToInput('@all');
-		this.sendBtn.click();
-		this.waitForLastMessageEqualsText('Notify all in this room is not allowed');
 	}
 
 	// Do one of the message actions, based on the "action" parameter inserted.

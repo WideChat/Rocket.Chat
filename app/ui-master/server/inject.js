@@ -67,8 +67,7 @@ Meteor.startup(() => {
 
 	settings.get('theme-color-sidebar-background', (key, value) => {
 		const escapedValue = s.escapeHTML(value);
-		injectIntoHead(key, `<meta name="msapplication-TileColor" content="${ escapedValue }" />`
-							+ `<meta name="theme-color" content="${ escapedValue }" />`);
+		injectIntoHead(key, `<meta name="msapplication-TileColor" content="${ escapedValue }" />`);
 	});
 
 	settings.get('Site_Name', (key, value = 'Rocket.Chat') => {

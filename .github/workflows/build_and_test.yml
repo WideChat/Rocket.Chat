@@ -482,6 +482,7 @@ jobs:
     # needs: test
 
     steps:
+    - uses: actions/checkout@v1
     - name: Github Info
       run: |
         echo "GITHUB_ACTION: $GITHUB_ACTION"
@@ -497,7 +498,7 @@ jobs:
     - name: cp dockerfile
       run: |
         ls -a ${GITHUB_WORKSPACE}
-        cp ${GITHUB_WORKSPACE}/.docker/Dockerfile .
+        # cp ${GITHUB_WORKSPACE}/.docker/Dockerfile .
 
     - name: AWS Deploy to ECR
       uses: Terranovax/aws-ecr-deploy@v1

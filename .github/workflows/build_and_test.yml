@@ -497,7 +497,7 @@ jobs:
         
         arrRef=(${github.ref//\// })
         pr_num = $arrRef[2]
-        echo "pr_num is this: ${{ pr_num }}"
+        echo "pr_num is this: $pr_num"
 
     # - name: Restore build
     #   uses: actions/download-artifact@v1

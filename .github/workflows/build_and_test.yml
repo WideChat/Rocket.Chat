@@ -482,7 +482,7 @@ jobs:
     needs: test
 
     steps:
-    - name: AWS: Deploy to ECR
+    - name: AWS Deploy to ECR
       uses: Terranovax/aws-ecr-deploy@v1
       with:
         access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}

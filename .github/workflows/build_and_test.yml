@@ -493,7 +493,7 @@ jobs:
       if: github.event_name == 'pull_request'
 
       run: |
-        IFS='/' read -ra REF <<< "$GITHUB_REF"
+        IFS='/' read -ra REF <<< $GITHUB_REF
         export PR_NUM="${REF[2]}"
         echo "PR_NUM is this: ${{ PR_NUM }}"
 

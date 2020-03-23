@@ -495,7 +495,7 @@ jobs:
         arrRef=(${git_ref//\// })
         pr_num=${arrRef[2]}
         echo "pr_num is this: $pr_num"
-        export PR_NUM=$pr_num
+        echo ::set-env name=PR_NUM::$pr_num
 
     # - name: Restore build
     #   uses: actions/download-artifact@v1

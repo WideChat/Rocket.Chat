@@ -479,7 +479,7 @@ jobs:
     if: github.base_ref == 'develop_pwa'
     # needs: test
       
-    # steps:
+    steps:
     # - uses: actions/checkout@v1
 
     # - name: Install jq

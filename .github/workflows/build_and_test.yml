@@ -489,6 +489,6 @@ jobs:
         secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         account_id: ${{ secrets.AWS_ACCOUNT_ID }}
         region: us-east-1
-        path: ${GITHUB_WORKSPACE}/.docker
+        path: "${GITHUB_WORKSPACE}/.docker/Dockerfile"
         repo: widechat
         tags: first-github-test

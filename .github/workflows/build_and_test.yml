@@ -493,13 +493,9 @@ jobs:
         echo "github.event_name: ${{ github.event_name }}"
         echo "github.ref: ${{ github.ref }}"
         echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+        echo "ENVs are: "
+        env
         cat $GITHUB_EVENT_PATH
-
-    # - name: cp dockerfile
-    #   run: |
-    #     ls -a ${GITHUB_WORKSPACE}
-    #     docker --help
-    #     cp ${GITHUB_WORKSPACE}/.docker/Dockerfile ./Dockerfile
 
     - name: AWS Deploy to ECR
       uses: Terranovax/aws-ecr-deploy@v1
@@ -510,4 +506,5 @@ jobs:
         region: us-east-1
         dockerfile: .docker/Dockerfile
         repo: widechat
-        tags: first-github-test
+        tags: github-ci-test
+

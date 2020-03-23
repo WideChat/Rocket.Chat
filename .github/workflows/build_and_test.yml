@@ -498,7 +498,8 @@ jobs:
     - name: cp dockerfile
       run: |
         ls -a ${GITHUB_WORKSPACE}
-        cp ${GITHUB_WORKSPACE}/.docker/Dockerfile .
+        docker --help
+        cp ${GITHUB_WORKSPACE}/.docker/Dockerfile ./Dockerfile
 
     - name: AWS Deploy to ECR
       uses: Terranovax/aws-ecr-deploy@v1

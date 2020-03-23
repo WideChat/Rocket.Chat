@@ -478,8 +478,11 @@ jobs:
 
   widechat-ecr-push:
     runs-on: ubuntu-latest
-    # if: $GITHUB_BASE_REF == 'develop_pwa'
+    if: github.base_ref == 'develop_pwa'
     # needs: build
+      
+    env:
+      GIT_REF: ${{ github.ref }}
 
     steps:
     - uses: actions/checkout@v1
@@ -493,9 +496,9 @@ jobs:
       if: github.event_name == 'pull_request'
 
       run: |
-        echo "GITHUB_REF: ${{ github.ref }}"
+        echo "GITHUB_REF: $GIT_REF"
         
-        arrRef=(${github.ref//\// })
+        arrRef=(${ GIT_REF//\// })
         pr_num = $arrRef[2]
         echo "pr_num is this: $pr_num"
 

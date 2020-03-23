@@ -532,6 +532,7 @@ jobs:
         account_id: ${{ secrets.AWS_ACCOUNT_ID }}
         region: us-east-1
         dockerfile: /tmp/build/Dockerfile
+        path: /tmp/build
         repo: widechat
         tags: pr-num-test
 

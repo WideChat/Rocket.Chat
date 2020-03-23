@@ -495,11 +495,11 @@ jobs:
         echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
         cat $GITHUB_EVENT_PATH
 
-    - name: cp dockerfile
-      run: |
-        ls -a ${GITHUB_WORKSPACE}
-        docker --help
-        cp ${GITHUB_WORKSPACE}/.docker/Dockerfile ./Dockerfile
+    # - name: cp dockerfile
+    #   run: |
+    #     ls -a ${GITHUB_WORKSPACE}
+    #     docker --help
+    #     cp ${GITHUB_WORKSPACE}/.docker/Dockerfile ./Dockerfile
 
     - name: AWS Deploy to ECR
       uses: Terranovax/aws-ecr-deploy@v1
@@ -508,6 +508,7 @@ jobs:
         secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         account_id: ${{ secrets.AWS_ACCOUNT_ID }}
         region: us-east-1
-        path: ${GITHUB_WORKSPACE}/.docker/Dockerfile
+        dockerfile: ${GITHUB_WORKSPACE}/.docker/Dockerfile
+        # path: ${GITHUB_WORKSPACE}/.docker/Dockerfile
         repo: widechat
         tags: first-github-test

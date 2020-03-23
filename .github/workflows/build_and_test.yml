@@ -17,6 +17,8 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # EAR debug
+    if: github.event_name == 'DEACTIVATED-pull_request'
 
     steps:
     - name: Github Info
@@ -160,6 +162,8 @@ jobs:
 
   test:
     runs-on: ubuntu-16.04
+    # EAR debug
+    if: github.event_name == 'DEACTIVATED-pull_request'
     needs: build
 
     strategy:
@@ -473,7 +477,7 @@ jobs:
   widechat-ecr-push:
     runs-on: ubuntu-latest
     if: github.base_ref == 'develop_pwa'
-    needs: test
+    # needs: test
       
     steps:
     - uses: actions/checkout@v1
@@ -491,19 +495,20 @@ jobs:
         arrRef=(${git_ref//\// })
         pr_num=${arrRef[2]}
         echo "pr_num is this: $pr_num"
+        export PR_NUM=$pr_num
 
-    - name: Restore build
-      uses: actions/download-artifact@v1
-      with:
-        name: build
-        path: /tmp/build
+    # - name: Restore build
+    #   uses: actions/download-artifact@v1
+    #   with:
+    #     name: build
+    #     path: /tmp/build
 
-    - name: Unpack build
-      run: |
-        cd /tmp/build
-        tar xzf Rocket.Chat.tar.gz
-        rm Rocket.Chat.tar.gz
-        cp "${GITHUB_WORKSPACE}/.docker/Dockerfile" .
+    # - name: Unpack build
+    #   run: |
+    #     cd /tmp/build
+    #     tar xzf Rocket.Chat.tar.gz
+    #     rm Rocket.Chat.tar.gz
+    #     cp "${GITHUB_WORKSPACE}/.docker/Dockerfile" .
 
     - name: AWS Deploy to ECR
       if: github.event_name == 'pull_request'
@@ -517,5 +522,5 @@ jobs:
         dockerfile: /tmp/build/Dockerfile
         path: /tmp/build
         repo: widechat
-        tags: "pr-num-$pr_num"
+        tags: pr-num-${pr_num}
 

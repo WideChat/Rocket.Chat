@@ -7,7 +7,7 @@ on:
     branches: '**'
   push:
     branches:
-      - develop
+      - develop_pwa
 
 env:
   CI: true

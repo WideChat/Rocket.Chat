@@ -495,7 +495,7 @@ jobs:
         arrRef=(${git_ref//\// })
         pr_num=${arrRef[2]}
         echo "pr_num is this: $pr_num"
-        echo ::set-env name=PR_NUM::$pr_num
+        echo ::set-env name=PR_TAG::pr-num-$pr_num
 
     # - name: Restore build
     #   uses: actions/download-artifact@v1
@@ -522,5 +522,5 @@ jobs:
         dockerfile: /tmp/build/Dockerfile
         path: /tmp/build
         repo: widechat
-        tags: pr-num-$PR_NUM
+        tags: $PR_TAG
 

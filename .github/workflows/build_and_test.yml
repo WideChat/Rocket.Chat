@@ -478,7 +478,7 @@ jobs:
 
   widechat-ecr-push:
     runs-on: ubuntu-latest
-    if: $GITHUB_BASE_REF == 'develop_pwa'
+    # if: $GITHUB_BASE_REF == 'develop_pwa'
     # needs: build
 
     steps:

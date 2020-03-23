@@ -479,8 +479,8 @@ jobs:
     if: github.base_ref == 'develop_pwa'
     # needs: test
       
-    steps:
-    - uses: actions/checkout@v1
+    # steps:
+    # - uses: actions/checkout@v1
 
     # - name: Install jq
     #   run: |
@@ -513,8 +513,8 @@ jobs:
     - name: AWS Deploy to ECR
       if: github.event_name == 'pull_request'
 
-      env:
-        TAG: ${{ env.PR_TAG }}
+      # env:
+      #   TAG: ${{ env.PR_TAG }}
    
       uses: Terranovax/aws-ecr-deploy@v1
       with:
@@ -525,5 +525,5 @@ jobs:
         dockerfile: /tmp/build/Dockerfile
         path: /tmp/build
         repo: widechat
-        tags: $TAG
+        tags: ${{ env.PR_TAG }}
 

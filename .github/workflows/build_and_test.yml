@@ -489,8 +489,8 @@ jobs:
     #     sudo apt-get -y -qq update
     #     sudo apt-get -y -qq install jq
 
-    # - name: Parse for PR num
-    #   if: github.event_name == 'pull_request'
+    - name: Parse for PR num
+      if: github.event_name == 'pull_request'
 
       run: |
         IFS='/' read -ra REF <<< '${{ GITHUB_REF }}'

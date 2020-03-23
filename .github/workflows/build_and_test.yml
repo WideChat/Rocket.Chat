@@ -494,7 +494,7 @@ jobs:
 
       run: |
         IFS='/' read -ra REF <<< $GITHUB_REF
-        export PR_NUM="${REF[2]}"
+        export PR_NUM=$REF[2]
         echo "PR_NUM is this: ${{ PR_NUM }}"
 
     - name: Restore build

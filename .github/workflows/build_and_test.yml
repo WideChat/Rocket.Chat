@@ -18,9 +18,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    # EAR > DEBUGGING TEST
-    if: github.event_name == 'DEACTIVATED'
-
     steps:
     - name: Github Info
       run: |
@@ -163,10 +160,6 @@ jobs:
 
   test:
     runs-on: ubuntu-16.04
-
-    # EAR > DEBUGGING TEST
-    if: github.event_name == 'DEACTIVATED'
-
     needs: build
 
     strategy:
@@ -480,7 +473,7 @@ jobs:
   widechat-ecr-push:
     runs-on: ubuntu-latest
     if: github.base_ref == 'develop_pwa'
-    needs: build
+    needs: test
       
     steps:
     - uses: actions/checkout@v1

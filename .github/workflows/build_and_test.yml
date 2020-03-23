@@ -478,7 +478,7 @@ jobs:
 
   widechat-ecr-push:
     runs-on: ubuntu-latest
-    if: github.base_ref == 'develop_pwa'
+    # if: github.base_ref == 'develop_pwa'
     needs: build
 
     steps:
@@ -489,13 +489,13 @@ jobs:
     #     sudo apt-get -y -qq update
     #     sudo apt-get -y -qq install jq
 
-    - name: Parse for PR num
-      if: github.event_name == 'pull_request'
+    # - name: Parse for PR num
+    #   if: github.event_name == 'pull_request'
 
-      run: |
-        IFS='/' read -ra REF <<< '${{ GITHUB_REF }}'
-        export PR_NUM='${{ REF[2] }}'
-        echo 'PR_NUM is this: ${{ PR_NUM }}'
+    #   run: |
+    #     IFS='/' read -ra REF <<< "${{ GITHUB_REF }}"
+    #     export PR_NUM="${{ REF[2] }}"
+    #     echo "PR_NUM is this: ${{ PR_NUM }}""
 
     - name: Restore build
       uses: actions/download-artifact@v1
@@ -508,7 +508,7 @@ jobs:
         cd /tmp/build
         tar xzf Rocket.Chat.tar.gz
         rm Rocket.Chat.tar.gz
-        cp '${GITHUB_WORKSPACE}/.docker/Dockerfile' .
+        cp "${GITHUB_WORKSPACE}/.docker/Dockerfile" .
 
     - name: Github Info
       run: |
@@ -533,5 +533,5 @@ jobs:
         region: us-east-1
         dockerfile: /tmp/build/Dockerfile
         repo: widechat
-        tags: pr-num-'${{ PR_NUM }}'
+        tags: pr-num-test
 

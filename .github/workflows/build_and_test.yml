@@ -483,6 +483,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+
+    - name: Restore build
+      uses: actions/download-artifact@v1
+      with:
+        name: build
+        path: /tmp/build
+
+    - name: Unpack build
+      run: |
+        cd /tmp/build
+        tar xzf Rocket.Chat.tar.gz
+        rm Rocket.Chat.tar.gz
+        cp ${DOCKER_PATH}/Dockerfile .
+
     - name: Github Info
       run: |
         echo "GITHUB_ACTION: $GITHUB_ACTION"
@@ -504,7 +518,7 @@ jobs:
         secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         account_id: ${{ secrets.AWS_ACCOUNT_ID }}
         region: us-east-1
-        dockerfile: .docker/Dockerfile
+        dockerfile: /tmp/build/Dockerfile
         repo: widechat
-        tags: github-ci-test
+        tags: pr-num-${GITHUB_REF#*tags/}
 

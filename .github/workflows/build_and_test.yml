@@ -18,6 +18,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    # EAR > DEBUGGING TEST
+    if: github.event_name == 'DEACTIVATED'
+
     steps:
     - name: Github Info
       run: |
@@ -160,6 +163,10 @@ jobs:
 
   test:
     runs-on: ubuntu-16.04
+
+    # EAR > DEBUGGING TEST
+    if: github.event_name == 'DEACTIVATED'
+
     needs: build
 
     strategy:
@@ -344,7 +351,10 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' || github.ref == 'refs/heads/develop'
+    # WideChat does not need this
+    if: github.event_name == 'DEACTIVATED'
+
+    # if: github.event_name == 'release' || github.ref == 'refs/heads/develop'
     needs: test
 
     steps:
@@ -390,6 +400,8 @@ jobs:
 
   image-build:
     runs-on: ubuntu-latest
+    # EAR - WideChat uses Terranovax/aws-ecr-deploy@v1 to deploy to ecr
+    if: github.event_name == 'DEACTIVATED'
     needs: deploy
 
     strategy:
@@ -463,3 +475,20 @@ jobs:
 
         docker build -t ${IMAGE}:develop .
         docker push ${IMAGE}:develop
+
+  widechat-ecr-push:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop_pwa' && github.event_name == 'pull_request'
+    needs: test
+
+    steps:
+      - name: AWS: Deploy to ECR
+        uses: Terranovax/aws-ecr-deploy@v1
+        with:
+          access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          account_id: ${{ secrets.AWS_ACCOUNT_ID }}
+          region: us-east-1
+          path: ${GITHUB_WORKSPACE}/.docker
+          repo: widechat
+          tags: first-github-test

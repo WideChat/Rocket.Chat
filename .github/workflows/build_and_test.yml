@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # EAR > DEBUGGING TEST
-    # if: github.event_name == 'DEACTIVATED'
+    if: github.event_name == 'DEACTIVATED'
 
     steps:
     - name: Github Info
@@ -478,8 +478,8 @@ jobs:
 
   widechat-ecr-push:
     runs-on: ubuntu-latest
-    # if: github.base_ref == 'develop_pwa'
-    needs: build
+    if: $GITHUB_BASE_REF == 'develop_pwa'
+    # needs: build
 
     steps:
     - uses: actions/checkout@v1
@@ -489,26 +489,28 @@ jobs:
     #     sudo apt-get -y -qq update
     #     sudo apt-get -y -qq install jq
 
-    # - name: Parse for PR num
-    #   if: github.event_name == 'pull_request'
+    - name: Parse for PR num
+      if: github.event_name == 'pull_request'
 
-    #   run: |
-    #     IFS='/' read -ra REF <<< "${{ GITHUB_REF }}"
-    #     export PR_NUM="${{ REF[2] }}"
-    #     echo "PR_NUM is this: ${{ PR_NUM }}""
-
-    - name: Restore build
-      uses: actions/download-artifact@v1
-      with:
-        name: build
-        path: /tmp/build
-
-    - name: Unpack build
       run: |
-        cd /tmp/build
-        tar xzf Rocket.Chat.tar.gz
-        rm Rocket.Chat.tar.gz
-        cp "${GITHUB_WORKSPACE}/.docker/Dockerfile" .
+        echo "GITHUB_REF: $GITHUB_REF"
+        IFS='/' read -ra REF <<< "${{ GITHUB_REF }}"
+        echo "GITHUB_REF: $REF"
+        export PR_NUM="${{ REF[2] }}"
+        echo "PR_NUM is this: ${{ PR_NUM }}""
+
+    # - name: Restore build
+    #   uses: actions/download-artifact@v1
+    #   with:
+    #     name: build
+    #     path: /tmp/build
+
+    # - name: Unpack build
+    #   run: |
+    #     cd /tmp/build
+    #     tar xzf Rocket.Chat.tar.gz
+    #     rm Rocket.Chat.tar.gz
+    #     cp "${GITHUB_WORKSPACE}/.docker/Dockerfile" .
 
     - name: Github Info
       run: |
@@ -522,17 +524,17 @@ jobs:
         echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
         # cat $GITHUB_EVENT_PATH
 
-    - name: AWS Deploy to ECR
-      if: github.event_name == 'pull_request'
-
-      uses: Terranovax/aws-ecr-deploy@v1
-      with:
-        access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        account_id: ${{ secrets.AWS_ACCOUNT_ID }}
-        region: us-east-1
-        dockerfile: /tmp/build/Dockerfile
-        path: /tmp/build
-        repo: widechat
-        tags: pr-num-test
+    # - name: AWS Deploy to ECR
+    #   if: github.event_name == 'pull_request'
+   
+    #   uses: Terranovax/aws-ecr-deploy@v1
+    #   with:
+    #     access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     account_id: ${{ secrets.AWS_ACCOUNT_ID }}
+    #     region: us-east-1
+    #     dockerfile: /tmp/build/Dockerfile
+    #     path: /tmp/build
+    #     repo: widechat
+    #     tags: pr-num-test
 

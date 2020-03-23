@@ -498,7 +498,7 @@ jobs:
       run: |
         echo "GITHUB_REF: $GIT_REF"
         
-        arrRef=(${{ GIT_REF//\// }})
+        arrRef=(${${{GIT_REF}}//\//})
         pr_num = $arrRef[2]
         echo "pr_num is this: $pr_num"
 

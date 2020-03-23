@@ -500,12 +500,6 @@ jobs:
         export PR_NUM = $refs[2]
         echo "PR_NUM is this: ${refs[2]}"
 
-
-        # IFS='/' read -ra REF <<< github.ref
-        # echo "REF array is: ${{REF}}"
-        # export PR_NUM="${{ REF[2] }}"
-        # echo "PR_NUM is this: ${{ PR_NUM }}""
-
     # - name: Restore build
     #   uses: actions/download-artifact@v1
     #   with:

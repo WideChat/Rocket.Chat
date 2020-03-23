@@ -493,9 +493,9 @@ jobs:
       if: github.event_name == 'pull_request'
 
       run: |
-        echo "GITHUB_REF: github.ref"
+        echo "GITHUB_REF: ${{ github.ref }}"
 
-        refs=$(echo github.ref | tr "/" "\n")
+        refs=$(echo "${{ github.ref }}" | tr "/" "\n")
         echo "refs[2] is this:  ${refs[2]}"
         export PR_NUM = $refs[2]
         echo "PR_NUM is this: ${refs[2]}"

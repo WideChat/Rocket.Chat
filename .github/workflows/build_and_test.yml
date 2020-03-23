@@ -478,7 +478,7 @@ jobs:
 
   widechat-ecr-push:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop_pwa' && github.event_name == 'pull_request'
+    # if: github.ref == 'refs/heads/develop_pwa' && github.event_name == 'pull_request'
     # needs: test
 
     steps:

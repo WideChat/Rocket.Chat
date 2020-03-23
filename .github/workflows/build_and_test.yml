@@ -494,11 +494,10 @@ jobs:
 
       run: |
         echo "GITHUB_REF: ${{ github.ref }}"
-
-        refs=$(echo "${{ github.ref }}" | tr "/" "\n")
-        echo "refs[2] is this:  ${refs[2]}"
-        export PR_NUM = $refs[2]
-        echo "PR_NUM is this: ${refs[2]}"
+        
+        arrRef=(${github.ref//\// })
+        export PR_NUM = $arrRef[2]
+        echo "PR_NUM is this: ${{ PR_NUM }}"
 
     # - name: Restore build
     #   uses: actions/download-artifact@v1

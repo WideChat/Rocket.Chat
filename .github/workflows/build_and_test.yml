@@ -478,11 +478,6 @@ jobs:
 
   widechat-ecr-push:
     runs-on: ubuntu-latest
-    echo "EAR github.ref is: "
-    echo github.ref
-    echo "EAR github.event_name is: "
-    echo github.event_name
-    
     if: github.ref == 'refs/heads/develop_pwa' && github.event_name == 'pull_request'
     needs: test
 

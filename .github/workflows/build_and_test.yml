@@ -481,8 +481,8 @@ jobs:
     if: github.base_ref == 'develop_pwa'
     # needs: build
       
-    env:
-      GIT_REF: ${{ github.ref }}
+    #env:
+      #GIT_REF: ${{ github.ref }}
 
     steps:
     - uses: actions/checkout@v1
@@ -496,9 +496,9 @@ jobs:
       if: github.event_name == 'pull_request'
 
       run: |
-        echo "GITHUB_REF: $GIT_REF"
-        
-        arrRef=(${${{GIT_REF}}//\//})
+        #echo "GITHUB_REF: $GIT_REF"
+        git_ref = ${{ github.ref }}
+        arrRef=(${git_ref//\//})
         pr_num = $arrRef[2]
         echo "pr_num is this: $pr_num"
 

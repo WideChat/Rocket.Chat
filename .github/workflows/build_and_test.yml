@@ -482,6 +482,17 @@ jobs:
     # needs: test
 
     steps:
+    - name: Github Info
+      run: |
+        echo "GITHUB_ACTION: $GITHUB_ACTION"
+        echo "GITHUB_ACTOR: $GITHUB_ACTOR"
+        echo "GITHUB_REF: $GITHUB_REF"
+        echo "GITHUB_HEAD_REF: $GITHUB_HEAD_REF"
+        echo "GITHUB_BASE_REF: $GITHUB_BASE_REF"
+        echo "github.event_name: ${{ github.event_name }}"
+        echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+        cat $GITHUB_EVENT_PATH
+
     - name: AWS Deploy to ECR
       uses: Terranovax/aws-ecr-deploy@v1
       with:

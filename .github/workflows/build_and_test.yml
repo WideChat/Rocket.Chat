@@ -17,8 +17,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # EAR debug
-    if: github.event_name == 'DEACTIVATED-pull_request'
 
     steps:
     - name: Github Info
@@ -162,8 +160,6 @@ jobs:
 
   test:
     runs-on: ubuntu-16.04
-    # EAR debug
-    if: github.event_name == 'DEACTIVATED-pull_request'
     needs: build
 
     strategy:
@@ -477,10 +473,10 @@ jobs:
   widechat-ecr-push:
     runs-on: ubuntu-latest
     if: github.base_ref == 'develop_pwa'
-    # needs: test
+    needs: test
       
     steps:
-    # - uses: actions/checkout@v1
+    - uses: actions/checkout@v1
 
     # - name: Install jq
     #   run: |
@@ -497,25 +493,22 @@ jobs:
         echo "pr_num is this: $pr_num"
         echo ::set-env name=PR_TAG::pr-num-$pr_num
 
-    # - name: Restore build
-    #   uses: actions/download-artifact@v1
-    #   with:
-    #     name: build
-    #     path: /tmp/build
+    - name: Restore build
+      uses: actions/download-artifact@v1
+      with:
+        name: build
+        path: /tmp/build
 
-    # - name: Unpack build
-    #   run: |
-    #     cd /tmp/build
-    #     tar xzf Rocket.Chat.tar.gz
-    #     rm Rocket.Chat.tar.gz
-    #     cp "${GITHUB_WORKSPACE}/.docker/Dockerfile" .
+    - name: Unpack build
+      run: |
+        cd /tmp/build
+        tar xzf Rocket.Chat.tar.gz
+        rm Rocket.Chat.tar.gz
+        cp "${GITHUB_WORKSPACE}/.docker/Dockerfile" .
 
     - name: AWS Deploy to ECR
       if: github.event_name == 'pull_request'
 
-      # env:
-      #   TAG: ${{ env.PR_TAG }}
-   
       uses: Terranovax/aws-ecr-deploy@v1
       with:
         access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}

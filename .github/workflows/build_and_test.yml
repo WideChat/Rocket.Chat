@@ -522,5 +522,5 @@ jobs:
         dockerfile: /tmp/build/Dockerfile
         path: /tmp/build
         repo: widechat
-        tags: pr-num-${{ PR_NUM }}
+        tags: pr-num-$PR_NUM
 

@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # EAR > DEBUGGING TEST
-    if: github.event_name == 'DEACTIVATED'
+    # if: github.event_name == 'DEACTIVATED'
 
     steps:
     - name: Github Info

@@ -489,11 +489,11 @@ jobs:
     #     sudo apt-get -y -qq update
     #     sudo apt-get -y -qq install jq
 
-    - name: Parse for PR num
-      run: |
-        IFS='/' read -ra REF <<< "$IN"
-        export PR_NUM="${ REF[2] }"
-        echo "PR_NUM is this: ${{ PR_NUM }}"
+    # - name: Parse for PR num
+    #   run: |
+    #     IFS='/' read -ra REF <<< "$IN"
+    #     export PR_NUM="${REF[2]}"
+    #     echo "PR_NUM is this: ${{ PR_NUM }}"
 
     - name: Restore build
       uses: actions/download-artifact@v1
@@ -529,5 +529,5 @@ jobs:
         region: us-east-1
         dockerfile: /tmp/build/Dockerfile
         repo: widechat
-        tags: "pr-num-${{ PR_NUM }}"
+        tags: "pr-num-test"
 

@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # EAR > DEBUGGING TEST
-    # if: github.event_name == 'DEACTIVATED'
+    if: github.event_name == 'DEACTIVATED'
 
     steps:
     - name: Github Info
@@ -479,10 +479,21 @@ jobs:
   widechat-ecr-push:
     runs-on: ubuntu-latest
     # if: github.ref == 'refs/heads/develop_pwa' && github.event_name == 'pull_request'
-    # needs: test
+    # needs: build
 
     steps:
     - uses: actions/checkout@v1
+
+    # - name: Install jq
+    #   run: |
+    #     sudo apt-get -y -qq update
+    #     sudo apt-get -y -qq install jq
+
+    - name: Parse for PR num
+      run: |
+        IFS='/' read -ra REF <<< "$IN"
+        export PR_NUM="${ REF[2] }"
+        echo "PR_NUM is this: ${{ PR_NUM }}"
 
     - name: Restore build
       uses: actions/download-artifact@v1
@@ -507,9 +518,7 @@ jobs:
         echo "github.event_name: ${{ github.event_name }}"
         echo "github.ref: ${{ github.ref }}"
         echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
-        echo "ENVs are: "
-        env
-        cat $GITHUB_EVENT_PATH
+        # cat $GITHUB_EVENT_PATH
 
     - name: AWS Deploy to ECR
       uses: Terranovax/aws-ecr-deploy@v1
@@ -520,5 +529,5 @@ jobs:
         region: us-east-1
         dockerfile: /tmp/build/Dockerfile
         repo: widechat
-        tags: pr-num-${GITHUB_REF#*tags/}
+        tags: "pr-num-${{ PR_NUM }}"
 

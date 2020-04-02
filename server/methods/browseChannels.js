@@ -15,6 +15,10 @@ const sortChannels = function(field, direction) {
 			return {
 				ts: direction === 'asc' ? 1 : -1,
 			};
+		case 'lastMessage':
+			return {
+				'lastMessage.ts': direction === 'asc' ? 1 : -1,
+			};
 		default:
 			return {
 				[field]: direction === 'asc' ? 1 : -1,
@@ -51,7 +55,7 @@ Meteor.methods({
 			return;
 		}
 
-		if (!['name', 'createdAt', 'usersCount', ...type === 'channels' ? ['usernames'] : [], ...type === 'users' ? ['username', 'email'] : []].includes(sortBy)) {
+		if (!['name', 'createdAt', 'usersCount', ...type === 'channels' ? ['usernames', 'lastMessage'] : [], ...type === 'users' ? ['username', 'email', 'bio'] : []].includes(sortBy)) {
 			return;
 		}
 
@@ -75,16 +79,22 @@ Meteor.methods({
 				return;
 			}
 
-			const result = Rooms.findByNameAndType(regex, 'c', {
+			const result = Rooms.findByNameOrFNameAndType(regex, 'c', {
 				...pagination,
-				sort,
+				sort: {
+					featured: -1,
+					...sort,
+				},
 				fields: {
 					description: 1,
 					topic: 1,
 					name: 1,
+					fname: 1,
 					lastMessage: 1,
 					ts: 1,
 					archived: 1,
+					default: 1,
+					featured: 1,
 					usersCount: 1,
 				},
 			});
@@ -115,6 +125,7 @@ Meteor.methods({
 			fields: {
 				username: 1,
 				name: 1,
+				bio: 1,
 				createdAt: 1,
 				emails: 1,
 				federation: 1,
@@ -133,7 +144,7 @@ Meteor.methods({
 		const total = result.count(); // count ignores the `skip` and `limit` options
 		const results = result.fetch();
 
-		// Try to find federated users, when appliable
+		// Try to find federated users, when applicable
 		if (isFederationEnabled() && type === 'users' && workspace === 'external' && text.indexOf('@') !== -1) {
 			const users = federationSearchUsers(text);
 
@@ -144,6 +155,7 @@ Meteor.methods({
 				results.unshift({
 					username: user.username,
 					name: user.name,
+					bio: user.bio,
 					emails: user.emails,
 					federation: user.federation,
 					isRemote: true,

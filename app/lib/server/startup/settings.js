@@ -354,7 +354,7 @@ settings.addGroup('Accounts', function() {
 			public: true,
 			i18nLabel: 'Group_by_Type',
 		});
-		this.add('Accounts_Default_User_Preferences_sidebarViewMode', 'medium', {
+		this.add('Accounts_Default_User_Preferences_sidebarViewMode', 'extended', {
 			type: 'select',
 			values: [
 				{

@@ -46,11 +46,25 @@
 		position: absolute;
 		z-index: 1;
 
-		left: 10px;
+		left: 0;
 
 		overflow-y: scroll;
 
 		background-color: var(--sidebar-background);
+	}
+}
+
+@media (width <= 500px) {
+	.rooms-list {
+		&__type {
+			padding: 0 var(--sidebar-small-default-padding) 1rem var(--sidebar-small-default-padding);
+
+			font-size: var(--rooms-list-title-text-size-mobile);
+		}
+
+		&__empty-room {
+			font-size: var(--rooms-list-empty-text-size-mobile);
+		}
 	}
 }
 

@@ -2,7 +2,7 @@ import { Migrations } from '../../../app/migrations';
 import { Subscriptions, Rooms } from '../../../app/models';
 
 Migrations.add({
-	version: 183,
+	version: 190,
 	up() {
 		const subscriptions = Subscriptions.find({}).fetch();
 

@@ -92,12 +92,9 @@ self.addEventListener('fetch', (event) => {
 		return;
 	}
 
-	console.log(event.request);
-
 	event.respondWith(
 		caches.match(event.request.clone().url).then((cached) => {
 			const fetchEvent = fetchFromNetwork(event);
-			console.log({ request: event.request, isCached: cached });
 			// We don't return cached HTML (except if fetch failed)
 			if (cached) {
 				const resourceType = cached.headers.get('content-type');

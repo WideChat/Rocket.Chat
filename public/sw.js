@@ -49,7 +49,7 @@ const fetchFromNetwork = (event) => {
 				handleAvatar(event.request, response);
 			}
 
-			caches.open(version).then((cache) => cache.put(event.request, clonedResponse));
+			caches.open(version).then((cache) => cache.put(event.request.url, clonedResponse));
 		}
 		return response;
 	}).catch(() => {
@@ -92,9 +92,12 @@ self.addEventListener('fetch', (event) => {
 		return;
 	}
 
+	console.log(event.request);
+
 	event.respondWith(
-		caches.match(event.request.clone()).then((cached) => {
+		caches.match(event.request.clone().url).then((cached) => {
 			const fetchEvent = fetchFromNetwork(event);
+			console.log({ request: event.request, isCached: cached });
 			// We don't return cached HTML (except if fetch failed)
 			if (cached) {
 				const resourceType = cached.headers.get('content-type');

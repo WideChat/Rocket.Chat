@@ -522,7 +522,8 @@ jobs:
     - name: Artifactory Deploy to Viasat
       if: github.event_name == 'pull_request'
       run: |
-        docker build --tag messaging:${{ env.PR_TAG }} . [-f /tmp/build/Dockerfile]
+        cd /tmp/build
+        docker build --tag messaging:${{ env.PR_TAG }} . 
         docker login vega-docker-dev.docker.artifactory.viasat.com -u ${{ secrets.ARTIFACTORY_USER }} -p ${{ secrets.ARTIFACTORY_PASS }}
         docker tag messaging:${{ env.PR_TAG }} vega-docker-dev.docker.artifactory.viasat.com/messaging:${{ env.PR_TAG }}
         docker push vega-docker-dev.docker.artifactory.viasat.com/messaging:${{ env.PR_TAG }}

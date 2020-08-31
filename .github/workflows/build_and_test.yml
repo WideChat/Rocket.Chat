@@ -487,6 +487,54 @@ jobs:
         docker build -t ${IMAGE}:develop .
         docker push ${IMAGE}:develop
 
+  # Push to artifactory - NOTE: temp on PRs to develop_pwa during development
+  viasat-artifactory-push:
+    runs-on: ubuntu-latest
+    if: github.base_ref == 'develop_pwa'
+    needs: test
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Parse for PR num
+      if: github.event_name == 'pull_request'
+
+      run: |
+        git_ref=${{ github.ref }}
+        arrRef=(${git_ref//\// })
+        pr_num=${arrRef[2]}
+        echo "pr_num is this: $pr_num"
+        echo ::set-env name=PR_TAG::pr-num-$pr_num
+
+    - name: Restore build
+      uses: actions/download-artifact@v1
+      with:
+        name: build
+        path: /tmp/build
+
+    - name: Unpack build
+      run: |
+        cd /tmp/build
+        tar xzf Rocket.Chat.tar.gz
+        rm Rocket.Chat.tar.gz
+        cp "${GITHUB_WORKSPACE}/.docker/Dockerfile" .
+
+    - name: Artifactory Deploy to Viasat
+      if: github.event_name == 'pull_request'
+      run: |
+        docker build --tag messaging:${{ env.PR_TAG }} . [-f /tmp/build/Dockerfile]
+        docker login vega-docker-dev.docker.artifactory.viasat.com -u ${{ secrets.ARTIFACTORY_USER }} -p ${{ secrets.ARTIFACTORY_PASS }}
+        docker tag messaging:${{ env.PR_TAG }} vega-docker-dev.docker.artifactory.viasat.com/messaging:${{ env.PR_TAG }}
+        docker push vega-docker-dev.docker.artifactory.viasat.com/messaging:${{ env.PR_TAG }}
+
+    # - uses: jfrog/setup-jfrog-cli@v1
+    #   env:
+    #     JF_ARTIFACTORY_1: ${{ secrets.ARTIFACTORY_P4BUILD_ACCELENET_API_TOKEN }}
+    # - run: |
+    #     # Ping the server
+    #     jfrog rt ping
+
+
   # TODO: configure for merges to develop when ready; configure for PROD as needed
   # NOTE: Right now it will only push on every merge into develop_pwa because we have a standing PR from it -> develop.
   widechat-ecr-push:

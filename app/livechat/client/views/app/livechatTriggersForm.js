@@ -82,9 +82,17 @@ Template.livechatTriggersForm.events({
 					params,
 				});
 			} else {
+				let params;
+				if ($('.trigger-action', this).val() === 'start-session') {
+					params = {
+						department: $('[name=session-department]', this).val(),
+					};
+				}
+
 				data.actions.push({
 					name: $('.trigger-action', this).val(),
 					value: $(`.${ $('.trigger-action', this).val() }-value`).val(),
+					params,
 				});
 			}
 		});

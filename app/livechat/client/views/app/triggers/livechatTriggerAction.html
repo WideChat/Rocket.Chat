@@ -16,6 +16,9 @@
 				<input type="text" name="send-message-name" placeholder="{{_ "Name_of_agent"}}" value="{{params.name}}" class="{{showCustomName}} rc-input__element">
 				<textarea name="send-message-msg" placeholder="{{_ "Message"}}" rows="3" class="rc-input__element">{{params.msg}}</textarea>
 			</div>
+			<div class="start-session trigger-action-value {{hiddenValue 'start-session'}}">
+				<input type="text" name="session-department" placeholder="{{_ "Name_of_department"}}" value="{{params.department}}" class="rc-input__element">
+			</div>
 		</div>
 	</div>
 </template>

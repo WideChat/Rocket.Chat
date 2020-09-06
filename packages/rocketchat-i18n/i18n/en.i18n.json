@@ -2606,6 +2606,7 @@
   "Name": "Name",
   "Name_cant_be_empty": "Name can't be empty",
   "Name_of_agent": "Name of agent",
+  "Name_of_department": "Name of department",
   "Name_optional": "Name (optional)",
   "Name_Placeholder": "Please enter your name...",
   "Navigation_History": "Navigation History",

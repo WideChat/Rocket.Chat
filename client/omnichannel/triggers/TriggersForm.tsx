@@ -111,7 +111,7 @@ const TriggersForm: FC<TriggersFormProps> = ({ values, handlers, className }) =>
 			name,
 			params: {
 				...actions.params,
-			}
+			},
 		});
 	});
 
@@ -198,7 +198,7 @@ const TriggersForm: FC<TriggersFormProps> = ({ values, handlers, className }) =>
 				<Select options={actionOptions} value={actionName} onChange={handleActionName}/>
 			</Field.Row>
 			{actionName === 'start-session' && <Field.Row>
-					<TextInput value={actionDepartmentName} onChange={handleActionDepartmentName} placeholder={t('Name_of_department')}/>
+				<TextInput value={actionDepartmentName} onChange={handleActionDepartmentName} placeholder={t('Name_of_department')}/>
 			</Field.Row>}
 			{actionName === 'send-message' && <>
 				<Field.Row>
@@ -209,7 +209,7 @@ const TriggersForm: FC<TriggersFormProps> = ({ values, handlers, className }) =>
 				</Field.Row>}
 				<Field.Row>
 					<TextAreaInput rows={3} value={actionMsg} onChange={handleActionMessage} placeholder={t('Message')}/>
-				</Field.Row> 
+				</Field.Row>
 			</>}
 		</Field>
 	</>;

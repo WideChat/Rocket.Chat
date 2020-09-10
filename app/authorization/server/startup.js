@@ -108,6 +108,7 @@ Meteor.startup(function() {
 		{ _id: 'view-livechat-current-chats',        roles: ['livechat-manager', 'admin'] },
 		{ _id: 'view-livechat-real-time-monitoring', roles: ['livechat-manager', 'admin'] },
 		{ _id: 'view-livechat-triggers',        roles: ['livechat-manager', 'admin'] },
+		{ _id: 'view-livechat-filters',         roles: ['livechat-manager', 'admin'] },
 		{ _id: 'view-livechat-customfields',    roles: ['livechat-manager', 'admin'] },
 		{ _id: 'view-livechat-installation',    roles: ['livechat-manager', 'admin'] },
 		{ _id: 'view-livechat-appearance',      roles: ['livechat-manager', 'admin'] },

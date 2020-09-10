@@ -77,7 +77,7 @@ export class AppLivechatBridge {
 		this.orch.debugLog(`The App ${ appId } is creating a livechat filter.`);
 
 		const filterData = {
-			_id: filter.id || Random.id(), 
+			_id: filter.id || Random.id(),
 			name: filter.name,
 			description: filter.description,
 			enabled: filter.enabled,
@@ -92,7 +92,7 @@ export class AppLivechatBridge {
 		this.orch.debugLog(`The App ${ appId } is updating a livechat filter.`);
 
 		const filterData = {
-			_id: filter.id, 
+			_id: filter.id,
 			name: filter.name,
 			description: filter.description,
 			enabled: filter.enabled,
@@ -100,7 +100,7 @@ export class AppLivechatBridge {
 			slug: filter.slug,
 		};
 
-		return LivechatFilter.updateById(filterData._id, filterData);;
+		return LivechatFilter.updateById(filterData._id, filterData);
 	}
 
 	async closeRoom(room, comment, appId) {

@@ -109,6 +109,11 @@ export function sendWebPush(notification, platform) {
 	const vapidPrivate = settings.get('Vapid_private_key');
 	const vapidSubject = settings.get('Vapid_subject');
 
+	if (!gcmKey || !vapidPublic || !vapidPrivate || !vapidSubject) {
+		console.log('Push not configured properly');
+		return;
+	}
+
 	webpush.setGCMAPIKey(gcmKey);
 	webpush.setVapidDetails(
 		vapidSubject,

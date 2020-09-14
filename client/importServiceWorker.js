@@ -2,7 +2,8 @@ import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
 
 import { settings } from '../app/settings';
-import { handleError } from '../app/utils/client';
+import { handleError, t } from '../app/utils/client';
+import { modal } from '../app/ui-utils/client';
 
 function urlBase64ToUint8Array(base64String) {
 	const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
@@ -79,15 +80,21 @@ Meteor.startup(() => {
 							if (sub === null) {
 								console.log('Not subscribed to push service!');
 								if (settingsReady) {
-									if (window.Notification && Notification.permission === 'granted') {
-										subscribeUser();
-									} else if (window.Notification && (Notification.permission !== 'granted')) {
-										return Notification.requestPermission(function(permission) {
+									modal.open({
+										title: t('Important'),
+										type: 'info',
+										text: t('Please subscribe to push notifications to continue'),
+										showCancelButton: true,
+										confirmButtonText: t('Subscribe'),
+										cancelButtonText: t('Cancel'),
+										closeOnConfirm: true,
+									}, () => {
+										Notification.requestPermission().then(function(permission) {
 											if (permission === 'granted') {
 												subscribeUser();
 											}
 										});
-									}
+									});
 									computation.stop();
 								}
 							} else {

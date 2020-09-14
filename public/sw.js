@@ -158,9 +158,6 @@ self.addEventListener('push', function(event) {
 			const client = clients[0];
 			client.postMessage(data);
 		} else {
-			const data = JSON.parse(event.data.text());
-
-
 			const options = {
 				body: data.text,
 				icon: data.icon,

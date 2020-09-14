@@ -110,7 +110,6 @@ export function sendWebPush(notification, platform) {
 	const vapidSubject = settings.get('Vapid_subject');
 
 	if (!gcmKey || !vapidPublic || !vapidPrivate || !vapidSubject) {
-		console.log('Push not configured properly');
 		return;
 	}
 

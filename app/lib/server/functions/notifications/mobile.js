@@ -104,6 +104,10 @@ export function getNotificationPayload({
 }
 
 export function sendWebPush(notification, platform) {
+	if (settings.get('Push_enable') !== true) {
+		return;
+	}
+
 	const gcmKey = settings.get('Push_gcm_api_key');
 	const vapidPublic = settings.get('Vapid_public_key');
 	const vapidPrivate = settings.get('Vapid_private_key');

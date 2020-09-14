@@ -71,6 +71,10 @@ Meteor.startup(() => {
 						};
 						console.log(`Service worker has been registered for scope: ${ reg.scope }`);
 					} else {
+						if (settings.get('Push_enable') !== true) {
+							return;
+						}
+
 						reg.pushManager.getSubscription().then(function(sub) {
 							if (sub === null) {
 								console.log('Not subscribed to push service!');

@@ -56,17 +56,23 @@ const fetchFromNetwork = (event) => {
 			caches.open(version).then((cache) => cache.put(event.request, clonedResponse));
 		}
 		return response;
-	}).catch(() => {
-		if (hasHash(event.request.url)) { return caches.match(event.request.url); }
-		// If the request URL hasn't been served from cache and isn't sockjs we suppose it's HTML
-		if (!/\/sockjs\//.test(event.request.url)) { return caches.match(HTMLToCache); }
-		// Only for sockjs
-		return new Response('No connection to the server', {
-			status: 503,
-			statusText: 'No connection to the server',
-			headers: new Headers({ 'Content-Type': 'text/plain' }),
-		});
-	});
+	}).catch(() =>
+		new Promise(function(resolve) {
+			caches.match(event.request.url).then((cached) => {
+				if (cached) {
+					return resolve(cached);
+				}
+				// If the request URL hasn't been served from cache and isn't sockjs we suppose it's HTML
+				if (!/\/sockjs\//.test(event.request.url)) { return resolve(caches.match(HTMLToCache)); }
+				// Only for sockjs
+				return resolve(new Response('No connection to the server', {
+					status: 503,
+					statusText: 'No connection to the server',
+					headers: new Headers({ 'Content-Type': 'text/plain' }),
+				}));
+			});
+		}),
+	);
 };
 
 self.addEventListener('install', (event) => {
@@ -106,6 +112,10 @@ self.addEventListener('fetch', (event) => {
 				const resourceType = cached.headers.get('content-type');
 				// We only return non css/js/html cached response e.g images
 				if (!hasHash(event.request.url) && !/text\/html/.test(resourceType)) {
+					// If API call try to respond with network response first
+					if (/\/api\//.test(event.request.url)) {
+						return fetchFromNetwork(event);
+					}
 					// Refresh resources which are not(sound or assets)
 					if (!/sounds/.test(event.request.url) && !/assets/.test(event.request.url) && !/font/.test(event.request.url)) {
 						fetchFromNetwork(event);

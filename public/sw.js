@@ -25,7 +25,7 @@ function handleAvatar(request, response) {
 	caches.open(version).then((cache) => cache.put(new Request(url), clonedResponse));
 }
 
-const fetchFromNetwork = (event) => {
+const fetchFromNetwork = (event, cached) => {
 	const requestToFetch = event.request.clone();
 	return fetch(requestToFetch, { cache: 'reload' }).then((response) => {
 		const clonedResponse = response.clone();
@@ -56,23 +56,17 @@ const fetchFromNetwork = (event) => {
 			caches.open(version).then((cache) => cache.put(event.request, clonedResponse));
 		}
 		return response;
-	}).catch(() =>
-		new Promise(function(resolve) {
-			caches.match(event.request.url).then((cached) => {
-				if (cached) {
-					return resolve(cached);
-				}
-				// If the request URL hasn't been served from cache and isn't sockjs we suppose it's HTML
-				if (!/\/sockjs\//.test(event.request.url)) { return resolve(caches.match(HTMLToCache)); }
-				// Only for sockjs
-				return resolve(new Response('No connection to the server', {
-					status: 503,
-					statusText: 'No connection to the server',
-					headers: new Headers({ 'Content-Type': 'text/plain' }),
-				}));
-			});
-		}),
-	);
+	}).catch(() => {
+		if (cached) { return cached; }
+		// If the request URL hasn't been served from cache and isn't sockjs we suppose it's HTML
+		if (!/\/sockjs\//.test(event.request.url)) { return caches.match(HTMLToCache); }
+		// Only for sockjs
+		return new Response('No connection to the server', {
+			status: 503,
+			statusText: 'No connection to the server',
+			headers: new Headers({ 'Content-Type': 'text/plain' }),
+		});
+	});
 };
 
 self.addEventListener('install', (event) => {
@@ -114,11 +108,11 @@ self.addEventListener('fetch', (event) => {
 				if (!hasHash(event.request.url) && !/text\/html/.test(resourceType)) {
 					// If API call try to respond with network response first
 					if (/\/api\//.test(event.request.url)) {
-						return fetchFromNetwork(event);
+						return fetchFromNetwork(event, cached);
 					}
 					// Refresh resources which are not(sound or assets)
 					if (!/sounds/.test(event.request.url) && !/assets/.test(event.request.url) && !/font/.test(event.request.url)) {
-						fetchFromNetwork(event);
+						fetchFromNetwork(event, cached);
 					}
 					return cached;
 				}

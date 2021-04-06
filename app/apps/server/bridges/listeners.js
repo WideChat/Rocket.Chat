@@ -98,6 +98,10 @@ export class AppListenerBridge {
 	async livechatEvent(inte, data) {
 		switch (inte) {
 			case AppInterface.IPostLivechatAgentAssigned:
+				return this.orch.getManager().getListenerManager().executeListener(inte, {
+					room: this.orch.getConverters().get('rooms').convertRoom(data.room),
+					agent: this.orch.getConverters().get('users').convertToApp(data.user),
+				});
 			case AppInterface.IPostLivechatAgentUnassigned:
 				return this.orch.getManager().getListenerManager().executeListener(inte, {
 					room: this.orch.getConverters().get('rooms').convertRoom(data.room),

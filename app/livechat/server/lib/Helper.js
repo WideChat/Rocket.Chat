@@ -206,7 +206,6 @@ export const normalizeAgent = (agentId) => {
 
 export const dispatchAgentDelegated = (rid, agentId) => {
 	const agent = normalizeAgent(agentId);
-
 	notifications.streamLivechatRoom.emit(rid, {
 		type: 'agentData',
 		data: agent,

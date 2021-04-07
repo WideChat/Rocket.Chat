@@ -41,7 +41,7 @@ export const QueueManager = {
 		LivechatRooms.updateRoomCount();
 
 		await queueInquiry(room, inquiry, agent);
-		
+
 		return LivechatRooms.findOneById(rid);
 	},
 

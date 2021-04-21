@@ -38,7 +38,6 @@ function getSalesforceAgentFields(message, room) {
 	}
 }
 
-
 callbacks.add('afterSaveMessage', function(message, room) {
 	if (!validateMessage(message, room)) {
 		return message;

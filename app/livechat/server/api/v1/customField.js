@@ -34,6 +34,31 @@ API.v1.addRoute('livechat/custom.field', {
 	},
 });
 
+API.v1.addRoute('livechat/custom-field', { authRequired: true }, {
+	post() {
+		try {
+			check(this.bodyParams, {
+				field: String,
+				label: String,
+				scope: String,
+				visibility: Boolean,
+				regexp: String,
+			});
+
+			const { field, visibility } = this.bodyParams;
+			const { customField } = Promise.await(findCustomFieldById({ userId: this.userId, customFieldId: field }));
+
+			API.v1.success(
+				Meteor.runAsUser(this.userId,
+					() => Meteor.call('livechat:saveCustomField', customField ? field : undefined, { ...this.bodyParams, visibility: visibility ? 'visible' : 'hidden' }),
+				),
+			);
+		} catch (e) {
+			return API.v1.failure(e);
+		}
+	},
+});
+
 API.v1.addRoute('livechat/custom.fields', {
 	post() {
 		check(this.bodyParams, {

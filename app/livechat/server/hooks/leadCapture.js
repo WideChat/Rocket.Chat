@@ -1,9 +1,6 @@
-
-import { Meteor } from 'meteor/meteor';
-
 import { callbacks } from '../../../callbacks';
-import { settings } from '../../../settings';
 import { LivechatVisitors } from '../../../models';
+import { settings } from '../../../settings';
 
 function validateMessage(message, room) {
 	// skips this callback if the message was edited

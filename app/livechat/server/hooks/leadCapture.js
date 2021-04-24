@@ -28,16 +28,6 @@ function validateMessage(message, room) {
 	return true;
 }
 
-function getSalesforceAgentFields(message, room) {
-	if (room.customFields && room.customFields.salesforceAgentName) {
-		if (message.customFields) {
-			message.customFields[' salesforceAgentName '] = room.customFields.salesforceAgentName;
-		} else {
-			message.customFields = { salesforceAgentName: room.customFields.salesforceAgentName };
-		}
-	}
-}
-
 callbacks.add('afterSaveMessage', function(message, room) {
 	if (!validateMessage(message, room)) {
 		return message;
@@ -59,9 +49,6 @@ callbacks.add('afterSaveMessage', function(message, room) {
 }, callbacks.priority.LOW, 'leadCapture');
 
 callbacks.add('beforeSaveMessage', function(message, room) {
-	if (room) {
-		getSalesforceAgentFields(message, room);
-	}
 	if (settings.get('Livechat_kill_switch')) {
 		throw new Meteor.Error(settings.get('Livechat_kill_switch_message'));
 	}

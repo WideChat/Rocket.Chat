@@ -93,7 +93,7 @@ API.v1.addRoute('settings.addCustomOAuthWithSettings', { authRequired: true }, {
 		if (!this.requestParams().name || !this.requestParams().name.trim()) {
 			throw new Meteor.Error('error-name-param-not-provided', 'The parameter "name" is required');
 		}
-		
+
 		Meteor.runAsUser(this.userId, () => {
 			Meteor.call('addOAuthServiceWithSettings', this.requestParams().name, this.requestParams());
 		});

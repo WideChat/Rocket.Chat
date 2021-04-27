@@ -6,7 +6,7 @@ import { addOAuthService } from '../functions/addOAuthService';
 
 Meteor.methods({
 	addOAuthServiceWithSettings(name, values) {
-        check(name, String);
+		check(name, String);
 
 		if (!Meteor.userId()) {
 			throw new Meteor.Error('error-invalid-user', 'Invalid user', { method: 'addOAuthServiceWithSettings' });

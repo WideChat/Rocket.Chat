@@ -1,6 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 
-import { callbacks } from '../../../app/callbacks';
+import { callbacks } from '../../../app/callbacks/client';
 
 const removeUserIdOnLogout = () => {
 	if ('serviceWorker' in navigator) {

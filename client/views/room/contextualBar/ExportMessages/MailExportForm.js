@@ -12,7 +12,7 @@ import {
 import { useMutableCallback } from '@rocket.chat/fuselage-hooks';
 import React, { useState, useEffect } from 'react';
 
-import { offlineAction } from '../../../../../app/ui-utils';
+import { offlineAction } from '../../../../../app/ui-utils/client';
 import { roomTypes, isEmail } from '../../../../../app/utils/client';
 import UserAutoCompleteMultiple from '../../../../../ee/client/audit/UserAutoCompleteMultiple';
 import { useEndpoint } from '../../../../contexts/ServerContext';

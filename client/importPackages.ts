@@ -63,7 +63,7 @@ import '../app/ui-login/client';
 import '../app/ui-master/client';
 import '../app/ui-message/client';
 import '../app/ui-sidenav/client';
-import '../app/ui-share';
+import '../app/ui-share/client';
 import '../app/ui-vrecord/client';
 import '../app/videobridge/client';
 import '../app/webdav/client';

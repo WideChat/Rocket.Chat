@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
 
-import { settings } from '../app/settings';
+import { settings } from '../app/settings/client';
 import { modal } from '../app/ui-utils/client';
 import { handleError, t } from '../app/utils/client';
 

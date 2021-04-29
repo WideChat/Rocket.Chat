@@ -4,8 +4,8 @@ import { Session } from 'meteor/session';
 import { AccountBox } from './AccountBox';
 import { roomTypes } from '../../../utils/client/lib/roomTypes';
 import { Subscriptions } from '../../../models';
+import { RoomManager } from '../../../../client/lib/RoomManager';
 import { isMobile } from '../../../utils/client/lib/isMobile';
-
 
 export const SideNav = new class {
 	constructor() {
@@ -49,7 +49,7 @@ export const SideNav = new class {
 	closeFlex(callback = null) {
 		const routesNamesForRooms = roomTypes.getTypes().filter((i) => i.route).map((i) => i.route.name);
 		if (!routesNamesForRooms.includes(FlowRouter.current().route.name)) {
-			const subscription = Subscriptions.findOne({ rid: Session.get('lastOpenedRoom') });
+			const subscription = Subscriptions.findOne({ rid: RoomManager.lastRid });
 			if (subscription) {
 				if (isMobile()) {
 					FlowRouter.go('home');

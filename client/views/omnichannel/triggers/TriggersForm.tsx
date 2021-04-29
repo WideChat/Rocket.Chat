@@ -1,6 +1,14 @@
-import React, { FC, FormEvent, useMemo, useState } from 'react';
-import { Box, Field, TextInput, ToggleSwitch, BoxClassName, Select, TextAreaInput, SelectOptions } from '@rocket.chat/fuselage';
+import {
+	Box,
+	Field,
+	TextInput,
+	ToggleSwitch,
+	Select,
+	TextAreaInput,
+	SelectOptions,
+} from '@rocket.chat/fuselage';
 import { useMutableCallback } from '@rocket.chat/fuselage-hooks';
+import React, { ComponentProps, FC, FormEvent, useMemo, useState } from 'react';
 
 import { useTranslation } from '../../../contexts/TranslationContext';
 import { useComponentDidUpdate } from '../../../hooks/useComponentDidUpdate';
@@ -8,7 +16,7 @@ import { useComponentDidUpdate } from '../../../hooks/useComponentDidUpdate';
 type TriggerConditions = {
 	name: string;
 	value: string | number;
-}
+};
 
 type TriggerActions = {
 	name: string;
@@ -18,7 +26,7 @@ type TriggerActions = {
 		msg: string | undefined;
 		name: string | undefined;
 	};
-}
+};
 
 type TriggersFormProps = {
 	values: {
@@ -41,22 +49,14 @@ type TriggersFormProps = {
 		handleConditions: (value: TriggerConditions) => void;
 		handleActions: (value: TriggerActions) => void;
 	};
-	className?: BoxClassName;
-}
+	className?: ComponentProps<typeof Field>['className'];
+};
 
 const TriggersForm: FC<TriggersFormProps> = ({ values, handlers, className }) => {
 	const [nameError, setNameError] = useState('');
 	const [msgError, setMsgError] = useState('');
 	const t = useTranslation();
-	const {
-		name,
-		description,
-		enabled,
-		runOnce,
-		registeredOnly,
-		conditions,
-		actions,
-	} = values;
+	const { name, description, enabled, runOnce, registeredOnly, conditions, actions } = values;
 
 	const {
 		handleName,
@@ -68,10 +68,7 @@ const TriggersForm: FC<TriggersFormProps> = ({ values, handlers, className }) =>
 		handleActions,
 	} = handlers;
 
-	const {
-		name: conditionName,
-		value: conditionValue,
-	} = conditions;
+	const { name: conditionName, value: conditionValue } = conditions;
 
 	const {
 		name: actionName,
@@ -83,28 +80,40 @@ const TriggersForm: FC<TriggersFormProps> = ({ values, handlers, className }) =>
 		},
 	} = actions;
 
-	const conditionOptions: SelectOptions = useMemo(() => [
-		['page-url', t('Visitor_page_URL')],
-		['time-on-site', t('Visitor_time_on_site')],
-		['chat-opened-by-visitor', t('Chat_opened_by_visitor')],
-	], [t]);
+	const conditionOptions: SelectOptions = useMemo(
+		() => [
+			['page-url', t('Visitor_page_URL')],
+			['time-on-site', t('Visitor_time_on_site')],
+			['chat-opened-by-visitor', t('Chat_opened_by_visitor')],
+		],
+		[t],
+	);
 
-	const actionOptions: SelectOptions = useMemo(() => [
-		['send-message', t('Send_a_message')],
-		['start-session', t('Start_a_session')],
-	], [t]);
+	const actionOptions: SelectOptions = useMemo(
+		() => [
+			['send-message', t('Send_a_message')],
+			['start-session', t('Start_a_session')],
+		],
+		[t],
+	);
 
-	const conditionValuePlaceholders: {[conditionName: string]: string} = useMemo(() => ({
-		'page-url': t('Enter_a_regex'),
-		'time-on-site': t('Time_in_seconds'),
-	}), [t]);
+	const conditionValuePlaceholders: { [conditionName: string]: string } = useMemo(
+		() => ({
+			'page-url': t('Enter_a_regex'),
+			'time-on-site': t('Time_in_seconds'),
+		}),
+		[t],
+	);
 
 	const conditionValuePlaceholder = conditionValuePlaceholders[conditionName];
 
-	const senderOptions: SelectOptions = useMemo(() => [
-		['queue', t('Impersonate_next_agent_from_queue')],
-		['custom', t('Custom_agent')],
-	], [t]);
+	const senderOptions: SelectOptions = useMemo(
+		() => [
+			['queue', t('Impersonate_next_agent_from_queue')],
+			['custom', t('Custom_agent')],
+		],
+		[t],
+	);
 
 	const handleConditionName = useMutableCallback((name) => {
 		handleConditions({
@@ -139,15 +148,17 @@ const TriggersForm: FC<TriggersFormProps> = ({ values, handlers, className }) =>
 		});
 	});
 
-	const handleActionDepartmentName = useMutableCallback(({ currentTarget: { value: department } }) => {
-		handleActions({
-			...actions,
-			params: {
-				...actions.params,
-				department,
-			},
-		});
-	});
+	const handleActionDepartmentName = useMutableCallback(
+		({ currentTarget: { value: department } }) => {
+			handleActions({
+				...actions,
+				params: {
+					...actions.params,
+					department,
+				},
+			});
+		},
+	);
 
 	const handleActionSender = useMutableCallback((sender) => {
 		handleActions({
@@ -235,11 +246,7 @@ const TriggersForm: FC<TriggersFormProps> = ({ values, handlers, className }) =>
 			<Field className={className}>
 				<Field.Label>{t('Action')}</Field.Label>
 				<Field.Row>
-					<Select
-						options={actionOptions}
-						value={actionName}
-						onChange={handleActionName}
-					/>
+					<Select options={actionOptions} value={actionName} onChange={handleActionName} />
 				</Field.Row>
 				{actionName === 'start-session' && (
 					<Field.Row>
@@ -274,7 +281,7 @@ const TriggersForm: FC<TriggersFormProps> = ({ values, handlers, className }) =>
 								rows={3}
 								value={actionMsg}
 								onChange={handleActionMessage}
-								placeholder={`${ t('Message') }*`}
+								placeholder={`${t('Message')}*`}
 							/>
 						</Field.Row>
 					</>

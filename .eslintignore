@@ -18,5 +18,7 @@ imports/client/
 !/.storybook/
 ee/server/services/dist/**
 !/.mocharc.js
+!/client/.eslintrc.js
+!/ee/client/.eslintrc.js
 app/utils/client/lib/sha1.js
 app/analytics/server/trackEvents.js

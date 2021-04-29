@@ -6,6 +6,5 @@ import './popup/messagePopupChannel';
 import './popup/messagePopupConfig';
 import './popup/messagePopupEmoji';
 import './popup/messagePopupSlashCommandPreview';
-import '../../../client/views/blocks';
 import './pushMessage';
 import './pushMessageAction';

@@ -1,13 +1,13 @@
-import React from 'react';
 import { Button, FieldGroup, ButtonGroup } from '@rocket.chat/fuselage';
 import { useMutableCallback } from '@rocket.chat/fuselage-hooks';
+import React from 'react';
 
-import FiltersForm from './FiltersForm';
-import { useTranslation } from '../../../contexts/TranslationContext';
-import { useMethod } from '../../../contexts/ServerContext';
-import { useForm } from '../../../hooks/useForm';
 import { useRoute } from '../../../contexts/RouterContext';
+import { useMethod } from '../../../contexts/ServerContext';
 import { useToastMessageDispatch } from '../../../contexts/ToastMessagesContext';
+import { useTranslation } from '../../../contexts/TranslationContext';
+import { useForm } from '../../../hooks/useForm';
+import FiltersForm from './FiltersForm';
 
 const NewFilterPage = ({ onSave }) => {
 	const dispatchToastMessage = useToastMessageDispatch();
@@ -36,16 +36,18 @@ const NewFilterPage = ({ onSave }) => {
 		}
 	});
 
-	return 	<>
-		<FieldGroup>
-			<FiltersForm values={values} handlers={handlers}/>
-		</FieldGroup>
-		<ButtonGroup align='end'>
-			<Button primary onClick={handleSave}>
-				{t('Save')}
-			</Button>
-		</ButtonGroup>
-	</>;
+	return (
+		<>
+			<FieldGroup>
+				<FiltersForm values={values} handlers={handlers} />
+			</FieldGroup>
+			<ButtonGroup align='end'>
+				<Button primary onClick={handleSave}>
+					{t('Save')}
+				</Button>
+			</ButtonGroup>
+		</>
+	);
 };
 
 export default NewFilterPage;

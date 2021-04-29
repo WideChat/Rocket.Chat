@@ -139,7 +139,7 @@
 		"@nivo/heatmap": "^0.61.0",
 		"@nivo/line": "^0.61.1",
 		"@nivo/pie": "^0.61.1",
-		"@rocket.chat/apps-engine": "git+https://github.com/WideChat/Rocket.Chat.Apps-engine.git#alpha",
+		"@rocket.chat/apps-engine": "git+https://github.com/WideChat/Rocket.Chat.Apps-engine.git#124d506b843adf24dedc1a8fbdee5e38583ab710",
 		"@rocket.chat/css-in-js": "^0.23.0",
 		"@rocket.chat/emitter": "^0.23.0",
 		"@rocket.chat/fuselage": "^0.23.0",

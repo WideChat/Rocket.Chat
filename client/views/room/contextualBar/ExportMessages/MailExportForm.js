@@ -12,6 +12,7 @@ import {
 import { useMutableCallback } from '@rocket.chat/fuselage-hooks';
 import React, { useState, useEffect } from 'react';
 
+import { offlineAction } from '../../../../../app/ui-utils';
 import { roomTypes, isEmail } from '../../../../../app/utils/client';
 import UserAutoCompleteMultiple from '../../../../../ee/client/audit/UserAutoCompleteMultiple';
 import { useEndpoint } from '../../../../contexts/ServerContext';
@@ -19,7 +20,6 @@ import { useToastMessageDispatch } from '../../../../contexts/ToastMessagesConte
 import { useTranslation } from '../../../../contexts/TranslationContext';
 import { useForm } from '../../../../hooks/useForm';
 import { useUserRoom } from '../../hooks/useUserRoom';
-import { offlineAction } from '../../../../../app/ui-utils';
 
 const clickable = css`
 	cursor: pointer;

@@ -72,7 +72,12 @@ const TriggersForm: FC<TriggersFormProps> = ({ values, handlers, className }) =>
 
 	const {
 		name: actionName,
-		params: { sender: actionSender, msg: actionMsg, name: actionAgentName, department: actionDepartmentName, },
+		params: {
+			sender: actionSender,
+			msg: actionMsg,
+			name: actionAgentName,
+			department: actionDepartmentName,
+		},
 	} = actions;
 
 	const conditionOptions: SelectOptions = useMemo(
@@ -143,15 +148,17 @@ const TriggersForm: FC<TriggersFormProps> = ({ values, handlers, className }) =>
 		});
 	});
 
-	const handleActionDepartmentName = useMutableCallback(({ currentTarget: { value: department } }) => {
-		handleActions({
-			...actions,
-			params: {
-				...actions.params,
-				department,
-			},
-		});
-	});
+	const handleActionDepartmentName = useMutableCallback(
+		({ currentTarget: { value: department } }) => {
+			handleActions({
+				...actions,
+				params: {
+					...actions.params,
+					department,
+				},
+			});
+		},
+	);
 
 	const handleActionSender = useMutableCallback((sender) => {
 		handleActions({
@@ -239,11 +246,7 @@ const TriggersForm: FC<TriggersFormProps> = ({ values, handlers, className }) =>
 			<Field className={className}>
 				<Field.Label>{t('Action')}</Field.Label>
 				<Field.Row>
-					<Select
-						options={actionOptions}
-						value={actionName}
-						onChange={handleActionName}
-					/>
+					<Select options={actionOptions} value={actionName} onChange={handleActionName} />
 				</Field.Row>
 				{actionName === 'start-session' && (
 					<Field.Row>
@@ -278,7 +281,7 @@ const TriggersForm: FC<TriggersFormProps> = ({ values, handlers, className }) =>
 								rows={3}
 								value={actionMsg}
 								onChange={handleActionMessage}
-								placeholder={`${ t('Message') }*`}
+								placeholder={`${t('Message')}*`}
 							/>
 						</Field.Row>
 					</>

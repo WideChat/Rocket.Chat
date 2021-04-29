@@ -74,7 +74,8 @@ Meteor.methods({
 				editedAt: message.editedAt,
 				editedBy: message.editedBy,
 				msg: message.msg,
-				temp: true, tempActions,
+				temp: true,
+				tempActions,
 			};
 
 			if (originalMessage.attachments) {

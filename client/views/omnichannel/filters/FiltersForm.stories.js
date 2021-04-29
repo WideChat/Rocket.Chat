@@ -1,8 +1,8 @@
-import React from 'react';
 import { FieldGroup, Box } from '@rocket.chat/fuselage';
+import React from 'react';
 
-import FiltersForm from './FiltersForm';
 import { useForm } from '../../../hooks/useForm';
+import FiltersForm from './FiltersForm';
 
 export default {
 	title: 'omnichannel/FiltersForm',
@@ -17,9 +17,11 @@ export const Default = () => {
 		regex: '',
 		slug: '',
 	});
-	return <Box maxWidth='x600'>
-		<FieldGroup>
-			<FiltersForm values={values} handlers={handlers}/>;
-		</FieldGroup>
-	</Box>;
+	return (
+		<Box maxWidth='x600'>
+			<FieldGroup>
+				<FiltersForm values={values} handlers={handlers} />;
+			</FieldGroup>
+		</Box>
+	);
 };

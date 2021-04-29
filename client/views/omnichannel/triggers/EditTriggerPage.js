@@ -20,7 +20,7 @@ const getInitialValues = ({
 		{
 			name: actName,
 			params: { sender: actSender, msg: actMsg, name: actSenderName, department: actDept },
-		}
+		},
 	],
 }) => ({
 	name: name ?? '',

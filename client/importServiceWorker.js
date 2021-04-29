@@ -2,8 +2,8 @@ import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
 
 import { settings } from '../app/settings';
-import { handleError, t } from '../app/utils/client';
 import { modal } from '../app/ui-utils/client';
+import { handleError, t } from '../app/utils/client';
 
 function urlBase64ToUint8Array(base64String) {
 	const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
@@ -17,7 +17,6 @@ function urlBase64ToUint8Array(base64String) {
 	}
 	return outputArray;
 }
-
 
 function isMobile() {
 	const toMatch = [
@@ -35,14 +34,13 @@ function isMobile() {
 
 function subscribeUser() {
 	if ('serviceWorker' in navigator) {
-		navigator.serviceWorker.ready.then(async function(reg) {
+		navigator.serviceWorker.ready.then(async (reg) => {
 			try {
 				const vapidKey = await settings.get('Vapid_public_key');
-				const subscription = await reg.pushManager
-					.subscribe({
-						userVisibleOnly: true,
-						applicationServerKey: urlBase64ToUint8Array(vapidKey),
-					});
+				const subscription = await reg.pushManager.subscribe({
+					userVisibleOnly: true,
+					applicationServerKey: urlBase64ToUint8Array(vapidKey),
+				});
 
 				const platform = isMobile() ? 'mobile' : 'desktop';
 				Meteor.call('savePushNotificationSubscription', JSON.stringify(subscription), platform);
@@ -61,40 +59,43 @@ Meteor.startup(() => {
 				.register('sw.js', {
 					scope: './',
 				})
-				.then(function(reg) {
+				.then((reg) => {
 					if (reg.installing) {
 						const sw = reg.installing || reg.waiting;
-						sw.onstatechange = function() {
+						sw.onstatechange = function () {
 							if (sw.state === 'installed') {
 								// SW installed. Reload page.
 								window.location.reload();
 							}
 						};
-						console.log(`Service worker has been registered for scope: ${ reg.scope }`);
+						console.log(`Service worker has been registered for scope: ${reg.scope}`);
 					} else {
 						if (settings.get('Push_enable') !== true) {
 							return;
 						}
 
-						reg.pushManager.getSubscription().then(function(sub) {
+						reg.pushManager.getSubscription().then((sub) => {
 							if (sub === null) {
 								console.log('Not subscribed to push service!');
 								if (settingsReady) {
-									modal.open({
-										title: t('Important'),
-										type: 'info',
-										text: t('Please subscribe to push notifications to continue'),
-										showCancelButton: true,
-										confirmButtonText: t('Subscribe'),
-										cancelButtonText: t('Cancel'),
-										closeOnConfirm: true,
-									}, () => {
-										Notification.requestPermission().then(function(permission) {
-											if (permission === 'granted') {
-												subscribeUser();
-											}
-										});
-									});
+									modal.open(
+										{
+											title: t('Important'),
+											type: 'info',
+											text: t('Please subscribe to push notifications to continue'),
+											showCancelButton: true,
+											confirmButtonText: t('Subscribe'),
+											cancelButtonText: t('Cancel'),
+											closeOnConfirm: true,
+										},
+										() => {
+											Notification.requestPermission().then((permission) => {
+												if (permission === 'granted') {
+													subscribeUser();
+												}
+											});
+										},
+									);
 									computation.stop();
 								}
 							} else {

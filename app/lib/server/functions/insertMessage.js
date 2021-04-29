@@ -88,6 +88,7 @@ export const insertMessage = function(user, message, rid, upsert = false) {
 		alias: String,
 		emoji: String,
 		avatar: String,
+		pushm: Boolean,
 		attachments: [Match.Any],
 	}));
 

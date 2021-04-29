@@ -22,16 +22,18 @@ const NewTriggerPage = ({ onSave }) => {
 		description: '',
 		enabled: true,
 		runOnce: false,
+		registeredOnly: false,
 		conditions: {
 			name: 'page-url',
 			value: '',
 		},
 		actions: {
-			name: '',
+			name: 'send-message',
 			params: {
 				sender: 'queue',
 				msg: '',
 				name: '',
+				department: '',
 			},
 		},
 	});
@@ -40,7 +42,8 @@ const NewTriggerPage = ({ onSave }) => {
 		try {
 			const {
 				actions: {
-					params: { sender, msg, name },
+					name: actionName,
+					params: { sender, msg, name, department },
 				},
 				...restValues
 			} = values;
@@ -49,10 +52,11 @@ const NewTriggerPage = ({ onSave }) => {
 				conditions: [values.conditions],
 				actions: [
 					{
-						name: 'send-message',
+						name: actionName,
 						params: {
 							sender,
 							msg,
+							department,
 							...(sender === 'custom' && { name }),
 						},
 					},

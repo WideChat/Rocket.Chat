@@ -5,12 +5,14 @@ import GroupingList from './GroupingList';
 import SortModeList from './SortModeList';
 import ViewModeList from './ViewModeList';
 
+import { isMobile } from '../../../app/utils/client';
+
 function SortList() {
 	return (
 		<>
 			<div className='rc-popover__column'>
-				<ViewModeList />
-				<Divider />
+				{!isMobile() && <ViewModeList/>}
+				{!isMobile() && <Divider/>}
 				<SortModeList />
 				<Divider />
 				<GroupingList />

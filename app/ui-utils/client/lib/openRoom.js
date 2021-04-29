@@ -63,7 +63,6 @@ export const openRoom = async function(type, name) {
 
 			appLayout.render('main', { center: 'room' });
 
-
 			c.stop();
 
 			if (window.currentTracker) {

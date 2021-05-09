@@ -26,6 +26,7 @@ import {
 	isRTL,
 } from '../../../ui-utils';
 import {
+	isMobile,
 	t,
 	roomTypes,
 	getUserPreference,
@@ -37,6 +38,7 @@ import './messageBoxAudioMessage';
 import './messageBoxNotSubscribed';
 import './messageBox.html';
 import './messageBoxReadOnly';
+import './messageBoxFriendlyUI';
 
 Template.messageBox.onCreated(function() {
 	this.state = new ReactiveDict();
@@ -201,6 +203,9 @@ Template.messageBox.helpers({
 		}
 		const isAnonymous = !Meteor.userId();
 		return isAnonymous || instance.state.get('mustJoinWithCode');
+	},
+	isMobile() {
+		return isMobile();
 	},
 	isWritable() {
 		const { rid, subscription } = Template.currentData();

@@ -360,7 +360,7 @@ Prerequisites:
 Now just clone and start the app:
 
 ```sh
-git clone https://github.com/RocketChat/Rocket.Chat.git
+git clone https://github.com/WideChat/Rocket.Chat.git
 cd Rocket.Chat
 meteor npm install
 meteor npm start

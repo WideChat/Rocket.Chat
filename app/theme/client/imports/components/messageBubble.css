@@ -1,0 +1,263 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400&display=swap');
+
+.messageBubble {
+	display: flex;
+	flex-direction: column;
+
+	padding: 0 16px;
+
+	.message-body-wrapper {
+		overflow: hidden;
+
+		width: fit-content;
+		max-width: 75%;
+
+		border-radius: 30px;
+
+		font-family: 'Source Sans Pro', sans-serif;
+		font-weight: 400;
+
+		.body {
+			position: relative;
+
+			width: 100%;
+			height: 100%;
+			padding: 11px 16px;
+		}
+
+		.emojione.big {
+			width: 3em !important;
+			height: 3em !important;
+
+			.messageBubble .message-body-wrapper {
+				background-color: transparent !important;
+			}
+		}
+	}
+
+	.read-receipt {
+		display: none;
+
+		& > .rc-icon {
+			width: 1em;
+			height: 1em;
+
+			&:first-of-type {
+				margin-right: -6px;
+			}
+
+			&:last-of-type {
+				margin-right: -8px;
+			}
+		}
+	}
+
+	&.attachment {
+		.body {
+			padding: 0;
+
+			> div > .rcx-message-attachment {
+				margin: 0 !important;
+				padding: 0 !important;
+
+				& > .rcx-message-attachment {
+					display: none !important;
+				}
+
+				& > .rcx-attachment__content {
+					width: 100px !important;
+					height: 100px !important;
+					margin: 0 !important;
+
+					& > picture {
+						width: 100% !important;
+						height: 100% !important;
+
+						border-width: 0 !important;
+
+						& > img {
+							width: 100% !important;
+							height: 100% !important;
+							object-fit: cover !important;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	&.url {
+		.message-body-wrapper {
+			border: 1px solid #dee4e8 !important;
+
+			.body {
+				width: 250px;
+				padding: 0;
+
+				> blockquote {
+					margin: 0;
+					padding: 0 !important;
+
+					&::before {
+						width: 0;
+					}
+
+					& > div {
+						padding: 0 !important;
+
+						& > a {
+							top: 0;
+
+							width: 100%;
+							height: 100%;
+
+							& > img {
+								width: auto;
+								max-width: 250px;
+								height: auto;
+								max-height: 250px;
+								margin-bottom: 10px;
+							}
+						}
+
+						& > div {
+							font-family: 'Source Sans Pro', sans-serif;
+
+							&:nth-of-type(1) {
+								display: none;
+							}
+
+							&:nth-of-type(2) {
+								& > a > strong {
+									display: -webkit-box;
+
+									padding: 0 20px;
+
+									text-overflow: ellipsis;
+
+									color: #000000;
+
+									font-size: 15px;
+									line-height: 20px;
+									-webkit-box-orient: vertical;
+									-webkit-line-clamp: 2;
+								}
+							}
+
+							&:nth-of-type(3) {
+								display: none;
+							}
+						}
+					}
+				}
+
+				& > a {
+					display: block;
+
+					padding: 5px 20px 20px;
+
+					color: #677a89;
+
+					font-size: 12px;
+				}
+			}
+		}
+
+		&.own {
+			.body {
+				blockquote > div > div:nth-of-type(2) > a > strong {
+					color: #ffffff !important;
+				}
+
+				& > a {
+					color: #d6dfe6 !important;
+				}
+			}
+		}
+	}
+
+	&.own {
+		margin-top: 10px;
+		align-items: flex-end;
+
+		.message-body-wrapper .body {
+			color: #ffffff;
+			background-color: #0aa5ab;
+		}
+
+		&:first-of-type {
+			border-bottom-right-radius: 8px;
+		}
+
+		&:last-child {
+			.read-receipt.read {
+				position: relative;
+
+				display: flex;
+			}
+		}
+	}
+
+	&.notOwn {
+		margin-top: 10px;
+		align-items: flex-start;
+
+		.message-body-wrapper .body {
+			color: #202e39;
+			background-color: #dee4e8;
+		}
+
+		&:first-of-type {
+			border-bottom-left-radius: 8px;
+		}
+	}
+
+	&.own + &.own {
+		margin-top: 2px;
+
+		.message-body-wrapper {
+			border-top-right-radius: 8px;
+			border-bottom-right-radius: 8px;
+		}
+	}
+
+	&.own ~ &.own {
+		margin-top: 2px;
+
+		.message-body-wrapper {
+			border-bottom-right-radius: 8px;
+		}
+	}
+
+	&.notOwn + &.own {
+		margin-top: 10px;
+
+		.message-body-wrapper {
+			border-bottom-right-radius: 8px;
+		}
+	}
+
+	&.notOwn ~ &.notOwn {
+		margin-top: 2px;
+
+		.message-body-wrapper {
+			border-bottom-left-radius: 8px;
+		}
+	}
+
+	&.notOwn + &.notOwn {
+		margin-top: 2px;
+
+		.message-body-wrapper {
+			border-top-left-radius: 8px;
+		}
+	}
+
+	&.own + &.notOwn {
+		margin-top: 10px;
+
+		.message-body-wrapper {
+			border-bottom-left-radius: 8px;
+		}
+	}
+}

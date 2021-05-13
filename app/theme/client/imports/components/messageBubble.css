@@ -24,15 +24,6 @@
 			height: 100%;
 			padding: 11px 16px;
 		}
-
-		.emojione.big {
-			width: 3em !important;
-			height: 3em !important;
-
-			.messageBubble .message-body-wrapper {
-				background-color: transparent !important;
-			}
-		}
 	}
 
 	.read-receipt {
@@ -211,6 +202,17 @@
 			border-bottom-left-radius: 8px;
 		}
 	}
+
+    &.bigEmoji {
+        .message-body-wrapper .body {
+            background-color: transparent !important;
+
+			.emojione.big {
+				width: 3.5em !important;
+				height: 3.5em !important;
+			}
+        }
+    }
 
 	&.own + &.own {
 		margin-top: 2px;

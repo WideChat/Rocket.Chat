@@ -70,6 +70,21 @@ Template.messageBubble.helpers({
 		const { msg, u = {} } = this;
 		return msg.u && msg.u._id === u._id ? 'own' : 'notOwn';
 	},
+	bigEmoji() {
+		let { msg } = this;
+		msg = renderMessageBody(msg);
+		const classesIndex = msg.indexOf('class="');
+		
+		if (classesIndex > -1) {
+			const classes = msg.substring(classesIndex + 7, msg.indexOf('"', classesIndex + 7)).split(' ');
+			console.log(classes, classes.includes('big'));
+			if (classes.includes('big')) {
+				return 'bigEmoji';
+			}
+		}
+
+		return '';
+	},
 	timestamp() {
 		const { msg } = this;
 		return +msg.ts;

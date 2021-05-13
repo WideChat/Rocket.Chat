@@ -1,5 +1,5 @@
 <template name="messageBubble">
-	<li id="{{templatePrefix}}{{msg._id}}" data-id="{{msg._id}}" data-context={{actionContext}} class="messageBubble {{own}} {{attachmentsClass}}" data-username="{{msg.u.username}}" data-tmid="{{msg.tmid}}" data-date="{{date}}" data-timestamp="{{timestamp}}" data-alias="{{msg.alias}}">
+	<li id="{{templatePrefix}}{{msg._id}}" data-id="{{msg._id}}" data-context={{actionContext}} class="messageBubble {{own}} {{bigEmoji}} {{attachmentsClass}}" data-username="{{msg.u.username}}" data-tmid="{{msg.tmid}}" data-date="{{date}}" data-timestamp="{{timestamp}}" data-alias="{{msg.alias}}">
 		{{#unless shouldHideBody}}
 			<div class="message-body-wrapper">
 				<div class="body" dir="auto" data-unread-text="{{_ "Unread_Messages"}}">

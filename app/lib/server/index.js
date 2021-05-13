@@ -19,6 +19,7 @@ import './oauth/google';
 import './oauth/proxy';
 import './oauth/twitter';
 import './methods/addOAuthService';
+import './methods/addOAuthServiceWithSettings';
 import './methods/addUserToPushSubscription';
 import './methods/addUsersToRoom';
 import './methods/addUserToRoom';

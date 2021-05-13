@@ -68,7 +68,7 @@ Template.messageBubble.helpers({
 	},
 	own() {
 		const { msg, u = {} } = this;
-		return (msg.u && msg.u._id === u._id) ? 'own' : 'notOwn';
+		return msg.u && msg.u._id === u._id ? 'own' : 'notOwn';
 	},
 	timestamp() {
 		const { msg } = this;

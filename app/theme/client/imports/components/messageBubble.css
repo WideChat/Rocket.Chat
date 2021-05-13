@@ -203,16 +203,16 @@
 		}
 	}
 
-    &.bigEmoji {
-        .message-body-wrapper .body {
-            background-color: transparent !important;
+	&.bigEmoji {
+		.message-body-wrapper .body {
+			background-color: transparent !important;
 
 			.emojione.big {
 				width: 3.5em !important;
 				height: 3.5em !important;
 			}
-        }
-    }
+		}
+	}
 
 	&.own + &.own {
 		margin-top: 2px;

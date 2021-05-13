@@ -74,7 +74,7 @@ Template.messageBubble.helpers({
 		let { msg } = this;
 		msg = renderMessageBody(msg);
 		const classesIndex = msg.indexOf('class="');
-		
+
 		if (classesIndex > -1) {
 			const classes = msg.substring(classesIndex + 7, msg.indexOf('"', classesIndex + 7)).split(' ');
 			console.log(classes, classes.includes('big'));

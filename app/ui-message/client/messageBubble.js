@@ -77,7 +77,6 @@ Template.messageBubble.helpers({
 
 		if (classesIndex > -1) {
 			const classes = msg.substring(classesIndex + 7, msg.indexOf('"', classesIndex + 7)).split(' ');
-			console.log(classes, classes.includes('big'));
 			if (classes.includes('big')) {
 				return 'bigEmoji';
 			}
@@ -135,9 +134,9 @@ const getPreviousSentMessage = (currentNode) => {
 	if (hasTempClass(currentNode)) {
 		return currentNode.previousElementSibling;
 	}
-	if (currentNode.previousElementSibling != null) {
+	if (currentNode.previousElementSibling) {
 		let previousValid = currentNode.previousElementSibling;
-		while (previousValid != null && (hasTempClass(previousValid) || !previousValid.classList.contains('message'))) {
+		while (previousValid != null && (hasTempClass(previousValid) || !previousValid.classList.contains('messageBubble'))) {
 			previousValid = previousValid.previousElementSibling;
 		}
 		return previousValid;
@@ -217,6 +216,29 @@ const processSequentials = ({ index, currentNode, settings, forceDate, showDateS
 	// const currentDataset = currentNode.dataset;
 	const previousNode = (index === undefined || index > 0) && getPreviousSentMessage(currentNode);
 	const nextNode = currentNode.nextElementSibling;
+
+	if (nextNode) {
+		nextNode.previousElementSibling = currentNode;
+	}
+
+	if (currentNode.classList.contains('own')) {
+		if (!previousNode || previousNode?.classList.contains('notOwn')) {
+			currentNode.classList.add('firstMsg');
+		} else if (nextNode?.classList.contains('notOwn')) {
+			currentNode.classList.add('lastMsg');
+		} else {
+			currentNode.classList.add('midMsg');
+		}
+	}
+	if (currentNode.classList.contains('notOwn')) {
+		if (!previousNode || previousNode?.classList.contains('own')) {
+			currentNode.classList.add('firstMsg');
+		} else if (nextNode?.classList.contains('own')) {
+			currentNode.classList.add('lastMsg');
+		} else {
+			currentNode.classList.add('midMsg');
+		}
+	}
 
 	if (!previousNode) {
 		setTimeout(() => {

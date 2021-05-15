@@ -409,6 +409,13 @@ Meteor.startup(function() {
 		enableQuery: { _id: 'Livechat_enable_transcript', value: true },
 	});
 
+	settings.add('Livechat_enable_print_transcript', true, {
+		type: 'boolean',
+		group: 'Omnichannel',
+		public: true,
+		i18nLabel: 'Transcript_Print_Enabled',
+	});
+
 	settings.add('Livechat_registration_form_message', '', {
 		type: 'string',
 		group: 'Omnichannel',

@@ -224,7 +224,7 @@ const processSequentials = ({ index, currentNode, settings, forceDate, showDateS
 	if (currentNode.classList.contains('own')) {
 		if (!previousNode || previousNode?.classList.contains('notOwn')) {
 			currentNode.classList.add('firstMsg');
-		} else if (nextNode?.classList.contains('notOwn')) {
+		} else if (!nextNode || nextNode?.classList.contains('notOwn')) {
 			currentNode.classList.add('lastMsg');
 		} else {
 			currentNode.classList.add('midMsg');
@@ -233,7 +233,7 @@ const processSequentials = ({ index, currentNode, settings, forceDate, showDateS
 	if (currentNode.classList.contains('notOwn')) {
 		if (!previousNode || previousNode?.classList.contains('own')) {
 			currentNode.classList.add('firstMsg');
-		} else if (nextNode?.classList.contains('own')) {
+		} else if (!nextNode || nextNode?.classList.contains('own')) {
 			currentNode.classList.add('lastMsg');
 		} else {
 			currentNode.classList.add('midMsg');

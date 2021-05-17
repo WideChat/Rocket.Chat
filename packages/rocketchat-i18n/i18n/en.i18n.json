@@ -4062,6 +4062,7 @@
   "Transcript": "Transcript",
   "Transcript_Enabled": "Ask Visitor if They Would Like a Transcript After Chat Closed",
   "Transcript_message": "Message to Show When Asking About Transcript",
+  "Transcript_Print_Enabled": "Allow Visitor to Print the Transcript",
   "Transcript_of_your_livechat_conversation": "Transcript of your omnichannel conversation.",
   "Transcript_Request": "Transcript Request",
   "transfer-livechat-guest": "Transfer Livechat Guests",

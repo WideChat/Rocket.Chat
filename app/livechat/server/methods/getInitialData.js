@@ -84,6 +84,7 @@ Meteor.methods({
 		info.fileUpload = initSettings.Livechat_fileupload_enabled && initSettings.FileUpload_Enabled;
 		info.transcript = initSettings.Livechat_enable_transcript;
 		info.transcriptMessage = initSettings.Livechat_transcript_message;
+		info.printTranscript = initSettings.Livechat_enable_print_transcript;
 		info.conversationFinishedMessage = initSettings.Livechat_conversation_finished_message;
 		info.conversationFinishedText = initSettings.Livechat_conversation_finished_text;
 		info.nameFieldRegistrationForm = initSettings.Livechat_name_field_registration_form;

@@ -8,6 +8,7 @@ API.v1.addRoute('livechat/filter', { authRequired: true }, {
 	post() {
 		try {
 			check(this.bodyParams, {
+				_id: String,
 				name: String,
 				description: String,
 				enabled: Boolean,

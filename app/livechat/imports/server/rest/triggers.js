@@ -1,7 +1,33 @@
+import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 
 import { API } from '../../../../api/server';
 import { findTriggers, findTriggerById } from '../../../server/api/lib/triggers';
+
+API.v1.addRoute('livechat/trigger', { authRequired: true }, {
+	post() {
+		try {
+			check(this.bodyParams, {
+				_id: String,
+				name: String,
+				description: String,
+				enabled: Boolean,
+				runOnce: Boolean,
+				registeredOnly: Boolean,
+				conditions: Array,
+				actions: Array,
+			});
+
+			API.v1.success(
+				Meteor.runAsUser(this.userId,
+					() => Meteor.call('livechat:saveTrigger', this.bodyParams),
+				),
+			);
+		} catch (e) {
+			return API.v1.failure(e);
+		}
+	},
+});
 
 API.v1.addRoute('livechat/triggers', { authRequired: true }, {
 	get() {

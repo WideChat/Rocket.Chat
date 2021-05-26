@@ -19,9 +19,6 @@ Meteor.methods({
 			slug: String,
 		});
 
-		if (filter._id) {
-			return LivechatFilter.updateById(filter._id, filter);
-		}
-		return LivechatFilter.insert(filter);
+		return LivechatFilter.insertOrUpsert(filter);
 	},
 });

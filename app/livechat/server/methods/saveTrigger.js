@@ -21,9 +21,6 @@ Meteor.methods({
 			actions: Array,
 		});
 
-		if (trigger._id) {
-			return LivechatTrigger.updateById(trigger._id, trigger);
-		}
-		return LivechatTrigger.insert(trigger);
+		return LivechatTrigger.insertOrUpsert(trigger);
 	},
 });

@@ -16,9 +16,9 @@ const Burger = (props) => {
 			margin='x4'
 			alignSelf='center'
 			fontSize='x40'
-			ghost
 			{...props}
 			onClick={onClick}
+			color='#465967'
 		/>
 	);
 };

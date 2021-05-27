@@ -159,7 +159,7 @@ Template.messageBox.onRendered(function() {
 			}
 
 			this.input = input;
-			onInputChanged && onInputChanged(input);
+			!isMobile() && onInputChanged && onInputChanged(input);
 
 			if (input && rid) {
 				this.popupConfig.set({
@@ -272,6 +272,19 @@ Template.messageBox.helpers({
 	isSubscribed() {
 		const { subscription } = Template.currentData();
 		return !!subscription;
+	},
+	messageBoxData() {
+		const { rid, subscription, isEmbedded, onInputChanged, onResize, onKeyUp, onKeyDown, onSend } = Template.currentData();
+		return {
+			rid,
+			subscription,
+			isEmbedded,
+			onInputChanged,
+			onResize,
+			onKeyUp,
+			onKeyDown,
+			onSend,
+		};
 	},
 });
 

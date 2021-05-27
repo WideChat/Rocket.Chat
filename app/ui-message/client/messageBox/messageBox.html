@@ -7,7 +7,7 @@
 
 			{{#if isWritable}}
 				{{#if isMobile}}
-					{{> messageBoxFriendlyUI rid=rid tmid=tmid onInputChanged=onInputChanged }}
+					{{> messageBoxFriendlyUI messageBoxData }}
 				{{else}}
 					{{#if popupConfig}}
 						{{> messagePopupConfig popupConfig}}

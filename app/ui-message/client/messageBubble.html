@@ -13,6 +13,9 @@
 					{{/if}}
 					{{{body}}}
 					{{#if hasAttachments}}
+						{{#if getFileIcon}}
+							{{> icon block="rc-input__icon-svg" icon=getFileIcon }}
+						{{/if}}
 						{{> reactAttachments attachments=msg.attachments file=msg.file }}
 					{{/if}}
 					{{#if msg.location}}

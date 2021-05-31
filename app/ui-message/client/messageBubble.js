@@ -54,8 +54,12 @@ Template.messageBubble.helpers({
 	attachmentsClass() {
 		const { msg } = this;
 
-		if (msg.attachments?.length) {
-			return 'attachment';
+		if (msg?.attachments?.length) {
+			if (msg.attachments[0]?.image_type) {
+				return 'attachment image';
+			}
+
+			return 'attachment file';
 		}
 
 		if (msg.urls?.length) {
@@ -65,6 +69,39 @@ Template.messageBubble.helpers({
 	hasAttachments() {
 		const { msg } = this;
 		return msg.attachments?.length;
+	},
+	getFileIcon() {
+		const { msg } = this;
+
+		if (msg?.attachments?.length) {
+			if (msg.attachments[0]?.image_type) {
+				return false;
+			}
+			if (msg.attachments[0]?.audio_type) {
+				return false;
+			}
+			if (msg.attachments[0]?.video_type) {
+				return false;
+			}
+
+			let ext = msg.attachments[0]?.title_link;
+			ext = ext.substring(ext.lastIndexOf('.'));
+
+			if (ext === '.doc') {
+				return 'file-document';
+			}
+			if (ext === '.pdf') {
+				return 'file-pdf';
+			}
+			if (ext === '.key') {
+				return 'file-keynote';
+			}
+			if (ext === '.zip') {
+				return 'files-zip';
+			}
+
+			return 'file-generic';
+		}
 	},
 	own() {
 		const { msg, u = {} } = this;

@@ -4,7 +4,7 @@
 	display: flex;
 	flex-direction: column;
 
-	padding: 0 16px;
+	padding: 0 15px;
 
 	.message-body-wrapper {
 		overflow: hidden;
@@ -13,7 +13,7 @@
 		max-width: 75%;
 		margin-top: 2px;
 
-		border-radius: 30px;
+		border-radius: 20px;
 
 		font-family: 'Source Sans Pro', sans-serif;
 		font-weight: 400;
@@ -34,6 +34,8 @@
 			width: 1em;
 			height: 1em;
 
+			color: var(--friendly-message-color);
+
 			&:first-of-type {
 				margin-right: -6px;
 			}
@@ -45,7 +47,11 @@
 	}
 
 	&.attachment {
-		.body {
+		&.image .body {
+			overflow: hidden;
+
+			width: 100px !important;
+			height: 100px !important;
 			padding: 0;
 
 			> div > .rcx-message-attachment {
@@ -71,6 +77,38 @@
 							width: 100% !important;
 							height: 100% !important;
 							object-fit: cover !important;
+						}
+					}
+				}
+			}
+		}
+
+		&.file .body {
+			display: flex;
+
+			width: 250px;
+			padding: 16px 15px 16px 20px;
+			align-items: center;
+
+			> svg {
+				margin-right: 15px;
+			}
+
+			> div {
+				flex: 1;
+
+				> .rcx-message-attachment {
+					& > .rcx-message-attachment {
+						display: flex;
+						justify-content: space-between;
+
+						& > a:first-of-type {
+							font-family: 'Source Sans Pro', sans-serif;
+							font-size: 16px !important;
+						}
+
+						& > a:last-of-type {
+							transform: scale(1.4);
 						}
 					}
 				}
@@ -173,7 +211,11 @@
 
 		.message-body-wrapper .body {
 			color: #ffffff;
-			background-color: #0aa5ab;
+
+			* {
+				color: #ffffff;
+			}
+			background-color: var(--friendly-message-color);
 		}
 
 		&.firstMsg > .message-body-wrapper {
@@ -205,6 +247,10 @@
 
 		.message-body-wrapper .body {
 			color: #202e39;
+
+			* {
+				color: #202e39;
+			}
 			background-color: #dee4e8;
 		}
 

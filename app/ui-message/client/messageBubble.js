@@ -103,9 +103,9 @@ Template.messageBubble.helpers({
 			return 'file-generic';
 		}
 	},
-	own() {
+	messageType() {
 		const { msg, u = {} } = this;
-		return msg.u && msg.u._id === u._id ? 'own' : 'notOwn';
+		return msg.u && msg.u._id === u._id ? 'messageSent' : 'messageReceived';
 	},
 	bigEmoji() {
 		let { msg } = this;
@@ -165,15 +165,13 @@ Template.messageBubble.helpers({
 	},
 });
 
-const hasTempClass = (node) => node.classList.contains('temp');
-
 const getPreviousSentMessage = (currentNode) => {
-	if (hasTempClass(currentNode)) {
+	if (currentNode?.classList?.contains?.('temp')) {
 		return currentNode.previousElementSibling;
 	}
 	if (currentNode.previousElementSibling) {
 		let previousValid = currentNode.previousElementSibling;
-		while (previousValid != null && (hasTempClass(previousValid) || !previousValid.classList.contains('messageBubble'))) {
+		while (previousValid != null && (previousValid?.classList?.contains?.('temp') || !previousValid.classList.contains('messageBubble'))) {
 			previousValid = previousValid.previousElementSibling;
 		}
 		return previousValid;
@@ -246,6 +244,33 @@ const isSequential = (currentNode, previousNode, forceDate, period, showDateSepa
 	return false;
 };
 
+const setCornerClasses = (previousNode, currentNode, nextNode, iterateCount) => {
+	if (!currentNode) {
+		return;
+	}
+	currentNode.classList.remove('firstMsg', 'midMsg', 'lastMsg');
+	let newCornerClass = 'midMsg';
+
+	if (currentNode.classList.contains('messageSent')) {
+		if (!previousNode || previousNode?.classList.contains('messageReceived')) {
+			newCornerClass = 'firstMsg';
+		} else if (!nextNode || nextNode?.classList.contains('messageReceived')) {
+			newCornerClass = 'lastMsg';
+		}
+	} else if (currentNode.classList.contains('messageReceived')) {
+		if (!previousNode || previousNode?.classList.contains('messageSent')) {
+			newCornerClass = 'firstMsg';
+		} else if (!nextNode || nextNode?.classList.contains('messageSent')) {
+			newCornerClass = 'lastMsg';
+		}
+	}
+	currentNode.classList.add(newCornerClass);
+
+	if (--iterateCount > 0) {
+		setCornerClasses(getPreviousSentMessage(previousNode), previousNode, currentNode, iterateCount);
+	}
+};
+
 const processSequentials = ({ index, currentNode, settings, forceDate, showDateSeparator = true, groupable, shouldCollapseReplies }) => {
 	if (!showDateSeparator && !groupable) {
 		return;
@@ -258,24 +283,7 @@ const processSequentials = ({ index, currentNode, settings, forceDate, showDateS
 		nextNode.previousElementSibling = currentNode;
 	}
 
-	if (currentNode.classList.contains('own')) {
-		if (!previousNode || previousNode?.classList.contains('notOwn')) {
-			currentNode.classList.add('firstMsg');
-		} else if (!nextNode || nextNode?.classList.contains('notOwn')) {
-			currentNode.classList.add('lastMsg');
-		} else {
-			currentNode.classList.add('midMsg');
-		}
-	}
-	if (currentNode.classList.contains('notOwn')) {
-		if (!previousNode || previousNode?.classList.contains('own')) {
-			currentNode.classList.add('firstMsg');
-		} else if (!nextNode || nextNode?.classList.contains('own')) {
-			currentNode.classList.add('lastMsg');
-		} else {
-			currentNode.classList.add('midMsg');
-		}
-	}
+	setCornerClasses(previousNode, currentNode, nextNode, 2);
 
 	if (!previousNode) {
 		setTimeout(() => {

@@ -193,7 +193,7 @@
 			}
 		}
 
-		&.own {
+		&.messageSent {
 			.body {
 				blockquote > div > div:nth-of-type(2) > a > strong {
 					color: #ffffff !important;
@@ -206,7 +206,7 @@
 		}
 	}
 
-	&.own {
+	&.messageSent {
 		align-items: flex-end;
 
 		.message-body-wrapper .body {
@@ -242,7 +242,7 @@
 		}
 	}
 
-	&.notOwn {
+	&.messageReceived {
 		align-items: flex-start;
 
 		.message-body-wrapper .body {

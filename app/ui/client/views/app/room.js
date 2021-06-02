@@ -10,7 +10,7 @@ import { FlowRouter } from 'meteor/kadira:flow-router';
 import { Session } from 'meteor/session';
 import { Template } from 'meteor/templating';
 
-import { t, roomTypes, getUserPreference, handleError } from '../../../../utils/client';
+import { t, roomTypes, getUserPreference, handleError, isMobile } from '../../../../utils/client';
 import { WebRTC } from '../../../../webrtc/client';
 import { ChatMessage, RoomRoles, Users, Subscriptions, Rooms } from '../../../../models';
 import {
@@ -182,6 +182,9 @@ export const dropzoneHelpers = {
 
 Template.roomOld.helpers({
 	...dropzoneHelpers,
+	isMobile() {
+		return isMobile();
+	},
 	tabBar() {
 		return Template.instance().tabBar;
 	},

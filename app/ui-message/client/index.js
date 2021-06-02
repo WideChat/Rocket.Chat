@@ -1,4 +1,5 @@
 import './message';
+import './messageBubble';
 import './messageBox/messageBox';
 import './popup/customMessagePopups';
 import './popup/messagePopup';

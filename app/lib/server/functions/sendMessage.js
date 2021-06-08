@@ -145,7 +145,7 @@ const validateMessage = (message, room, user) => {
 	}));
 
 	if (message.alias || message.avatar) {
-		const isLiveChatGuest = !message.avatar && user.token && user.token === room.v?.token;
+		const isLiveChatGuest = user.token && user.token === room.v?.token;
 
 		if (!isLiveChatGuest && !hasPermission(user._id, 'message-impersonate', room._id)) {
 			throw new Error('Not enough permission');

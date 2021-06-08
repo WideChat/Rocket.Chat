@@ -5,6 +5,7 @@ import { AccountBox } from './AccountBox';
 import { roomTypes } from '../../../utils/client/lib/roomTypes';
 import { Subscriptions } from '../../../models';
 import { RoomManager } from '../../../../client/lib/RoomManager';
+import { isMobile } from '../../../utils/client/lib/isMobile';
 
 export const SideNav = new class {
 	constructor() {
@@ -50,7 +51,11 @@ export const SideNav = new class {
 		if (!routesNamesForRooms.includes(FlowRouter.current().route.name)) {
 			const subscription = Subscriptions.findOne({ rid: RoomManager.lastRid });
 			if (subscription) {
-				roomTypes.openRouteLink(subscription.t, subscription, FlowRouter.current().queryParams);
+				if (isMobile()) {
+					FlowRouter.go('home');
+				} else {
+					roomTypes.openRouteLink(subscription.t, subscription, FlowRouter.current().queryParams);
+				}
 			} else {
 				FlowRouter.go('home');
 			}

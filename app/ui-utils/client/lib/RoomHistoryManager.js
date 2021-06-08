@@ -12,8 +12,8 @@ import { RoomManager } from './RoomManager';
 import { readMessage } from './readMessages';
 import { renderMessageBody } from '../../../../client/lib/renderMessageBody';
 import { getConfig } from '../config';
-import { ChatMessage, ChatSubscription, ChatRoom } from '../../../models';
 import { call } from './callMethod';
+import { ChatMessage, ChatSubscription, ChatRoom } from '../../../models';
 import { filterMarkdown } from '../../../markdown/lib/markdown';
 import { getUserPreference } from '../../../utils/client';
 
@@ -320,7 +320,6 @@ export const RoomHistoryManager = new class extends Emitter {
 
 		const subscription = ChatSubscription.findOne({ rid: message.rid });
 		if (subscription) {
-			// const { ls } = subscription;
 			typeName = subscription.t + subscription.name;
 		} else {
 			const curRoomDoc = ChatRoom.findOne({ _id: message.rid });
@@ -391,7 +390,20 @@ export const RoomHistoryManager = new class extends Emitter {
 	}
 
 	clear(rid) {
-		ChatMessage.remove({ rid });
+		const query = { rid };
+		const options = {
+			sort: {
+				ts: -1,
+			},
+			limit: 50,
+		};
+		const retain = ChatMessage.find(query, options).fetch();
+		ChatMessage.remove({
+			rid,
+			ts: {
+				$lt: retain[retain.length - 1].ts,
+			},
+		});
 		if (this.histories[rid]) {
 			this.histories[rid].hasMore.set(true);
 			this.histories[rid].isLoading.set(false);

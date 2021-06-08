@@ -12,6 +12,7 @@ import {
 import { useMutableCallback } from '@rocket.chat/fuselage-hooks';
 import React, { useState, useEffect } from 'react';
 
+import { offlineAction } from '../../../../../app/ui-utils/client';
 import { roomTypes, isEmail } from '../../../../../app/utils/client';
 import UserAutoCompleteMultiple from '../../../../../ee/client/audit/UserAutoCompleteMultiple';
 import { useEndpoint } from '../../../../contexts/ServerContext';
@@ -92,6 +93,10 @@ const MailExportForm = ({ onCancel, rid }) => {
 	const roomsExport = useEndpoint('POST', 'rooms.export');
 
 	const handleSubmit = async () => {
+		// WIDECHAT
+		if (offlineAction('Sending mail')) {
+			return false;
+		}
 		if (toUsers.length === 0 && additionalEmails === '') {
 			setErrorMessage(t('Mail_Message_Missing_to'));
 			return;

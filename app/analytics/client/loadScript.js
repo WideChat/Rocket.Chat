@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 
 import { settings } from '../../settings';
+import { hex_sha1 } from '../../utils';
 
 Template.body.onRendered(function() {
 	this.autorun((c) => {
@@ -77,7 +78,19 @@ Template.body.onRendered(function() {
 			  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
 			  ga('create', googleId, 'auto');
-			  ga('send', 'pageview');
+
+			  // WIDECHAT - obfuscate username in GA
+			  const pathArray = document.location.pathname.split('/');
+			  if (pathArray[1] === 'direct') {
+			  	const hashedUsername = hex_sha1(pathArray[2]);
+			  	const page = document.location.pathname.replace(pathArray[2], hashedUsername);
+
+			  	ga('set', 'location', page);
+			  	ga('send', 'pageview', page);
+			  	
+			  } else {
+			  	ga('send', 'pageview');
+			  }
 				/* eslint-enable */
 			}
 		}

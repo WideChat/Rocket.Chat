@@ -9,6 +9,11 @@
 	height: 0.8em;
 }
 
+/* Overwriting the color-component-color class defined in colors.less */
+.color-component-color {
+	color: grey;
+}
+
 .message:hover .read-receipt,
 .message.active .read-receipt {
 	display: none;

@@ -1,3 +1,4 @@
+The WideChat repo is a fork of RocketChat for development of features to be merged upstream in coordination with the RocketChat team....
 ![](https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/2020/png/logo-horizontal-red.png)
 
 <h1 align="center">
@@ -359,7 +360,7 @@ Prerequisites:
 Now just clone and start the app:
 
 ```sh
-git clone https://github.com/RocketChat/Rocket.Chat.git
+git clone https://github.com/WideChat/Rocket.Chat.git
 cd Rocket.Chat
 meteor npm install
 meteor npm start
@@ -429,3 +430,6 @@ Rocket.Chat will be free forever, but you can help us speed up the development!
 
 
 [BountySource](https://www.bountysource.com/teams/rocketchat)
+
+#trigger a build to get latest livechat
+

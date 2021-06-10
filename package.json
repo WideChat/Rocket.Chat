@@ -135,7 +135,7 @@
 	},
 	"dependencies": {
 		"@babel/runtime": "^7.11.2",
-		"@google-cloud/language": "^3.8.0",
+		"@google-cloud/language": "^4.2.4",
 		"@google-cloud/storage": "^2.5.0",
 		"@google-cloud/vision": "^1.11.0",
 		"@nivo/bar": "^0.61.1",

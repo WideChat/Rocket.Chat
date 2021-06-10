@@ -348,7 +348,7 @@ Template.roomOld.helpers({
 	},
 
 	hideAvatar() {
-		return getUserPreference(Meteor.userId(), 'hideAvatars') ? 'hide-avatars' : undefined;
+		return getUserPreference(Meteor.userId(), 'displayAvatars') ? undefined : 'hide-avatars';
 	},
 	canPreview() {
 		const { room, state } = Template.instance();

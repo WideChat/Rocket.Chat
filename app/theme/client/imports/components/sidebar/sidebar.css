@@ -99,7 +99,7 @@
 	}
 }
 
-@media (width < 780px) {
+@media (width < 768px) {
 	.sidebar {
 		position: absolute;
 

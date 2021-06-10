@@ -44,6 +44,7 @@ Meteor.startup(() => {
 		}
 
 		const user = await synchronizeUserData(uid);
+
 		if (!user) {
 			return;
 		}

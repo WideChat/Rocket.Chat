@@ -1,8 +1,10 @@
+import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { TAPi18n } from 'meteor/rocketchat:tap-i18n';
 
 import { API } from '../../../../api/server';
 import { Livechat } from '../../lib/Livechat';
+import { hasPermission } from '../../../../authorization';
 
 API.v1.addRoute('livechat/transcript', {
 	post() {
@@ -34,6 +36,11 @@ API.v1.addRoute('livechat/gettranscript', { authRequired: true }, {
 			});
 
 			const { token, rid } = this.bodyParams;
+
+			if (!hasPermission(this.userId, 'send-omnichannel-chat-transcript')) {
+				throw new Meteor.Error('not-authorized', 'Not Authorized');
+			}
+
 			const response = Livechat.getTranscript({ token, rid });
 			if (!response) {
 				return API.v1.failure({ message: TAPi18n.__('Error_sending_livechat_transcript') });

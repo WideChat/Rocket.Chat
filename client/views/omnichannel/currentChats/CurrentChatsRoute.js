@@ -129,6 +129,7 @@ function CurrentChatsRoute() {
 				>
 					{t('Name')}
 				</GenericTable.HeaderCell>,
+				<GenericTable.HeaderCell key={'_id'}>{t('Id')}</GenericTable.HeaderCell>,
 				<GenericTable.HeaderCell
 					key={'departmentId'}
 					direction={sort[1]}
@@ -193,6 +194,7 @@ function CurrentChatsRoute() {
 				qa-user-id={_id}
 			>
 				<Table.Cell withTruncatedText>{fname}</Table.Cell>
+				<Table.Cell withTruncatedText>{_id}</Table.Cell>
 				<Table.Cell withTruncatedText>{department ? department.name : ''}</Table.Cell>
 				<Table.Cell withTruncatedText>{servedBy && servedBy.username}</Table.Cell>
 				<Table.Cell withTruncatedText>{moment(ts).format('L LTS')}</Table.Cell>

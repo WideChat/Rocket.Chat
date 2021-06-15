@@ -1,6 +1,6 @@
 <template name="messageBoxFriendlyUI">
     <label class="rc-message-box__container-friendlyUI">
-        <span class="rc-message-box__icon">
+        <span class="rc-message-box__icon js-attachment-icon">
             {{> icon block="rc-input__icon-svg" icon="plus"}}
         </span>
         <div class="rc-message-box__textarea-friendlyUI">
@@ -17,4 +17,32 @@
             {{> messageBoxAudioMessage rid=rid tmid=tmid}}
         {{/if}}
     </label>
+    {{#if isAttachmentSectionVisible}}
+        <div class="rc-message-box__insert-attachment-container">
+            <div class="attachment-tile js-camera">
+                {{> icon block="rc-input__icon-svg" icon="camera"}}
+                <span class="attachment-description">Camera</span>
+            </div>
+            <div class="attachment-tile js-photo">
+                {{> icon block="rc-input__icon-svg" icon="photo-library"}}
+                <span class="attachment-description">Photo</span>
+            </div>
+            <div class="attachment-tile js-gif">
+                {{> icon block="rc-input__icon-svg" icon="gif-box"}}
+                <span class="attachment-description">Gif</span>
+            </div>
+            {{!-- <div class="attachment-tile js-contact">
+                {{> icon block="rc-input__icon-svg" icon="contact-page"}}
+                <span class="attachment-description">Contact</span>
+            </div> --}}
+            <div class="attachment-tile js-location">
+                {{> icon block="rc-input__icon-svg" icon="location"}}
+                <span class="attachment-description">Location</span>
+            </div>
+            <div class="attachment-tile attachment-tile__last js-file">
+                {{> icon block="rc-input__icon-svg" icon="insert-drive-file"}}
+                <span class="attachment-description">File</span>
+            </div>
+        </div>
+    {{/if}}
 </template>

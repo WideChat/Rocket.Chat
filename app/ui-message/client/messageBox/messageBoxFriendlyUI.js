@@ -214,6 +214,21 @@ const getCoordinates = async () => {
 	return position;
 };
 
+const handleUpload = async (event, instance, rid, tmid, $input) => {
+	const { mime } = await import('../../../utils/lib/mimeTypes');
+	const filesToUpload = [...event.target.files].map((file) => {
+		Object.defineProperty(file, 'type', {
+			value: mime.lookup(file.name),
+		});
+		return {
+			file,
+			name: file.name,
+		};
+	});
+	fileUpload(filesToUpload, $('.js-input-message-friendly', instance.firstNode).get(0), { rid, tmid });
+	$input.remove();
+};
+
 Template.messageBoxFriendlyUI.events({
 	'focus .js-input-message-friendly'() {
 		KonchatNotification.removeRoomNotification(this.rid);
@@ -317,19 +332,8 @@ Template.messageBoxFriendlyUI.events({
 
 		$(document.body).append($input);
 
-		$input.one('change', async function(e) {
-			const { mime } = await import('../../../utils/lib/mimeTypes');
-			const filesToUpload = [...e.target.files].map((file) => {
-				Object.defineProperty(file, 'type', {
-					value: mime.lookup(file.name),
-				});
-				return {
-					file,
-					name: file.name,
-				};
-			});
-			fileUpload(filesToUpload, $('.js-input-message-friendly', instance.firstNode).get(0), { rid, tmid });
-			$input.remove();
+		$input.one('change', (event) => {
+			handleUpload(event, instance, rid, tmid, $input);
 		});
 
 		$input.click();
@@ -353,20 +357,8 @@ Template.messageBoxFriendlyUI.events({
 
 		$(document.body).append($input);
 
-		$input.one('change', async function(e) {
-			const { mime } = await import('../../../utils/lib/mimeTypes');
-			const filesToUpload = [...e.target.files].map((file) => {
-				Object.defineProperty(file, 'type', {
-					value: mime.lookup(file.name),
-				});
-				return {
-					file,
-					name: file.name,
-				};
-			});
-
-			fileUpload(filesToUpload, $('.js-input-message-friendly', instance.firstNode).get(0), { rid, tmid });
-			$input.remove();
+		$input.one('change', (event) => {
+			handleUpload(event, instance, rid, tmid, $input);
 		});
 
 		$input.click();
@@ -390,20 +382,8 @@ Template.messageBoxFriendlyUI.events({
 
 		$(document.body).append($input);
 
-		$input.one('change', async function(e) {
-			const { mime } = await import('../../../utils/lib/mimeTypes');
-			const filesToUpload = [...e.target.files].map((file) => {
-				Object.defineProperty(file, 'type', {
-					value: mime.lookup(file.name),
-				});
-				return {
-					file,
-					name: file.name,
-				};
-			});
-
-			fileUpload(filesToUpload, $('.js-input-message-friendly', instance.firstNode).get(0), { rid, tmid });
-			$input.remove();
+		$input.one('change', (event) => {
+			handleUpload(event, instance, rid, tmid, $input);
 		});
 
 		$input.click();
@@ -426,20 +406,8 @@ Template.messageBoxFriendlyUI.events({
 
 		$(document.body).append($input);
 
-		$input.one('change', async function(e) {
-			const { mime } = await import('../../../utils/lib/mimeTypes');
-			const filesToUpload = [...e.target.files].map((file) => {
-				Object.defineProperty(file, 'type', {
-					value: mime.lookup(file.name),
-				});
-				return {
-					file,
-					name: file.name,
-				};
-			});
-
-			fileUpload(filesToUpload, $('.js-input-message-friendly', instance.firstNode).get(0), { rid, tmid });
-			$input.remove();
+		$input.one('change', (event) => {
+			handleUpload(event, instance, rid, tmid, $input);
 		});
 
 		$input.click();

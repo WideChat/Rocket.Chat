@@ -11,136 +11,145 @@ import { api } from '../../../../server/sdk/api';
 const MAX_FILE_SIZE = 5242880;
 
 const notifyAgent = (userId, rid, msg) => api.broadcast('notify.ephemeralMessage', userId, rid, {
-	msg,
+    msg,
 });
 
 class Twilio {
-	constructor() {
-		this.accountSid = settings.get('SMS_Twilio_Account_SID');
-		this.authToken = settings.get('SMS_Twilio_authToken');
-		this.fileUploadEnabled = settings.get('SMS_Twilio_FileUpload_Enabled');
-		this.mediaTypeWhiteList = settings.get('SMS_Twilio_FileUpload_MediaTypeWhiteList');
-	}
+    constructor() {
+        this.accountSid = settings.get('SMS_Twilio_Account_SID');
+        this.authToken = settings.get('SMS_Twilio_authToken');
+        this.fileUploadEnabled = settings.get('SMS_Twilio_FileUpload_Enabled');
+        this.mediaTypeWhiteList = settings.get('SMS_Twilio_FileUpload_MediaTypeWhiteList');
+    }
 
-	parse(data) {
-		let numMedia = 0;
+    parse(data) {
+        let numMedia = 0;
 
-		const returnData = {
-			from: data.From,
-			to: data.To,
-			body: data.Body,
+        const returnData = {
+            from: data.From,
+            to: data.To,
+            body: data.Body,
 
-			extra: {
-				toCountry: data.ToCountry,
-				toState: data.ToState,
-				toCity: data.ToCity,
-				toZip: data.ToZip,
-				fromCountry: data.FromCountry,
-				fromState: data.FromState,
-				fromCity: data.FromCity,
-				fromZip: data.FromZip,
-				fromLatitude: data.Latitude,
-				fromLongitude: data.Longitude,
-			},
-		};
+            extra: {
+                toCountry: data.ToCountry,
+                toState: data.ToState,
+                toCity: data.ToCity,
+                toZip: data.ToZip,
+                fromCountry: data.FromCountry,
+                fromState: data.FromState,
+                fromCity: data.FromCity,
+                fromZip: data.FromZip,
+                fromLatitude: data.Latitude,
+                fromLongitude: data.Longitude,
+            },
+        };
 
-		if (data.NumMedia) {
-			numMedia = parseInt(data.NumMedia, 10);
-		}
+        if (data.NumMedia) {
+            numMedia = parseInt(data.NumMedia, 10);
+        }
 
-		if (isNaN(numMedia)) {
-			console.error(`Error parsing NumMedia ${ data.NumMedia }`);
-			return returnData;
-		}
+        if (isNaN(numMedia)) {
+            console.error(`Error parsing NumMedia ${ data.NumMedia }`);
+            return returnData;
+        }
 
-		returnData.media = [];
+        returnData.media = [];
 
-		for (let mediaIndex = 0; mediaIndex < numMedia; mediaIndex++) {
-			const media = {
-				url: '',
-				contentType: '',
-			};
+        for (let mediaIndex = 0; mediaIndex < numMedia; mediaIndex++) {
+            const media = {
+                url: '',
+                contentType: '',
+            };
 
-			const mediaUrl = data[`MediaUrl${ mediaIndex }`];
-			const contentType = data[`MediaContentType${ mediaIndex }`];
+            const mediaUrl = data[`MediaUrl${ mediaIndex }`];
+            const contentType = data[`MediaContentType${ mediaIndex }`];
 
-			media.url = mediaUrl;
-			media.contentType = contentType;
+            media.url = mediaUrl;
+            media.contentType = contentType;
 
-			returnData.media.push(media);
-		}
+            returnData.media.push(media);
+        }
 
-		return returnData;
-	}
+        return returnData;
+    }
 
-	send(fromNumber, toNumber, message, extraData) {
-		const client = twilio(this.accountSid, this.authToken);
-		let body = message;
+    send(fromNumber, toNumber, message, extraData) {
+        const client = twilio(this.accountSid, this.authToken);
+        let body = message;
 
-		let mediaUrl;
-		const defaultLanguage = settings.get('Language') || 'en';
-		if (extraData && extraData.fileUpload) {
-			const { rid, userId, fileUpload: { size, type, publicFilePath } } = extraData;
-			const user = userId ? Meteor.users.findOne(userId) : null;
-			const lng = (user && user.language) || defaultLanguage;
+        let mediaUrl;
+        const defaultLanguage = settings.get('Language') || 'en';
 
-			let reason;
-			if (!this.fileUploadEnabled) {
-				reason = TAPi18n.__('FileUpload_Disabled', { lng });
-			} else if (size > MAX_FILE_SIZE) {
-				reason = TAPi18n.__('File_exceeds_allowed_size_of_bytes', {
-					size: filesize(MAX_FILE_SIZE),
-					lng,
-				});
-			} else if (!fileUploadIsValidContentType(type, this.fileUploadMediaTypeWhiteList)) {
-				reason = TAPi18n.__('File_type_is_not_accepted', { lng });
-			}
+        if (extraData && extraData.fileUpload) {
+            const { rid, userId, fileUpload: { size, type, publicFilePath } } = extraData;
+            const user = userId ? Meteor.users.findOne(userId) : null;
+            const lng = (user && user.language) || defaultLanguage;
 
-			if (reason) {
-				rid && userId && notifyAgent(userId, rid, reason);
-				return console.error(`(Twilio) -> ${ reason }`);
-			}
+            let reason;
+            if (!this.fileUploadEnabled) {
+                reason = TAPi18n.__('FileUpload_Disabled', { lng });
+            } else if (size > MAX_FILE_SIZE) {
+                reason = TAPi18n.__('File_exceeds_allowed_size_of_bytes', {
+                    size: filesize(MAX_FILE_SIZE),
+                    lng,
+                });
+            } else if (!fileUploadIsValidContentType(type, this.fileUploadMediaTypeWhiteList)) {
+                reason = TAPi18n.__('File_type_is_not_accepted', { lng });
+            }
 
-			mediaUrl = [publicFilePath];
-		}
+            if (reason) {
+                rid && userId && notifyAgent(userId, rid, reason);
+                return console.error(`(Twilio) -> ${ reason }`);
+            }
 
-		let persistentAction;
-		if (extraData && extraData.location) {
-			const [longitude, latitude] = extraData.location.coordinates;
-			persistentAction = `geo:${ latitude },${ longitude }`;
-			body = TAPi18n.__('Location', { lng: defaultLanguage });
-		}
+            mediaUrl = [publicFilePath];
+        }
+        if (extraData && extraData.mediaUrl) {
+            if (mediaUrl) {
+                mediaUrl.push(extraData.mediaUrl);
+            }
+            else {
+                mediaUrl = extraData.mediaUrl;
+            }
+        }
 
-		client.messages.create({
-			to: toNumber,
-			from: fromNumber,
-			body,
-			...mediaUrl && { mediaUrl },
-			...persistentAction && { persistentAction },
-		});
-	}
+        let persistentAction;
+        if (extraData && extraData.location) {
+            const [longitude, latitude] = extraData.location.coordinates;
+            persistentAction = `geo:${ latitude },${ longitude }`;
+            body = TAPi18n.__('Location', { lng: defaultLanguage });
+        }
 
-	response(/* message */) {
-		return {
-			headers: {
-				'Content-Type': 'text/xml',
-			},
-			body: '<Response></Response>',
-		};
-	}
+        client.messages.create({
+            to: toNumber,
+            from: fromNumber,
+            body,
+            ...mediaUrl && { mediaUrl },
+            ...persistentAction && { persistentAction },
+        });
+    }
 
-	error(error) {
-		let message = '';
-		if (error.reason) {
-			message = `<Message>${ error.reason }</Message>`;
-		}
-		return {
-			headers: {
-				'Content-Type': 'text/xml',
-			},
-			body: `<Response>${ message }</Response>`,
-		};
-	}
+    response(/* message */) {
+        return {
+            headers: {
+                'Content-Type': 'text/xml',
+            },
+            body: '<Response></Response>',
+        };
+    }
+
+    error(error) {
+        let message = '';
+        if (error.reason) {
+            message = `<Message>${ error.reason }</Message>`;
+        }
+        return {
+            headers: {
+                'Content-Type': 'text/xml',
+            },
+            body: `<Response>${ message }</Response>`,
+        };
+    }
 }
 
 SMS.registerService('twilio', Twilio);

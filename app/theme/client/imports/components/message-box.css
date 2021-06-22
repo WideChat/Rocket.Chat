@@ -114,12 +114,6 @@
 		background-color: #F2F5F8;
 	}
 
-	.emoji-container {
-		height: auto;
-		max-height: 300px;
-		overflow-y: scroll;
-	}
-
 	&__textarea-friendlyUI {
 		display: flex;
 		

@@ -4,6 +4,7 @@ import { Tracker } from 'meteor/tracker';
 import { ReactiveVar } from 'meteor/reactive-var';
 import moment from 'moment';
 
+import { EmojiPicker } from '../../../emoji';
 import { settings } from '../../../settings';
 import {
 	getUserPreference,
@@ -237,5 +238,36 @@ Template.messageBoxFriendlyUI.events({
 	},
 	async 'click .js-send'(event, instance) {
 		instance.send(event);
+	},
+	'click .js-emoji-picker-friendly'(event, instance) {
+		event.stopPropagation();
+		event.preventDefault();
+
+		if (!getUserPreference(Meteor.userId(), 'useEmojis')) {
+			return;
+		}
+
+		if (EmojiPicker.isOpened()) {
+			EmojiPicker.close();
+			return;
+		}
+
+		EmojiPicker.open(instance.source, (emoji) => {
+			const emojiValue = `:${ emoji }: `;
+
+			const { input } = instance;
+
+			const caretPos = input.selectionStart;
+			const textAreaTxt = input.value;
+
+			input.focus();
+			if (!document.execCommand || !document.execCommand('insertText', false, emojiValue)) {
+				instance.set(textAreaTxt.substring(0, caretPos) + emojiValue + textAreaTxt.substring(caretPos));
+				input.focus();
+			}
+
+			input.selectionStart = caretPos + emojiValue.length;
+			input.selectionEnd = caretPos + emojiValue.length;
+		}, true);
 	},
 });

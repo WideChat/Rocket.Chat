@@ -21,6 +21,7 @@ export const EmojiPicker = {
 	pickCallback: null,
 	scrollingToCategory: false,
 	currentCategory: new ReactiveVar('recent'),
+	isFriendlyChat: false,
 	async init() {
 		if (this.initiated) {
 			return;
@@ -48,7 +49,7 @@ export const EmojiPicker = {
 			if (!this.opened) {
 				return;
 			}
-			this.setPosition();
+			this.isFriendlyChat ? this.setPositionFriendlyChat() : this.setPosition();
 		}, 300));
 	},
 	isOpened() {
@@ -87,18 +88,30 @@ export const EmojiPicker = {
 
 		return $('.emoji-picker').css(cssProperties);
 	},
-	async open(source, callback) {
+	setPositionFriendlyChat() {
+		const cssProperties = {};
+		cssProperties.top = 0;
+		cssProperties.left = 0;
+		cssProperties.height = '100%';
+		cssProperties.width = '100%';
+		cssProperties['z-index'] = 1;
+		cssProperties.position = 'relative';
+
+		return $('.emoji-picker').css(cssProperties);
+	},
+	async open(source, callback, friendlyChat = false) {
 		if (!this.initiated) {
 			await this.init();
 		}
 		this.pickCallback = callback;
 		this.source = source;
+		this.isFriendlyChat = friendlyChat;
 
-		const containerEl = this.setPosition();
+		const containerEl = friendlyChat ? this.setPositionFriendlyChat() : this.setPosition();
 		containerEl.addClass('show');
 
 		const emojiInput = containerEl.find('.js-emojipicker-search');
-		if (emojiInput) {
+		if (!this.isFriendlyChat && emojiInput) {
 			emojiInput.focus();
 		}
 
@@ -113,6 +126,7 @@ export const EmojiPicker = {
 	close() {
 		$('.emoji-picker').removeClass('show');
 		this.opened = false;
+		this.isFriendlyChat = false;
 		this.source.focus();
 	},
 	pickEmoji(emoji) {

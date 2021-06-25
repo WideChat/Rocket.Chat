@@ -36,6 +36,11 @@ callbacks.add('afterSaveMessage', function(message, room) {
 		extraData = Object.assign({}, { rid, userId, fileUpload });
 	}
 
+	if (message.customFields && message.customFields.mediaCardURL) {
+		const mediaUrl = message.customFields.mediaCardURL;
+		extraData = Object.assign({}, { mediaUrl });
+	}
+
 	if (message.location) {
 		const { location } = message;
 		extraData = Object.assign({}, extraData, { location });
@@ -52,6 +57,7 @@ callbacks.add('afterSaveMessage', function(message, room) {
 	if (!visitor || !visitor.phone || visitor.phone.length === 0) {
 		return message;
 	}
+
 
 	SMSService.send(room.sms.from, visitor.phone[0].phoneNumber, message.msg, extraData);
 

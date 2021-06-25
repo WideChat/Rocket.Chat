@@ -79,6 +79,7 @@ class Twilio {
 
 		let mediaUrl;
 		const defaultLanguage = settings.get('Language') || 'en';
+
 		if (extraData && extraData.fileUpload) {
 			const { rid, userId, fileUpload: { size, type, publicFilePath } } = extraData;
 			const user = userId ? Meteor.users.findOne(userId) : null;
@@ -102,6 +103,13 @@ class Twilio {
 			}
 
 			mediaUrl = [publicFilePath];
+		}
+		if (extraData && extraData.mediaUrl) {
+			if (mediaUrl) {
+				mediaUrl.push(extraData.mediaUrl);
+			} else {
+				mediaUrl = extraData.mediaUrl;
+			}
 		}
 
 		let persistentAction;

@@ -36,8 +36,8 @@ callbacks.add('afterSaveMessage', function(message, room) {
 		extraData = Object.assign({}, { rid, userId, fileUpload });
 	}
 
-	if (message.customFields && message.customFields.imageCardURL) {
-		const mediaUrl = message.customFields.imageCardURL;
+	if (message.customFields && message.customFields.mediaCardURL) {
+		const mediaUrl = message.customFields.mediaCardURL;
 		extraData = Object.assign({}, { mediaUrl });
 	}
 

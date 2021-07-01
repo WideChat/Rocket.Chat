@@ -63,6 +63,10 @@ Template.messageBubble.helpers({
 				return 'attachment audio';
 			}
 
+			if (msg.attachments[0]?.video_type) {
+				return 'attachment video';
+			}
+
 			return 'attachment file';
 		}
 

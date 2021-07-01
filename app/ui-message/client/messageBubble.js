@@ -59,6 +59,10 @@ Template.messageBubble.helpers({
 				return 'attachment image';
 			}
 
+			if (msg.attachments[0]?.audio_type) {
+				return 'attachment audio';
+			}
+
 			return 'attachment file';
 		}
 

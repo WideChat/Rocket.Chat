@@ -83,6 +83,28 @@
 			}
 		}
 
+		&.audio .body {
+			display: flex;
+
+			width: 250px;
+			padding: 16px 15px 16px 20px;
+			align-items: center;
+
+			> div {
+				flex: 1;
+
+				> .rcx-message-attachment {
+					margin: 0 !important;
+					padding: 0 !important;
+	
+					& > .rcx-message-attachment {
+						font-family: 'Source Sans Pro', sans-serif;
+						font-size: 16px !important;
+					}
+				}
+			}
+		}
+
 		&.file .body {
 			display: flex;
 
@@ -213,7 +235,7 @@
 			color: #ffffff;
 
 			* {
-				color: #ffffff;
+				color: #ffffff !important;
 			}
 			background-color: var(--friendly-message-color);
 		}
@@ -247,11 +269,11 @@
 
 		.message-body-wrapper .body {
 			color: #202e39;
+			background-color: #dee4e8;
 
 			* {
-				color: #202e39;
+				color: #202e39 !important;
 			}
-			background-color: #dee4e8;
 		}
 
 		&.firstMsg > .message-body-wrapper {

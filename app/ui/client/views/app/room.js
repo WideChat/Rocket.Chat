@@ -182,8 +182,8 @@ export const dropzoneHelpers = {
 
 Template.roomOld.helpers({
 	...dropzoneHelpers,
-	isMobile() {
-		return isMobile();
+	isFriendlyUIEnabled() {
+		return settings.get('UI_FriendlyUI') && isMobile();
 	},
 	tabBar() {
 		return Template.instance().tabBar;

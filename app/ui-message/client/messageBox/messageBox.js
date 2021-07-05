@@ -204,8 +204,8 @@ Template.messageBox.helpers({
 		const isAnonymous = !Meteor.userId();
 		return isAnonymous || instance.state.get('mustJoinWithCode');
 	},
-	isMobile() {
-		return isMobile();
+	isFriendlyUIEnabled() {
+		return settings.get('UI_FriendlyUI') && isMobile();
 	},
 	isWritable() {
 		const { rid, subscription } = Template.currentData();

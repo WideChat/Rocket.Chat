@@ -1218,6 +1218,12 @@ settings.addGroup('Message', function() {
 			},
 		],
 	});
+
+	this.add('Message_FriendlyUI', true, {
+		type: 'boolean',
+		public: true,
+		i18nDescription: 'Message_FriendlyUIDescription',
+	});
 });
 
 settings.addGroup('Meta', function() {
@@ -1560,6 +1566,10 @@ settings.addGroup('Layout', function() {
 			public: true,
 		});
 		this.add('UI_Allow_room_names_with_special_chars', false, {
+			type: 'boolean',
+			public: true,
+		});
+		this.add('UI_FriendlyUI', true, {
 			type: 'boolean',
 			public: true,
 		});

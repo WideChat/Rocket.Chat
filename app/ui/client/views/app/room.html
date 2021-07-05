@@ -116,7 +116,7 @@
 
 								{{# with messageContext}}
 									{{#each msg in messagesHistory}}
-										{{#unless isMobile}}
+										{{#unless isFriendlyUIEnabled}}
 											{{> message showRoles=true index=@index shouldCollapseReplies=false msg=msg room=room  actions=actions subscription=subscription settings=settings u=u}}
 										{{else}}
 											{{> messageBubble showRoles=true index=@index shouldCollapseReplies=false msg=msg room=room  actions=actions subscription=subscription settings=settings u=u}}

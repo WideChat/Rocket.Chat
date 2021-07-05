@@ -1,11 +1,11 @@
 import { Tracker } from 'meteor/tracker';
 import { Template } from 'meteor/templating';
 import { TAPi18n } from 'meteor/rocketchat:tap-i18n';
-import { escapeHTML } from '@rocket.chat/string-helpers';
 
 import { MessageTypes } from '../../ui-utils/client';
 import { Markdown } from '../../markdown/client';
 import './messageThread';
+import { escapeHTML } from '../../../lib/escapeHTML';
 import { renderMentions } from '../../mentions/client/client';
 import { renderMessageBody } from '../../../client/lib/renderMessageBody';
 import { settings } from '../../settings/client';

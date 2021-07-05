@@ -4116,6 +4116,7 @@
   "UI_Allow_room_names_with_special_chars": "Allow Special Characters in Room Names",
   "UI_Click_Direct_Message": "Click to Create Direct Message",
   "UI_Click_Direct_Message_Description": "Skip opening profile tab, instead go straight to conversation",
+  "UI_FriendlyUI": "Enable Friendly UI",
   "UI_DisplayRoles": "Display Roles",
   "UI_DisplayLocalization": "Display Localization in Account Preferences",
   "UI_DisplayGlobal": "Display Global in Account Preferences",

@@ -1218,12 +1218,6 @@ settings.addGroup('Message', function() {
 			},
 		],
 	});
-
-	this.add('Message_FriendlyUI', true, {
-		type: 'boolean',
-		public: true,
-		i18nDescription: 'Message_FriendlyUIDescription',
-	});
 });
 
 settings.addGroup('Meta', function() {

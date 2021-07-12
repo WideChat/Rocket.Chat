@@ -468,6 +468,8 @@ export const Livechat = {
 		const rcSettings = {};
 
 		Settings.findNotHiddenPublic([
+			'Livechat_friendly_chat',
+			'Livechat_enable_avatar',
 			'Livechat_title',
 			'Livechat_title_color',
 			'Livechat_kill_switch',

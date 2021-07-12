@@ -163,10 +163,12 @@ export function settings(url) {
 			agentHiddenInfo: initSettings.Livechat_show_agent_info === false,
 			hideSysMessages: initSettings.Livechat_hide_sys_messages,
 			limitTextLength: initSettings.Livechat_enable_message_character_limit
+				&& (initSettings.Livechat_message_character_limit || initSettings.Message_MaxAllowedSize),
 
-			&& (initSettings.Livechat_message_character_limit || initSettings.Message_MaxAllowedSize),
 			livechat_kill_switch: initSettings.Livechat_kill_switch,
 			livechat_kill_switch_message: initSettings.Livechat_kill_switch_message,
+			livechat_friendly_chat: initSettings.Livechat_friendly_chat,
+			livechat_enable_avatar: initSettings.Livechat_enable_avatar,
 		},
 		theme: {
 			title: initSettings.Livechat_title,

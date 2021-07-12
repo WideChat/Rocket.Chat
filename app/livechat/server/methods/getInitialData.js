@@ -95,6 +95,8 @@ Meteor.methods({
 		info.hideSysMessages = initSettings.Livechat_hide_sys_messages;
 		info.livechat_kill_switch = initSettings.Livechat_kill_switch;
 		info.livechat_kill_switch_message = initSettings.Livechat_kill_switch_message;
+		info.livechat_friendly_chat = initSettings.Livechat_friendly_chat;
+		info.livechat_enable_avatar = initSettings.Livechat_enable_avatar;
 
 		info.agentData = room && room[0] && room[0].servedBy && Users.getAgentInfo(room[0].servedBy._id);
 

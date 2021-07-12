@@ -12,6 +12,22 @@ Meteor.startup(function() {
 		public: true,
 	});
 
+	settings.add('Livechat_friendly_chat', false, {
+		type: 'boolean',
+		group: 'Omnichannel',
+		section: 'Livechat',
+		public: true,
+		i18nDescription: 'Livechat_friendly_chat_description',
+	});
+
+	settings.add('Livechat_enable_avatar', true, {
+		type: 'boolean',
+		group: 'Omnichannel',
+		section: 'Livechat',
+		public: true,
+		i18nDescription: 'Livechat_enable_avatar_description',
+	});
+
 	settings.add('Livechat_title', 'Rocket.Chat', {
 		type: 'string',
 		group: 'Omnichannel',

@@ -11,6 +11,7 @@ import { renderMessageBody } from '../../../client/lib/renderMessageBody';
 import { settings } from '../../settings/client';
 import './messageBubble.html';
 
+let activeReactionMessage;
 const renderBody = (msg, settings) => {
 	const searchedText = msg.searchedText ? msg.searchedText : '';
 	const isSystemMessage = MessageTypes.isSystemMessage(msg);
@@ -270,20 +271,55 @@ const setCornerClasses = (previousNode, currentNode, nextNode, iterateCount) => 
 		setCornerClasses(getPreviousSentMessage(previousNode), previousNode, currentNode, iterateCount);
 	}
 };
+const showReactions = (target) => {
+	activeReactionMessage = target;
+	const wrapper = document.querySelector('.messages-box .wrapper');
+	const reactions = document.querySelector('.messages-box .wrapper .reactions');
 
+	activeReactionMessage.style.opacity = '1';
+	reactions.style.top = `${ activeReactionMessage.offsetTop - reactions.offsetHeight - 5 }px`;
+
+	if (activeReactionMessage?.classList.contains('messageSent')) {
+		reactions.style.left = '';
+		reactions.style.right = '15px';
+	} else if (activeReactionMessage?.classList.contains('messageReceived')) {
+		reactions.style.left = '15px';
+		reactions.style.right = '';
+	}
+
+	wrapper.classList.add('show-reactions');
+};
 const processSequentials = ({ index, currentNode, settings, forceDate, showDateSeparator = true, groupable, shouldCollapseReplies }) => {
 	if (!showDateSeparator && !groupable) {
 		return;
 	}
-	// const currentDataset = currentNode.dataset;
 	const previousNode = (index === undefined || index > 0) && getPreviousSentMessage(currentNode);
-	const nextNode = currentNode.nextElementSibling;
+	let nextNode = currentNode.nextElementSibling;
 
 	if (nextNode) {
 		nextNode.previousElementSibling = currentNode;
+		if (nextNode?.tagName === 'DIV') {
+			nextNode = null;
+		}
 	}
 
 	setCornerClasses(previousNode, currentNode, nextNode, 2);
+
+	if (currentNode.getAttribute('longPressListener') !== 'true') {
+		currentNode.setAttribute('longPressListener', 'true');
+
+		let longPressTimeout;
+		const mouseDown = () => {
+			longPressTimeout = setTimeout(() => showReactions(currentNode), 500);
+		};
+		const mouseUp = () => clearTimeout(longPressTimeout);
+
+		currentNode.addEventListener('mousedown', mouseDown);
+		currentNode.addEventListener('mouseup', mouseUp);
+		currentNode.addEventListener('touchstart', mouseDown);
+		currentNode.addEventListener('touchend', mouseUp);
+		currentNode.addEventListener('contextmenu', (event) => event.preventDefault());
+	}
 
 	if (!previousNode) {
 		setTimeout(() => {
@@ -319,5 +355,21 @@ const processSequentials = ({ index, currentNode, settings, forceDate, showDateS
 
 Template.messageBubble.onRendered(function() {
 	const currentNode = this.firstNode;
+
+	const wrapper = document.querySelector('.messages-box .wrapper');
+	const reactionBackdrop = document.querySelector('.reactions-backdrop');
+	reactionBackdrop.addEventListener('contextmenu', (event) => event.preventDefault());
+	reactionBackdrop.addEventListener('click', () => {
+		activeReactionMessage.style.opacity = '';
+		wrapper.classList.remove('show-reactions');
+	});
+
+	$('.reaction-icon').on('click', function(event) {
+		event.stopPropagation();
+		event.stopImmediatePropagation();
+		console.log($(this));
+		reactionBackdrop.click();
+	});
+
 	this.autorun(() => processSequentials({ currentNode, ...Template.currentData() }));
 });

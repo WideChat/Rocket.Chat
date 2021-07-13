@@ -218,10 +218,12 @@
 			background-color: var(--friendly-message-color);
 		}
 
-		&.firstMsg > .message-body-wrapper {
+		&.firstMsg {
 			margin-top: 10px;
 
-			border-bottom-right-radius: 6px;
+			> .message-body-wrapper {
+				border-bottom-right-radius: 6px;
+			}
 		}
 
 		&.midMsg > .message-body-wrapper {
@@ -254,10 +256,12 @@
 			background-color: #dee4e8;
 		}
 
-		&.firstMsg > .message-body-wrapper {
+		&.firstMsg {
 			margin-top: 10px;
 
-			border-bottom-left-radius: 6px;
+			> .message-body-wrapper {
+				border-bottom-left-radius: 6px;
+			}
 		}
 
 		&.midMsg > .message-body-wrapper {

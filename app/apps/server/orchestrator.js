@@ -119,6 +119,12 @@ export class AppServerOrchestrator {
 		}
 	}
 
+	errorLog(...args) {
+		if (this.isDebugging()) {
+			this.getRocketChatLogger().error(...args);
+		}
+	}
+
 	getMarketplaceUrl() {
 		return this._marketplaceUrl;
 	}

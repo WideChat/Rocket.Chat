@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
 import { Template } from 'meteor/templating';
 import { TAPi18n } from 'meteor/rocketchat:tap-i18n';
@@ -367,7 +368,7 @@ Template.messageBubble.onRendered(function() {
 	$('.reaction-icon').on('click', function(event) {
 		event.stopPropagation();
 		event.stopImmediatePropagation();
-		console.log($(this));
+		Meteor.call('setReaction', `:${ event.target.getAttribute('data') }:`, activeReactionMessage.id);
 		reactionBackdrop.click();
 	});
 

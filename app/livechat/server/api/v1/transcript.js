@@ -48,7 +48,7 @@ API.v1.addRoute('livechat/gettranscript', { authRequired: true }, {
 
 			return API.v1.success(response);
 		} catch (e) {
-			Livechat.logger.debug(e);
+			Livechat.logger.error(e);
 			return API.v1.failure(e);
 		}
 	},

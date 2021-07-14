@@ -5,7 +5,7 @@ import { Tracker } from 'meteor/tracker';
 import { lazy } from 'react';
 import toastr from 'toastr';
 
-import { KonchatNotification } from '../../app/ui/client';
+// import { KonchatNotification } from '../../app/ui/client';
 import { handleError } from '../../app/utils/client';
 import { IUser } from '../../definition/IUser';
 import { appLayout } from '../lib/appLayout';
@@ -54,7 +54,8 @@ FlowRouter.route('/home', {
 	name: 'home',
 
 	action(_params, queryParams) {
-		KonchatNotification.getDesktopPermission();
+		// WIDECHAT
+		// KonchatNotification.getDesktopPermission();
 		if (queryParams?.saml_idp_credentialToken !== undefined) {
 			const token = queryParams.saml_idp_credentialToken;
 			FlowRouter.setQueryParams({

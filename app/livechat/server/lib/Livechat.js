@@ -39,6 +39,9 @@ import { normalizeTransferredByData, parseAgentCustomFields, updateDepartmentAge
 import { Apps, AppEvents } from '../../../apps/server';
 import { businessHourManager } from '../business-hour';
 import notifications from '../../../notifications/server/lib/Notifications';
+import { Notifications } from '../../../notifications';
+
+const rooms = {};
 
 export const Livechat = {
 	Analytics,
@@ -50,7 +53,6 @@ export const Livechat = {
 		},
 	}),
 
-
 	findGuest(token) {
 		return LivechatVisitors.getVisitorByToken(token, {
 			fields: {
@@ -61,6 +63,21 @@ export const Livechat = {
 				department: 1,
 			},
 		});
+	},
+
+	addTypingListener(rid, callback) {
+		if (rooms[rid]) {
+			return;
+		}
+		rooms[rid] = callback;
+		return Notifications.onRoom(rid, 'typing', rooms[rid]);
+	},
+
+	removeTypingListener(rid) {
+		if (rooms[rid]) {
+			Notifications.unRoom(rid, 'typing', rooms[rid]);
+			delete rooms[rid];
+		}
 	},
 
 	online(department) {
@@ -123,6 +140,15 @@ export const Livechat = {
 
 	getRequiredDepartment(onlineRequired = true) {
 		const departments = LivechatDepartment.findEnabledWithAgents();
+
+		const deparmentName = settings.get('Livechat_assign_new_conversation_to_department');
+
+		if (deparmentName) {
+			const department = departments.fetch().find((dept) => dept.name === deparmentName);
+			if (department) {
+				return department;
+			}
+		}
 
 		return departments.fetch().find((dept) => {
 			if (!dept.showOnRegistration) {
@@ -355,6 +381,14 @@ export const Livechat = {
 
 		const params = callbacks.run('livechat.beforeCloseRoom', { room, options });
 		const { extraData } = params;
+		const guest = LivechatVisitors.findOneById(room.v._id);
+		const updateUser = {};
+
+		// remove department from guest when closing chat.
+		if (guest.department) {
+			Object.assign(updateUser, { $unset: { department: 1 } });
+			LivechatVisitors.updateById(guest._id, updateUser);
+		}
 
 		const now = new Date();
 		const { _id: rid, servedBy, transcriptRequest } = room;
@@ -407,6 +441,7 @@ export const Livechat = {
 			 */
 			Apps.getBridges().getListenerBridge().livechatEvent(AppEvents.ILivechatRoomClosedHandler, room);
 			Apps.getBridges().getListenerBridge().livechatEvent(AppEvents.IPostLivechatRoomClosed, room);
+			Livechat.removeTypingListener(rid);
 		});
 		callbacks.runAsync('livechat.closeRoom', room);
 
@@ -423,6 +458,7 @@ export const Livechat = {
 		Messages.removeByRoomId(rid);
 		Subscriptions.removeByRoomId(rid);
 		LivechatInquiry.removeByRoomId(rid);
+		Livechat.removeTypingListener(rid);
 		return LivechatRooms.removeById(rid);
 	},
 
@@ -461,11 +497,14 @@ export const Livechat = {
 		Settings.findNotHiddenPublic([
 			'Livechat_title',
 			'Livechat_title_color',
+			'Livechat_kill_switch',
+			'Livechat_kill_switch_message',
 			'Livechat_enable_message_character_limit',
 			'Livechat_message_character_limit',
 			'Message_MaxAllowedSize',
 			'Livechat_enabled',
 			'Livechat_registration_form',
+			'Livechat_start_session_on_new_chat',
 			'Livechat_allow_switching_departments',
 			'Livechat_offline_title',
 			'Livechat_offline_title_color',
@@ -478,16 +517,20 @@ export const Livechat = {
 			'Language',
 			'Livechat_enable_transcript',
 			'Livechat_transcript_message',
+			'Livechat_enable_print_transcript',
 			'Livechat_fileupload_enabled',
 			'FileUpload_Enabled',
 			'Livechat_conversation_finished_message',
 			'Livechat_conversation_finished_text',
 			'Livechat_name_field_registration_form',
 			'Livechat_email_field_registration_form',
+			'Assets_livechat_guest_default_avatar',
 			'Livechat_registration_form_message',
 			'Livechat_force_accept_data_processing_consent',
 			'Livechat_data_processing_consent_text',
 			'Livechat_show_agent_info',
+			'Livechat_skip_registration_form_DomainsList',
+			'Livechat_hide_sys_messages',
 		]).forEach((setting) => {
 			rcSettings[setting._id] = setting.value;
 		});
@@ -1041,6 +1084,37 @@ export const Livechat = {
 
 		Messages.createTranscriptHistoryWithRoomIdMessageAndUser(room._id, '', user, { requestData: { type, visitor, user } });
 		return true;
+	},
+
+	getTranscript({ token, rid, user }) {
+		check(rid, String);
+
+		const room = LivechatRooms.findOneById(rid);
+
+		const visitor = LivechatVisitors.getVisitorByToken(token, { fields: { _id: 1, token: 1, language: 1, username: 1, name: 1 } });
+
+		// allow to only user to send transcripts from their own chats
+		if (!room || room.t !== 'l' || !room.v || room.v.token !== token) {
+			Livechat.logger.debug('getTranscript: Room/Token not valid or Visitor token not allowed to access the room.', { rid, token });
+			throw new Meteor.Error('error-invalid-room', 'Invalid room');
+		}
+
+		const ignoredMessageTypes = ['livechat_navigation_history', 'livechat_transcript_history', 'command', 'livechat-close', 'livechat_video_call'];
+		const messages = Messages.findVisibleByRoomIdNotContainingTypes(rid, ignoredMessageTypes, { sort: { ts: 1 } });
+
+		const response = [];
+		messages.forEach((message) => {
+			response.push({ sender: message.u._id === visitor._id ? 'customer' : 'agent', message: message.msg, timestamp: message.ts });
+		});
+
+		let type = 'user';
+		if (!user) {
+			user = Users.findOneById('rocket.cat', { fields: { _id: 1, username: 1, name: 1 } });
+			type = 'visitor';
+		}
+
+		Messages.createTranscriptHistoryWithRoomIdMessageAndUser(room._id, '', user, { requestData: { type, visitor, user } });
+		return response;
 	},
 
 	requestTranscript({ rid, email, subject, user }) {

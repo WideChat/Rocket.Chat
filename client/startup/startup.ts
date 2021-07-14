@@ -42,9 +42,6 @@ Meteor.startup(() => {
 		if (!uid) {
 			return;
 		}
-		if (!Meteor.status().connected) {
-			return;
-		}
 
 		const user = await synchronizeUserData(uid);
 

@@ -16,13 +16,11 @@ Meteor.methods({
 			description: String,
 			enabled: Boolean,
 			runOnce: Boolean,
+			registeredOnly: Boolean,
 			conditions: Array,
 			actions: Array,
 		});
 
-		if (trigger._id) {
-			return LivechatTrigger.updateById(trigger._id, trigger);
-		}
-		return LivechatTrigger.insert(trigger);
+		return LivechatTrigger.insertOrUpsert(trigger);
 	},
 });

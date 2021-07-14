@@ -74,7 +74,7 @@ Meteor.startup(function() {
 		action() {
 			const { msg: message } = messageArgs(this);
 			if (window.matchMedia('(max-width: 500px)').matches) {
-				Template.instance().tabBar.close();
+				Template.currentData().instance.tabBar.close();
 			}
 			if (message.tmid) {
 				return FlowRouter.go(FlowRouter.getRouteName(), {
@@ -89,8 +89,8 @@ Meteor.startup(function() {
 			}
 			return RoomHistoryManager.getSurroundingMessages(message, 50);
 		},
-		condition({ subscription }) {
-			return !!subscription;
+		condition({ msg, subscription }) {
+			return msg.pinned && !!subscription;
 		},
 		order: 100,
 		group: ['message', 'menu'],

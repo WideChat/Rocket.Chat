@@ -145,6 +145,7 @@ describe('miscellaneous', function() {
 					'sidebarDisplayAvatar',
 					'sidebarGroupByType',
 					'muteFocusedConversations',
+					'discoverability',
 				];
 
 				expect(res.body).to.have.property('success', true);

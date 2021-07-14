@@ -177,6 +177,24 @@ export class AppSchedulerBridge extends SchedulerBridge {
 		}
 	}
 
+	/**
+	 * Cancels running jobs given its data query
+	 *
+	 * @param {object} data
+	 *
+	 * @returns Promise<void>
+	 */
+	protected async cancelJobByDataQuery(data: object, appId: string): Promise<void> {
+		this.orch.debugLog(`Canceling all jobs of App ${ appId } matching ${ JSON.stringify(data) }`);
+		await this.startScheduler();
+		const matcher = new RegExp(`_${ appId }$`);
+		try {
+			await this.scheduler.cancel({ name: { $regex: matcher }, data });
+		} catch (e) {
+			console.error(e);
+		}
+	}
+
 	private async startScheduler(): Promise<void> {
 		if (!this.isConnected) {
 			await this.scheduler.start();

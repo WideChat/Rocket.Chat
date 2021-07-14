@@ -1,3 +1,5 @@
+## The WideChat repo is a fork of RocketChat for development of features to be merged upstream in coordination with the RocketChat team....
+
 <img src="https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/2020/png/logo-horizontal-red.png" data-canonical-src="https://github.com/RocketChat/Rocket.Chat.Artwork/raw/master/Logos/2020/png/logo-horizontal-red.png" width="500" />
 
 [Rocket.Chat](https://rocket.chat) is an open-source fully customizable communications platform developed in JavaScript for organizations with high standards of data protection.
@@ -88,5 +90,3 @@ We're hiring developers, support people, and product managers all the time. Plea
 * Email - Subscribe to our [newsletter](https://rocket.chat/newsletter/)
 
 Any other questions, mail us at [info@rocket.chat](info@rocket.chat). We’d love to meet you!
-
-

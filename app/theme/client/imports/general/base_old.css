@@ -1511,9 +1511,9 @@
 				box-sizing: content-box;
 				gap: 6px;
 
-				transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.15s ease-out;
-				transform: translateY(20px) scale(0.7);
 				pointer-events: none;
+				transform: translateY(30px) scale(0.6);
+				transition: transform 0.15s ease-out, opacity 0.15s linear;
 
 				opacity: 0;
 				border-radius: var(--reactionSize);
@@ -1567,10 +1567,11 @@
 				}
 
 				> .reactions {
-					transform: translateY(0) scale(1);
 					pointer-events: all;
-
+					
 					opacity: 1;
+					transform: translateY(0) scale(1);
+					transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.18s linear;
 				}
 			}
 		}

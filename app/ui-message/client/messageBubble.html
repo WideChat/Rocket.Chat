@@ -1,5 +1,5 @@
 <template name="messageBubble">
-	<li id="{{templatePrefix}}{{msg._id}}" data-id="{{msg._id}}" data-context={{actionContext}} class="messageBubble {{messageType}} {{bigEmoji}} {{attachmentsClass}}" data-username="{{msg.u.username}}" data-tmid="{{msg.tmid}}" data-date="{{date}}" data-timestamp="{{timestamp}}" data-alias="{{msg.alias}}">
+	<li id="{{templatePrefix}}{{msg._id}}" data-id="{{msg._id}}" data-context={{actionContext}} class="messageBubble {{messageType}} {{bigEmoji}} {{hasReaction}} {{attachmentsClass}}" data-username="{{msg.u.username}}" data-tmid="{{msg.tmid}}" data-date="{{date}}" data-timestamp="{{timestamp}}" data-alias="{{msg.alias}}">
 		{{#unless shouldHideBody}}
 			<div class="message-body-wrapper">
 				<div class="body" dir="auto" data-unread-text="{{_ "Unread_Messages"}}">
@@ -21,6 +21,13 @@
 					{{#if msg.location}}
 						{{> messageLocation location=msg.location}}
 					{{/if}}
+				</div>
+				<div class="reaction">
+					<span class="reaction-icon" data-emoji="{{getReactionEmoji}}">
+						{{#if hasReaction}}
+							{{> icon icon=getReactionIcon }}
+						{{/if}}
+					</span>
 				</div>
 			</div>
 			{{#with readReceipt}}

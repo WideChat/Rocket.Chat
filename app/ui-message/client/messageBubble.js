@@ -123,6 +123,21 @@ Template.messageBubble.helpers({
 
 		return '';
 	},
+	hasReaction() {
+		const { msg: { reactions = {} } } = this;
+
+		return Object.keys(reactions).length ? 'hasReaction' : '';
+	},
+	getReactionEmoji() {
+		const { msg: { reactions = {} } } = this;
+
+		return Object.keys(reactions)[0];
+	},
+	getReactionIcon() {
+		const { msg: { reactions = {} } } = this;
+
+		return Object.keys(reactions)[0].replaceAll(':', '');
+	},
 	timestamp() {
 		const { msg } = this;
 		return +msg.ts;

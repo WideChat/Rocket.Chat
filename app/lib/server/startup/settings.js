@@ -228,6 +228,9 @@ settings.addGroup('Accounts', function() {
 				value: true,
 			},
 		});
+		this.add('Accounts_Registration_Users_Default_Roles', 'user', {
+			type: 'string',
+		});
 		this.add('Accounts_PasswordReset', true, {
 			type: 'boolean',
 			public: true,
@@ -868,6 +871,11 @@ settings.addGroup('General', function() {
 		type: 'boolean',
 		secret: true,
 	});
+
+	this.add('Enable_CSP', true, {
+		type: 'boolean',
+	});
+
 	this.add('Iframe_Restrict_Access', true, {
 		type: 'boolean',
 		secret: true,
@@ -1376,36 +1384,36 @@ settings.addGroup('Push', function() {
 	this.section('Certificates_and_Keys', function() {
 		this.add('Push_apn_passphrase', '', {
 			type: 'string',
-			enableQuery: pushEnabledWithoutGateway,
+			enableQuery: [],
 			secret: true,
 		});
 		this.add('Push_apn_key', '', {
 			type: 'string',
 			multiline: true,
-			enableQuery: pushEnabledWithoutGateway,
+			enableQuery: [],
 			secret: true,
 		});
 		this.add('Push_apn_cert', '', {
 			type: 'string',
 			multiline: true,
-			enableQuery: pushEnabledWithoutGateway,
+			enableQuery: [],
 			secret: true,
 		});
 		this.add('Push_apn_dev_passphrase', '', {
 			type: 'string',
-			enableQuery: pushEnabledWithoutGateway,
+			enableQuery: [],
 			secret: true,
 		});
 		this.add('Push_apn_dev_key', '', {
 			type: 'string',
 			multiline: true,
-			enableQuery: pushEnabledWithoutGateway,
+			enableQuery: [],
 			secret: true,
 		});
 		this.add('Push_apn_dev_cert', '', {
 			type: 'string',
 			multiline: true,
-			enableQuery: pushEnabledWithoutGateway,
+			enableQuery: [],
 			secret: true,
 		});
 		this.add('Vapid_public_key', '', {
@@ -1422,7 +1430,7 @@ settings.addGroup('Push', function() {
 		});
 		this.add('Push_gcm_api_key', '', {
 			type: 'string',
-			enableQuery: pushEnabledWithoutGateway,
+			enableQuery: [],
 			secret: true,
 		});
 		this.add('Gcm_sender_id', '', {
@@ -1432,7 +1440,7 @@ settings.addGroup('Push', function() {
 		return this.add('Push_gcm_project_number', '', {
 			type: 'string',
 			public: true,
-			enableQuery: pushEnabledWithoutGateway,
+			enableQuery: [],
 			secret: true,
 		});
 	});

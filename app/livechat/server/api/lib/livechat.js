@@ -4,7 +4,7 @@ import { Meteor } from 'meteor/meteor';
 import { Random } from 'meteor/random';
 import _ from 'underscore';
 
-import { LivechatRooms, LivechatVisitors, LivechatDepartment, LivechatTrigger, LivechatFilter } from '../../../../models';
+import { LivechatRooms, LivechatVisitors, LivechatDepartment, LivechatTrigger, LivechatFilter, EmojiCustom } from '../../../../models/server';
 import { Livechat } from '../../lib/Livechat';
 import { callbacks } from '../../../../callbacks/server';
 import { normalizeAgent } from '../../lib/Helper';
@@ -19,11 +19,13 @@ export function findFilters() {
 }
 
 export function findTriggers() {
-	return LivechatTrigger.findEnabled().fetch().map((trigger) => _.pick(trigger, '_id', 'actions', 'conditions', 'runOnce', 'registeredOnly'));
+	return LivechatTrigger.findEnabled().fetch().map(({ _id, actions, conditions, runOnce, registeredOnly }) => ({ _id, actions, conditions, runOnce, registeredOnly }));
 }
 
 export function findDepartments() {
-	return LivechatDepartment.findEnabledWithAgents().fetch().map((department) => _.pick(department, '_id', 'name', 'showOnRegistration', 'showOnOfflineForm'));
+	return LivechatDepartment.findEnabledWithAgents({
+		_id: 1, name: 1, showOnRegistration: 1, showOnOfflineForm: 1,
+	}).fetch().map(({ _id, name, showOnRegistration, showOnOfflineForm }) => ({ _id, name, showOnRegistration, showOnOfflineForm }));
 }
 
 export function findGuest(token) {
@@ -111,7 +113,7 @@ export function settings(url) {
 	const filters = findFilters();
 	const departments = findDepartments();
 	const sound = `${ Meteor.absoluteUrl() }sounds/chime.mp3`;
-	const emojis = Meteor.call('listEmojiCustom');
+	const emojis = EmojiCustom.find().fetch();
 
 	const shouldShowRegistrationForm = () => {
 		if (!url) {

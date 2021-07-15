@@ -14,7 +14,7 @@ import React, { useState, useEffect } from 'react';
 
 import { offlineAction } from '../../../../../app/ui-utils/client';
 import { roomTypes, isEmail } from '../../../../../app/utils/client';
-import UserAutoCompleteMultiple from '../../../../../ee/client/audit/UserAutoCompleteMultiple';
+import UserAutoCompleteMultiple from '../../../../components/UserAutoCompleteMultiple';
 import { useEndpoint } from '../../../../contexts/ServerContext';
 import { useToastMessageDispatch } from '../../../../contexts/ToastMessagesContext';
 import { useTranslation } from '../../../../contexts/TranslationContext';

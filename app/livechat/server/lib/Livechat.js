@@ -1095,7 +1095,7 @@ export const Livechat = {
 
 		// allow to only user to send transcripts from their own chats
 		if (!room || room.t !== 'l' || !room.v || room.v.token !== token) {
-			Livechat.logger.debug('getTranscript: Room/Token not valid or Visitor token not allowed to access the room.', { rid, token });
+			Livechat.logger.error('getTranscript: Room/Token not valid or Visitor token not allowed to access the room.', { rid, token });
 			throw new Meteor.Error('error-invalid-room', 'Invalid room');
 		}
 

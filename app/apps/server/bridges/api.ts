@@ -111,8 +111,12 @@ export class AppApisBridge extends ApiBridge {
 					res.set(headers);
 					res.status(status);
 					res.send(content);
+					if (status !== 200) {
+						this.orch.errorLog(`The endpoint /${ endpoint.path } of the App ${ appId } failed. \n${ JSON.stringify(request) }\nStatus Code: ${ status } Response: ${ JSON.stringify(content) }`);
+					}
 				})
 				.catch((reason) => {
+					this.orch.errorLog(reason);
 					// Should we handle this as an error?
 					res.status(500).send(reason.message);
 				});

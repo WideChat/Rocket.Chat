@@ -1506,30 +1506,35 @@
 				display: flex;
 				overflow: hidden;
 
+				box-sizing: content-box;
+
 				height: var(--reactionSize);
 				padding: 6px 15px;
-				box-sizing: content-box;
-				gap: 6px;
+
+				transition: transform 0.15s ease-out, opacity 0.15s linear;
+				transform: translateY(30px) scale(0.6);
 
 				pointer-events: none;
-				transform: translateY(30px) scale(0.6);
-				transition: transform 0.15s ease-out, opacity 0.15s linear;
 
 				opacity: 0;
 				border-radius: var(--reactionSize);
 				background-color: white;
 				box-shadow: 0 0 5px 0 #cccccc;
+				gap: 6px;
 
 				> .reaction-icon {
 					width: var(--reactionSize);
 					height: var(--reactionSize);
 					padding: 10px;
+
 					border-radius: 50%;
 
 					> .rc-icon {
 						width: 100%;
 						height: 100%;
+
 						pointer-events: none;
+
 						color: var(--friendly-message-color);
 					}
 
@@ -1567,11 +1572,11 @@
 				}
 
 				> .reactions {
-					pointer-events: all;
-					
-					opacity: 1;
-					transform: translateY(0) scale(1);
 					transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.18s linear;
+					transform: translateY(0) scale(1);
+					pointer-events: all;
+
+					opacity: 1;
 				}
 			}
 		}

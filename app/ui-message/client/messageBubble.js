@@ -3,6 +3,7 @@ import { Tracker } from 'meteor/tracker';
 import { Template } from 'meteor/templating';
 import { TAPi18n } from 'meteor/rocketchat:tap-i18n';
 
+import { Messages } from '../../models';
 import { MessageTypes } from '../../ui-utils/client';
 import { Markdown } from '../../markdown/client';
 import './messageThread';
@@ -43,7 +44,8 @@ const renderBody = (msg, settings) => {
 
 	return msg;
 };
-
+const validReactions = ['heart', 'thumbsup', 'thumbsdown', 'question', 'exclamation'];
+const lastValidReaction = (reactionList) => Object.keys(reactionList).reverse().find((reaction) => validReactions.includes(reaction.replaceAll(':', '')));
 Template.messageBubble.helpers({
 	unread() {
 		const { msg, subscription } = this;
@@ -126,17 +128,17 @@ Template.messageBubble.helpers({
 	hasReaction() {
 		const { msg: { reactions = {} } } = this;
 
-		return Object.keys(reactions).length ? 'hasReaction' : '';
+		return lastValidReaction(reactions) ? 'hasReaction' : '';
 	},
 	getReactionEmoji() {
 		const { msg: { reactions = {} } } = this;
 
-		return Object.keys(reactions)[0];
+		return lastValidReaction(reactions);
 	},
 	getReactionIcon() {
 		const { msg: { reactions = {} } } = this;
 
-		return Object.keys(reactions)[0].replaceAll(':', '');
+		return lastValidReaction(reactions).replaceAll(':', '');
 	},
 	timestamp() {
 		const { msg } = this;
@@ -368,7 +370,19 @@ const processSequentials = ({ index, currentNode, settings, forceDate, showDateS
 		}
 	}
 };
+const updateReactions = (messageID, targetReaction, currentReaction) => {
+	const { reactions = {} } = Messages.findOne({ _id: messageID });
+	const validReaction = lastValidReaction(reactions);
 
+	if (!validReaction || validReaction === targetReaction) {
+		return Meteor.call('setReaction', targetReaction, messageID);
+	}
+	if (validReaction === currentReaction) {
+		return setTimeout(() => updateReactions(messageID, targetReaction, currentReaction), 300);
+	}
+	Meteor.call('setReaction', validReaction, messageID);
+	return setTimeout(() => updateReactions(messageID, targetReaction, validReaction), 300);
+};
 Template.messageBubble.onRendered(function() {
 	const currentNode = this.firstNode;
 
@@ -376,14 +390,17 @@ Template.messageBubble.onRendered(function() {
 	const reactionBackdrop = document.querySelector('.reactions-backdrop');
 	reactionBackdrop.addEventListener('contextmenu', (event) => event.preventDefault());
 	reactionBackdrop.addEventListener('click', () => {
-		activeReactionMessage.style.opacity = '';
+		if (activeReactionMessage) {
+			activeReactionMessage.style.opacity = '';
+			activeReactionMessage = null;
+		}
 		wrapper.classList.remove('show-reactions');
 	});
 
 	$('.reaction-icon').on('click', function(event) {
 		event.stopPropagation();
 		event.stopImmediatePropagation();
-		Meteor.call('setReaction', `:${ event.target.getAttribute('data') }:`, activeReactionMessage.id);
+		updateReactions(activeReactionMessage.id, `:${ event.target.getAttribute('data') }:`);
 		reactionBackdrop.click();
 	});
 

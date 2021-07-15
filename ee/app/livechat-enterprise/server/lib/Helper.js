@@ -139,7 +139,7 @@ export const setPredictedVisitorAbandonmentTime = (room) => {
 		return;
 	}
 
-	const willBeAbandonedAt = moment(room.v.lastMessageTs).add(Number(secondsToAdd), 'seconds').toDate();
+	const willBeAbandonedAt = moment(room.v.lastMessageTs ?? room.lastMessage.ts).add(Number(secondsToAdd), 'seconds').toDate();
 	LivechatRooms.setPredictedVisitorAbandonment(room._id, willBeAbandonedAt);
 };
 
